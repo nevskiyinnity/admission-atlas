@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Atlas Neural Engine | University Match</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+
+    <header class="site-nav">
+        <div class="brand">Admission Atlas Neural Engine</div>
+        <nav class="nav-links">
+            <a href="/">View Landing Page</a>
+        </nav>
+    </header>
+
+    <main class="app-shell">
+        <header class="hero">
+            <p class="kicker">Admissions Assistant</p>
+            <h1>Global University Match Analyzer</h1>
+            <p class="hero-subtitle">Complete your profile and counseling questionnaire. Admission Atlas Neural Engine generates your target match score and alternative universities worldwide.</p>
+            <button type="button" class="secondary-btn" id="mockFillBtn">Fill Mock Answers</button>
+        </header>
+
+        <form id="assessmentForm" class="form-stack">
+            <section class="card">
+                <h2>Applicant Snapshot</h2>
+                <p class="section-subtitle">Who you are and where you want to apply.</p>
+                <div class="form-grid">
+                    <label>
+                        Full Name
+                        <input type="text" id="name" placeholder="Jordan Lee" required>
+                    </label>
+                    <label>
+                        Residency Status
+                        <select id="residency">
+                            <option value="domestic">Domestic (In-State)</option>
+                            <option value="out_of_state">Domestic (Out-of-State)</option>
+                            <option value="international">International</option>
+                        </select>
+                    </label>
+                    <label>
+                        Target University
+                        <input type="text" id="university" placeholder="University of Michigan" required>
+                    </label>
+                    <label>
+                        Intended Major
+                        <input type="text" id="major" placeholder="Computer Science" required>
+                    </label>
+                    <label class="full-width">
+                        Preferred Countries / Regions (Optional)
+                        <input type="text" id="preferredRegions" placeholder="e.g., USA, UK, Canada, Singapore, Europe">
+                    </label>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Academic Readiness</h2>
+                <p class="section-subtitle">Supports GPA, SAT/ACT, A Levels, IB, and other exam systems.</p>
+                <div class="form-grid">
+                    <label>
+                        GPA (Optional, 4.0 scale)
+                        <input type="number" id="gpa" step="0.01" min="0" max="4.0" placeholder="3.82">
+                    </label>
+                    <label>
+                        SAT / ACT / Other Standardized Tests
+                        <input type="text" id="sat" placeholder="e.g., SAT 1490, ACT 33, PSAT 1450">
+                    </label>
+                    <label class="full-width">
+                        A Levels / IB / AP / National Qualifications
+                        <textarea id="internationalExams" placeholder="e.g., A*AA in A Levels, IB 40/45 (HL Math 7), AP Calc BC 5, CBSE 95%"></textarea>
+                    </label>
+                    <label class="full-width">
+                        Other Exam Systems (Optional)
+                        <textarea id="otherExams" placeholder="e.g., Gaokao, JEE, Abitur, Leaving Cert, Bac, Matura, KCSE"></textarea>
+                    </label>
+                    <label class="full-width">
+                        Advanced Coursework
+                        <textarea id="coursework" placeholder="AP Calculus BC, AP Physics C, AP Computer Science A, Dual Enrollment Linear Algebra"></textarea>
+                    </label>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Activities & Distinction</h2>
+                <p class="section-subtitle">Impact, leadership, and outcomes outside class.</p>
+                <div class="form-grid">
+                    <label class="full-width">
+                        Key Activities and Leadership
+                        <textarea id="activities" placeholder="Founder and president of coding club; robotics software lead; peer tutoring"></textarea>
+                    </label>
+                    <label class="full-width">
+                        Honors and Awards
+                        <textarea id="awards" placeholder="State robotics finalist, National Merit Commended"></textarea>
+                    </label>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Neural Engine Counseling Questions</h2>
+                <p class="section-subtitle">Answer all prompts for better recommendation quality.</p>
+                <div class="form-grid">
+                    <label class="full-width">
+                        1) What learning environment helps you perform at your best?
+                        <textarea id="question1" placeholder="e.g., Project-based classes, close professor access, collaborative labs"></textarea>
+                    </label>
+                    <label class="full-width">
+                        2) What project or achievement best represents your strengths?
+                        <textarea id="question2" placeholder="e.g., Built a campus navigation app used by 300 students"></textarea>
+                    </label>
+                    <label class="full-width">
+                        3) What type of campus and location do you prefer?
+                        <textarea id="question3" placeholder="e.g., Mid-size urban campus with strong internship pipeline"></textarea>
+                    </label>
+                    <label class="full-width">
+                        4) How do you weigh affordability, prestige, and outcomes?
+                        <textarea id="question4" placeholder="e.g., Cost matters most; open to honors programs with scholarships"></textarea>
+                    </label>
+                    <label class="full-width">
+                        5) What are your intended career outcomes after graduation?
+                        <textarea id="question5" placeholder="e.g., Product management in health tech, then graduate school"></textarea>
+                    </label>
+                    <label class="full-width">
+                        6) What is your annual budget range for tuition + living costs? (Required)
+                        <input type="text" id="question6" placeholder="e.g., USD 25,000-40,000 per year" required>
+                    </label>
+                    <label class="full-width">
+                        7) Do you need scholarships, grants, or financial aid?
+                        <textarea id="question7" placeholder="e.g., Need merit scholarship of at least 30%, open to work-study"></textarea>
+                    </label>
+                    <label class="full-width">
+                        8) What type of support matters most to you at university?
+                        <textarea id="question8" placeholder="e.g., mentorship, career services, mental health, international student advising"></textarea>
+                    </label>
+                    <label class="full-width">
+                        9) What extracurricular or community experiences do you want?
+                        <textarea id="question9" placeholder="e.g., startup incubators, debate, research labs, sports clubs"></textarea>
+                    </label>
+                </div>
+            </section>
+
+            <button type="submit" class="primary-btn" id="submitBtn">Generate Match Report</button>
+        </form>
+
+        <section id="resultsSection" class="card results-card" style="display: none;">
+            <div class="results-top">
+                <div>
+                    <p class="kicker">Target School Match</p>
+                    <h2 id="resultsUniversity">University</h2>
+                    <p id="analysisSummary" class="results-summary"></p>
+                </div>
+                <div class="score-pill" id="finalScore">0%</div>
+            </div>
+
+            <div class="results-grid">
+                <div class="panel">
+                    <h3>Strengths</h3>
+                    <ul id="strengthList" class="insight-list"></ul>
+                </div>
+                <div class="panel">
+                    <h3>Watchouts</h3>
+                    <ul id="concernList" class="insight-list"></ul>
+                </div>
+                <div class="panel full-span">
+                    <h3>Recommended Next Steps</h3>
+                    <ul id="nextStepList" class="insight-list"></ul>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="panel">
+                    <h3>Fit Breakdown</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="panel">
+                    <h3>Alternative Match %</h3>
+                    <canvas id="alternativeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Suggested Alternatives</h3>
+                <div id="alternativesList" class="alternatives-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="processingModal">
+        <div class="modal-content">
+            <div class="loader"></div>
+            <h3>Running Match Analysis</h3>
+            <p class="section-subtitle">Admission Atlas Neural Engine is evaluating your profile, target fit, and alternatives worldwide.</p>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry">Initializing analysis...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
