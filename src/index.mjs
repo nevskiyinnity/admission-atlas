@@ -335,8 +335,7 @@ const serveAsset = (request, env) => {
   const mappedPath = ROUTE_TO_ASSET.get(pathname);
 
   if (mappedPath) {
-    url.pathname = mappedPath;
-    return env.ASSETS.fetch(new Request(url.toString(), request));
+    return env.ASSETS.fetch(`https://assets.local${mappedPath}`);
   }
 
   return env.ASSETS.fetch(request);
