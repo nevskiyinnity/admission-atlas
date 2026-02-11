@@ -6,6 +6,7 @@ const finalScoreElement = document.getElementById('finalScore');
 const resultsArea = document.getElementById('resultsSection');
 const analysisSummaryElement = document.getElementById('analysisSummary');
 const resultsUniversityElement = document.getElementById('resultsUniversity');
+const resolvedNoticeElement = document.getElementById('resolvedNotice');
 const strengthListElement = document.getElementById('strengthList');
 const concernListElement = document.getElementById('concernList');
 const nextStepListElement = document.getElementById('nextStepList');
@@ -95,13 +96,18 @@ form.addEventListener('submit', async (event) => {
             throw new Error(data.error || 'Unable to run analysis right now.');
         }
 
-        for (const message of data.logs || []) {
-            addLog(message);
-            await sleep(220 + Math.random() * 220);
+        const logs = data.logs || [];
+        for (let i = 0; i < logs.length; i++) {
+            addLog(logs[i]);
+            const isFirst = i < 2;
+            const isLast = i >= logs.length - 2;
+            const base = isFirst ? 300 : isLast ? 500 : 180;
+            const jitter = Math.random() * 350;
+            await sleep(base + jitter);
         }
 
-        addLog('Preparing final recommendations...');
-        await sleep(650);
+        addLog('Compiling final report and recommendations...');
+        await sleep(800);
 
         modal.style.display = 'none';
         showResults(data);
@@ -126,8 +132,18 @@ function addLog(text) {
 function showResults(data) {
     const targetScore = Number(data.targetMatchPercent ?? data.compatibilityScore ?? 0);
     const university = data.institution || data.university || 'Target University';
+    const userTyped = data.userTyped || '';
 
     resultsUniversityElement.textContent = university;
+
+    // Show correction notice if AI resolved a different name
+    if (userTyped && userTyped.toLowerCase().trim() !== university.toLowerCase().trim()) {
+        resolvedNoticeElement.innerHTML = `<span class="resolved-icon">✦</span> Interpreted "<em>${userTyped}</em>" as <strong>${university}</strong>`;
+        resolvedNoticeElement.style.display = 'block';
+    } else {
+        resolvedNoticeElement.style.display = 'none';
+    }
+
     analysisSummaryElement.textContent = data.summary || 'AI-based compatibility estimate using your profile and counseling responses.';
 
     animateScore(targetScore);

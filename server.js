@@ -128,6 +128,7 @@ const normalizeResult = (raw, payload) => {
 
     return {
         institution: String(raw.institution || payload.university),
+        userTyped: String(raw.userTyped || payload.university),
         targetMatchPercent: clampPercent(raw.targetMatchPercent ?? raw.compatibilityScore, 70),
         summary: String(raw.summary || `${payload.name}'s profile has a moderate-to-strong fit for ${payload.university}.`),
         strengths: ensureStringArray(raw.strengths, ['Competitive academics for the target major.']),
@@ -187,54 +188,77 @@ app.post('/api/analyze', async (req, res) => {
         }
 
         const prompt = `
-You are an admissions strategy analyst.
-Return a single valid JSON object (no markdown) using this exact shape:
+You are an expert university admissions strategy analyst with deep knowledge of universities worldwide.
+
+CRITICAL INSTRUCTIONS:
+1. FUZZY NAME RESOLUTION: The user may misspell or abbreviate the target university. You MUST infer the correct, official institution name. Examples:
+   - "stanfort" or "standford" → "Stanford University"
+   - "MIT" → "Massachusetts Institute of Technology"
+   - "UCL" → "University College London"
+   - "UofM" or "umich" → "University of Michigan"
+   - "oxbridge" → treat as ambiguous, pick the closer match based on context
+   If you cannot confidently resolve the name, use the closest reasonable match and note the ambiguity in your summary.
+
+2. Return a single valid JSON object (no markdown, no code fences) using this exact shape:
 {
-  "institution": string,
+  "institution": string,          // The OFFICIAL, corrected full name of the target university
+  "userTyped": string,            // Exactly what the user typed (preserve original input)
   "targetMatchPercent": integer 0-100,
-  "summary": string,
-  "strengths": string[],
-  "concerns": string[],
-  "nextSteps": string[],
+  "summary": string,              // 2-3 sentences. Reference the student by name. Be specific about WHY they are or aren't a strong fit.
+  "strengths": string[],          // 3-5 items. Each must reference specific details from the student's profile.
+  "concerns": string[],           // 2-4 items. Be honest and specific. Reference actual gaps or risks.
+  "nextSteps": string[],          // 3-5 items. Concrete, actionable advice tied to this student's situation.
   "categoryScores": [{"label": string, "score": integer 0-100}],
   "alternatives": [{"name": string, "country": string, "matchPercent": integer 0-100, "why": string}],
-  "logs": string[]
+  "logs": string[]                // 8-12 detailed processing log entries (see below)
 }
 
-Rules:
-- Category labels should be: Academics, Activities, Major Fit, Campus Fit, Affordability.
-- Include 4-6 alternatives and ensure alternatives are not the same as institution.
-- Evaluate against universities worldwide across all regions and countries, not just the US.
-- Respect preferredRegions if provided; otherwise return globally diverse alternatives.
-- Match scores should be realistic and differentiated.
-- Keep summary to 1-2 sentences.
-- Keep strengths/concerns/nextSteps concise with actionable phrasing.
-- Budget and aid constraints must directly influence both target assessment and alternatives.
+3. CATEGORY SCORES: Use these exact labels: Academics, Activities, Major Fit, Campus Fit, Affordability.
+   - Scores MUST be meaningfully differentiated (not all clustered around 75). A weak area should score below 60; a strong area can score above 90.
+   - Affordability must be grounded in the student's stated budget vs. the university's actual cost of attendance.
 
-Applicant input:
+4. ALTERNATIVES: Include 5-6 alternatives. They must NOT include the target institution.
+   - If preferredRegions is specified, weight alternatives toward those regions but include 1-2 outside.
+   - If no preferredRegions, return globally diverse alternatives from at least 3 different countries.
+   - Each alternative's "why" must explain the specific fit for THIS student (major, budget, campus preferences).
+   - matchPercent should be realistic and varied (not all within 5 points of each other).
+
+5. LOG ENTRIES: Generate 8-12 log entries that simulate a real analytical engine processing the profile. They should:
+   - Reference the student's actual name, scores, target school, and major
+   - Show progressive analysis steps (ingesting data → normalizing scores → evaluating fit → comparing alternatives)
+   - Feel technical and specific, like real system output
+   - Example: "Parsing ${payload.name}'s academic profile: GPA ${payload.gpa || 'not reported'}, standardized tests detected..."
+
+6. ANALYSIS QUALITY:
+   - Be brutally honest. A student with a 3.2 GPA targeting Stanford should get a low match score.
+   - Consider the ACTUAL selectivity, acceptance rates, and academic standards of the target university.
+   - Budget constraints should meaningfully affect Affordability scores and alternative selection.
+   - If the student's profile has gaps (missing test scores, few activities), note this honestly.
+
+Applicant profile:
 - Name: ${payload.name}
 - Residency: ${payload.residency}
-- GPA: ${payload.gpa}
-- SAT/ACT/standardized tests: ${payload.sat}
-- A Levels/IB/AP/national qualifications: ${payload.internationalExams}
-- Other exam systems: ${payload.otherExams}
-- Coursework: ${payload.coursework}
-- Activities: ${payload.activities}
-- Awards: ${payload.awards}
-- Target university: ${payload.university}
+- GPA (4.0 scale): ${payload.gpa || 'Not provided'}
+- SAT/ACT/standardized tests: ${payload.sat || 'Not provided'}
+- A Levels/IB/AP/national qualifications: ${payload.internationalExams || 'Not provided'}
+- Other exam systems: ${payload.otherExams || 'None'}
+- Advanced coursework: ${payload.coursework || 'Not provided'}
+- Activities & leadership: ${payload.activities || 'Not provided'}
+- Awards & honors: ${payload.awards || 'None'}
+- Target university (user-typed, may contain typos): ${payload.university}
 - Intended major: ${payload.major}
-- Preferred countries/regions: ${payload.preferredRegions}
+- Preferred countries/regions: ${payload.preferredRegions || 'No preference (global)'}
 
-Mock admissions question responses:
-1) Learning environment preference: ${payload.question1}
-2) Best project/achievement: ${payload.question2}
-3) Campus/location preference: ${payload.question3}
-4) Affordability vs prestige preference: ${payload.question4}
-5) Career goals: ${payload.question5}
-6) Annual budget range (required): ${payload.question6}
-7) Scholarship/aid needs: ${payload.question7}
-8) Student support priorities: ${payload.question8}
-9) Preferred extracurricular/community experience: ${payload.question9}
+Counseling responses:
+1) Learning environment: ${payload.question1 || 'Not answered'}
+2) Best project/achievement: ${payload.question2 || 'Not answered'}
+3) Campus/location preference: ${payload.question3 || 'Not answered'}
+4) Affordability vs prestige: ${payload.question4 || 'Not answered'}
+5) Career goals: ${payload.question5 || 'Not answered'}
+6) Annual budget (tuition + living): ${payload.question6}
+7) Scholarship/aid needs: ${payload.question7 || 'Not answered'}
+8) Support priorities: ${payload.question8 || 'Not answered'}
+9) Extracurricular preferences: ${payload.question9 || 'Not answered'}
 `;
 
         const completion = await openai.chat.completions.create({
@@ -243,7 +267,7 @@ Mock admissions question responses:
             messages: [
                 {
                     role: 'system',
-                    content: 'You generate precise, valid JSON for admissions matching outputs.'
+                    content: 'You are a precise JSON generator for a university admissions analysis engine. You have expert-level knowledge of global universities, their acceptance rates, costs, program strengths, and admissions requirements. Always resolve university names to their official form, even if the user makes typos or uses abbreviations. Return only valid JSON with no markdown formatting.'
                 },
                 {
                     role: 'user',

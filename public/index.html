@@ -7,7 +7,9 @@
     <title>Admission Atlas Neural Engine | University Match</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Public+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -27,7 +29,8 @@
         <header class="hero">
             <p class="kicker">Admissions Assistant</p>
             <h1>Global University Match Analyzer</h1>
-            <p class="hero-subtitle">Complete your profile and counseling questionnaire. Admission Atlas Neural Engine generates your target match score and alternative universities worldwide.</p>
+            <p class="hero-subtitle">Complete your profile and counseling questionnaire. Admission Atlas Neural Engine
+                generates your target match score and alternative universities worldwide.</p>
             <button type="button" class="secondary-btn" id="mockFillBtn">Fill Mock Answers</button>
         </header>
 
@@ -77,15 +80,18 @@
                     </label>
                     <label class="full-width">
                         A Levels / IB / AP / National Qualifications
-                        <textarea id="internationalExams" placeholder="e.g., A*AA in A Levels, IB 40/45 (HL Math 7), AP Calc BC 5, CBSE 95%"></textarea>
+                        <textarea id="internationalExams"
+                            placeholder="e.g., A*AA in A Levels, IB 40/45 (HL Math 7), AP Calc BC 5, CBSE 95%"></textarea>
                     </label>
                     <label class="full-width">
                         Other Exam Systems (Optional)
-                        <textarea id="otherExams" placeholder="e.g., Gaokao, JEE, Abitur, Leaving Cert, Bac, Matura, KCSE"></textarea>
+                        <textarea id="otherExams"
+                            placeholder="e.g., Gaokao, JEE, Abitur, Leaving Cert, Bac, Matura, KCSE"></textarea>
                     </label>
                     <label class="full-width">
                         Advanced Coursework
-                        <textarea id="coursework" placeholder="AP Calculus BC, AP Physics C, AP Computer Science A, Dual Enrollment Linear Algebra"></textarea>
+                        <textarea id="coursework"
+                            placeholder="AP Calculus BC, AP Physics C, AP Computer Science A, Dual Enrollment Linear Algebra"></textarea>
                     </label>
                 </div>
             </section>
@@ -96,11 +102,13 @@
                 <div class="form-grid">
                     <label class="full-width">
                         Key Activities and Leadership
-                        <textarea id="activities" placeholder="Founder and president of coding club; robotics software lead; peer tutoring"></textarea>
+                        <textarea id="activities"
+                            placeholder="Founder and president of coding club; robotics software lead; peer tutoring"></textarea>
                     </label>
                     <label class="full-width">
                         Honors and Awards
-                        <textarea id="awards" placeholder="State robotics finalist, National Merit Commended"></textarea>
+                        <textarea id="awards"
+                            placeholder="State robotics finalist, National Merit Commended"></textarea>
                     </label>
                 </div>
             </section>
@@ -111,23 +119,28 @@
                 <div class="form-grid">
                     <label class="full-width">
                         1) What learning environment helps you perform at your best?
-                        <textarea id="question1" placeholder="e.g., Project-based classes, close professor access, collaborative labs"></textarea>
+                        <textarea id="question1"
+                            placeholder="e.g., Project-based classes, close professor access, collaborative labs"></textarea>
                     </label>
                     <label class="full-width">
                         2) What project or achievement best represents your strengths?
-                        <textarea id="question2" placeholder="e.g., Built a campus navigation app used by 300 students"></textarea>
+                        <textarea id="question2"
+                            placeholder="e.g., Built a campus navigation app used by 300 students"></textarea>
                     </label>
                     <label class="full-width">
                         3) What type of campus and location do you prefer?
-                        <textarea id="question3" placeholder="e.g., Mid-size urban campus with strong internship pipeline"></textarea>
+                        <textarea id="question3"
+                            placeholder="e.g., Mid-size urban campus with strong internship pipeline"></textarea>
                     </label>
                     <label class="full-width">
                         4) How do you weigh affordability, prestige, and outcomes?
-                        <textarea id="question4" placeholder="e.g., Cost matters most; open to honors programs with scholarships"></textarea>
+                        <textarea id="question4"
+                            placeholder="e.g., Cost matters most; open to honors programs with scholarships"></textarea>
                     </label>
                     <label class="full-width">
                         5) What are your intended career outcomes after graduation?
-                        <textarea id="question5" placeholder="e.g., Product management in health tech, then graduate school"></textarea>
+                        <textarea id="question5"
+                            placeholder="e.g., Product management in health tech, then graduate school"></textarea>
                     </label>
                     <label class="full-width">
                         6) What is your annual budget range for tuition + living costs? (Required)
@@ -135,15 +148,18 @@
                     </label>
                     <label class="full-width">
                         7) Do you need scholarships, grants, or financial aid?
-                        <textarea id="question7" placeholder="e.g., Need merit scholarship of at least 30%, open to work-study"></textarea>
+                        <textarea id="question7"
+                            placeholder="e.g., Need merit scholarship of at least 30%, open to work-study"></textarea>
                     </label>
                     <label class="full-width">
                         8) What type of support matters most to you at university?
-                        <textarea id="question8" placeholder="e.g., mentorship, career services, mental health, international student advising"></textarea>
+                        <textarea id="question8"
+                            placeholder="e.g., mentorship, career services, mental health, international student advising"></textarea>
                     </label>
                     <label class="full-width">
                         9) What extracurricular or community experiences do you want?
-                        <textarea id="question9" placeholder="e.g., startup incubators, debate, research labs, sports clubs"></textarea>
+                        <textarea id="question9"
+                            placeholder="e.g., startup incubators, debate, research labs, sports clubs"></textarea>
                     </label>
                 </div>
             </section>
@@ -156,6 +172,7 @@
                 <div>
                     <p class="kicker">Target School Match</p>
                     <h2 id="resultsUniversity">University</h2>
+                    <p id="resolvedNotice" class="resolved-notice" style="display: none;"></p>
                     <p id="analysisSummary" class="results-summary"></p>
                 </div>
                 <div class="score-pill" id="finalScore">0%</div>
@@ -198,7 +215,8 @@
         <div class="modal-content">
             <div class="loader"></div>
             <h3>Running Match Analysis</h3>
-            <p class="section-subtitle">Admission Atlas Neural Engine is evaluating your profile, target fit, and alternatives worldwide.</p>
+            <p class="section-subtitle">Admission Atlas Neural Engine is evaluating your profile, target fit, and
+                alternatives worldwide.</p>
             <div class="log-container" id="logContainer">
                 <div class="log-entry">Initializing analysis...</div>
             </div>

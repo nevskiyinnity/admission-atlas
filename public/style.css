@@ -426,3 +426,31 @@ canvas {
         padding: 18px;
     }
 }
+
+/* ── Resolved name notice ── */
+.resolved-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 4px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.10), rgba(15, 76, 129, 0.08));
+    border: 1px solid rgba(13, 148, 136, 0.25);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+}
+
+.resolved-notice em {
+    font-style: italic;
+    color: var(--ink-muted);
+}
+
+.resolved-notice strong {
+    color: var(--brand);
+}
+
+.resolved-icon {
+    font-size: 1rem;
+}
