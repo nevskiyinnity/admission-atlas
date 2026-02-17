@@ -1,8 +1,7 @@
 {
   "name": "admission-atlas-production",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "University Admissions Full Process Integrated System",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
