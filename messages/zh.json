@@ -1,0 +1,411 @@
+{
+  "common": {
+    "appName": "录取通",
+    "loading": "加载中...",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "search": "搜索",
+    "filter": "筛选",
+    "reset": "重置",
+    "back": "返回",
+    "next": "下一页",
+    "previous": "上一页",
+    "submit": "提交",
+    "close": "关闭",
+    "yes": "是",
+    "no": "否",
+    "all": "全部",
+    "none": "无",
+    "actions": "操作",
+    "status": "状态",
+    "date": "日期",
+    "time": "时间",
+    "name": "姓名",
+    "email": "邮箱",
+    "phone": "电话",
+    "gender": "性别",
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "noData": "暂无数据",
+    "confirmDelete": "确定要删除吗？",
+    "success": "成功",
+    "error": "错误",
+    "logout": "退出登录",
+    "language": "语言",
+    "viewDetails": "查看详情",
+    "download": "下载",
+    "upload": "上传",
+    "markAllRead": "全部标为已读",
+    "unread": "未读",
+    "read": "已读",
+    "readMore": "查看更多",
+    "send": "发送"
+  },
+  "auth": {
+    "login": "登录",
+    "loginTitle": "登录您的账户",
+    "loginDescription": "输入您的邮箱和密码以访问平台",
+    "email": "邮箱地址",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "loginButton": "登录",
+    "loginError": "邮箱或密码错误",
+    "accountLocked": "账户已被锁定，请联系管理员。",
+    "forgotPasswordTitle": "重置密码",
+    "forgotPasswordDescription": "输入您的邮箱以接收验证码",
+    "verificationCode": "验证码",
+    "sendCode": "发送验证码",
+    "codeSent": "验证码已发送至您的邮箱",
+    "newPassword": "新密码",
+    "confirmPassword": "确认密码",
+    "resetPassword": "重置密码",
+    "passwordChanged": "密码修改成功",
+    "backToLogin": "返回登录"
+  },
+  "student": {
+    "sidebar": {
+      "progressTracking": "进度追踪",
+      "messages": "消息",
+      "notifications": "业务通知",
+      "account": "账户管理",
+      "settings": "系统设置",
+      "feedback": "反馈与支持",
+      "help": "帮助中心"
+    },
+    "dashboard": {
+      "title": "我的申请",
+      "deadline": "截止日期",
+      "urgentTask": "最紧急任务",
+      "unreadMessages": "未读"
+    },
+    "messages": {
+      "title": "消息"
+    },
+    "notifications": {
+      "title": "业务通知"
+    },
+    "account": {
+      "title": "账户管理"
+    },
+    "settings": {
+      "title": "系统设置"
+    },
+    "feedback": {
+      "title": "反馈与支持"
+    },
+    "help": {
+      "title": "帮助中心"
+    },
+    "task": {
+      "milestones": "环节",
+      "taskInstructions": "任务说明",
+      "fileHistory": "文件历史",
+      "sendMessage": "输入消息...",
+      "attachFiles": "添加附件"
+    }
+  },
+  "counselor": {
+    "sidebar": {
+      "studentManagement": "学生管理",
+      "notifications": "业务通知",
+      "account": "账户管理",
+      "settings": "系统设置",
+      "feedback": "反馈与支持",
+      "help": "帮助中心"
+    },
+    "students": {
+      "title": "我的学生",
+      "inService": "服务中",
+      "completed": "已完成",
+      "unread": "未读",
+      "searchPlaceholder": "搜索学生...",
+      "viewProfile": "查看资料",
+      "chat": "私信"
+    },
+    "project": {
+      "createProject": "创建项目",
+      "universityName": "学院名称",
+      "major": "学院专业",
+      "countryCity": "所在国家/城市",
+      "deadline": "申请截止日期",
+      "confirmCreate": "确认创建"
+    },
+    "task": {
+      "createTask": "创建任务",
+      "taskName": "任务名称",
+      "taskDescription": "任务说明",
+      "taskDeadline": "任务截止日期",
+      "completeTask": "完成任务",
+      "modifyTask": "修改任务",
+      "reassign": "移步给他人",
+      "setFinalVersion": "设为终版",
+      "onlyFinalVersions": "仅显示终版文件"
+    },
+    "notifications": {
+      "title": "业务通知"
+    },
+    "account": {
+      "title": "账户管理"
+    },
+    "settings": {
+      "title": "系统设置"
+    },
+    "feedback": {
+      "title": "反馈与支持"
+    },
+    "help": {
+      "title": "帮助中心"
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "仪表盘",
+      "students": "学生管理",
+      "teachers": "教师管理",
+      "tags": "标签管理",
+      "applications": "申请管理",
+      "tasks": "任务管理",
+      "communications": "沟通记录",
+      "files": "文件记录",
+      "loginLogs": "登录日志",
+      "uploadLogs": "上传日志",
+      "system": "系统管理",
+      "faq": "FAQ管理",
+      "feedbackTypes": "反馈类型",
+      "announcements": "公告管理",
+      "feedback": "反馈管理"
+    },
+    "dashboard": {
+      "title": "仪表盘",
+      "totalStudents": "学生总数",
+      "totalCounselors": "教师总数",
+      "activeProjects": "活跃项目",
+      "pendingTasks": "待处理任务"
+    },
+    "students": {
+      "title": "学生管理",
+      "createStudent": "创建学生",
+      "studentName": "学生姓名",
+      "phoneNumber": "电话号码",
+      "creationDate": "创建日期",
+      "assignedTeacher": "指定教师",
+      "serviceStatus": "服务状态",
+      "studentId": "学生编号",
+      "accountStatus": "账户状态",
+      "switchTeacher": "更换教师",
+      "endService": "结束服务",
+      "viewProjects": "查看项目",
+      "lockAccount": "锁定账户",
+      "unlockAccount": "解锁账户",
+      "inService": "服务中",
+      "serviceCompleted": "已完成",
+      "active": "正常",
+      "locked": "已锁定"
+    },
+    "teachers": {
+      "title": "教师管理",
+      "createTeacher": "创建教师",
+      "teacherName": "教师姓名",
+      "teacherId": "教师编号",
+      "title_field": "职称",
+      "country": "国家",
+      "city": "城市",
+      "tags": "标签",
+      "studentsAssigned": "已分配学生",
+      "viewStudents": "查看学生"
+    },
+    "tags": {
+      "title": "标签管理",
+      "addTag": "添加标签",
+      "tagName": "标签名称",
+      "searchTags": "搜索标签..."
+    },
+    "applications": {
+      "title": "申请管理",
+      "university": "院校",
+      "student": "学生",
+      "counselor": "教师",
+      "major": "专业",
+      "deadline": "截止日期",
+      "projectStatus": "状态",
+      "searchProjects": "搜索项目...",
+      "noProjects": "未找到项目"
+    },
+    "tasks": {
+      "title": "任务管理",
+      "taskName": "任务名称",
+      "milestone": "环节",
+      "project": "项目",
+      "assignedTo": "分配给",
+      "taskStatus": "状态",
+      "deadline": "截止日期",
+      "searchTasks": "搜索任务...",
+      "noTasks": "未找到任务"
+    },
+    "communications": {
+      "title": "沟通记录",
+      "sender": "发送者",
+      "content": "内容",
+      "task": "任务",
+      "sentAt": "发送时间",
+      "searchMessages": "搜索消息...",
+      "noMessages": "未找到消息"
+    },
+    "files": {
+      "title": "文件记录",
+      "fileName": "文件名",
+      "fileType": "文件类型",
+      "uploader": "上传者",
+      "uploadDate": "上传日期",
+      "fileSize": "大小",
+      "project": "项目",
+      "task": "任务",
+      "isFinal": "终版",
+      "searchFiles": "搜索文件...",
+      "deleteConfirm": "确定要删除该文件吗？",
+      "noFiles": "未找到文件"
+    },
+    "loginLogs": {
+      "title": "登录日志",
+      "user": "用户",
+      "role": "角色",
+      "ip": "IP地址",
+      "device": "设备",
+      "loginTime": "登录时间",
+      "searchLogs": "按用户名搜索...",
+      "noLogs": "暂无登录日志"
+    },
+    "uploadLogs": {
+      "title": "上传日志",
+      "user": "用户",
+      "fileName": "文件名",
+      "originalName": "原始名称",
+      "fileType": "文件类型",
+      "fileSize": "大小",
+      "uploadTime": "上传时间",
+      "searchLogs": "按用户名搜索...",
+      "noLogs": "暂无上传日志"
+    },
+    "system": {
+      "title": "系统管理",
+      "faqManagement": "FAQ管理",
+      "feedbackTypes": "反馈类型",
+      "announcements": "公告管理",
+      "addFaq": "添加FAQ",
+      "question": "问题",
+      "answer": "回答",
+      "category": "分类",
+      "addType": "添加类型",
+      "typeName": "类型名称",
+      "addAnnouncement": "添加公告",
+      "announcementTitle": "标题",
+      "announcementContent": "内容",
+      "target": "目标受众",
+      "targetAll": "全部",
+      "targetStudents": "学生",
+      "targetCounselors": "教师",
+      "createdAt": "创建时间"
+    },
+    "feedback": {
+      "title": "反馈管理",
+      "user": "用户",
+      "type": "类型",
+      "description": "描述",
+      "feedbackStatus": "状态",
+      "submittedAt": "提交时间",
+      "reply": "回复",
+      "replyPlaceholder": "输入回复内容...",
+      "sendReply": "发送回复",
+      "pending": "待处理",
+      "replied": "已回复",
+      "closed": "已关闭",
+      "noFeedback": "暂无反馈"
+    }
+  },
+  "notifications": {
+    "title": "业务通知",
+    "tabs": {
+      "all": "全部",
+      "announcements": "公告",
+      "messages": "消息",
+      "feedback": "反馈"
+    }
+  },
+  "account": {
+    "title": "账户管理",
+    "tabs": {
+      "info": "账户信息",
+      "password": "修改密码",
+      "loginHistory": "登录记录"
+    },
+    "info": {
+      "profilePicture": "头像",
+      "name": "姓名",
+      "gender": "性别",
+      "phone": "电话号码",
+      "email": "邮箱"
+    },
+    "password": {
+      "currentEmail": "邮箱地址",
+      "verificationCode": "验证码",
+      "sendCode": "获取验证码",
+      "newPassword": "新密码",
+      "confirmPassword": "确认密码",
+      "confirmChange": "确认修改"
+    },
+    "loginHistory": {
+      "ip": "IP地址",
+      "device": "设备",
+      "time": "登录时间"
+    }
+  },
+  "settings": {
+    "title": "系统设置",
+    "webNotifications": "网页通知",
+    "webNotificationsDesc": "接收浏览器弹窗通知",
+    "smsNotifications": "短信通知",
+    "smsNotificationsDesc": "接收短信提醒",
+    "emailNotifications": "邮箱通知",
+    "emailNotificationsDesc": "接收邮件提醒"
+  },
+  "feedback": {
+    "title": "反馈与支持",
+    "issueType": "问题类型",
+    "description": "问题描述",
+    "attachFiles": "添加附件",
+    "sendFeedback": "发送",
+    "viewHistory": "查看反馈记录",
+    "history": {
+      "title": "反馈记录",
+      "submissionTime": "提交时间"
+    }
+  },
+  "help": {
+    "title": "帮助中心",
+    "faq": "常见问题",
+    "contact": "联系我们",
+    "contactPhone": "电话",
+    "contactEmail": "邮箱",
+    "contactWeChat": "微信"
+  },
+  "files": {
+    "filterBySender": "发送者",
+    "filterByType": "文件类型",
+    "filterByDate": "日期范围",
+    "filterByMilestone": "环节",
+    "finalVersion": "终版",
+    "types": {
+      "word": "Word",
+      "excel": "Excel",
+      "pdf": "PDF",
+      "image": "图片",
+      "video": "视频",
+      "audio": "音频"
+    }
+  }
+}

@@ -1,0 +1,343 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enums ──────────────────────────────────────────────
+
+enum Role {
+  STUDENT
+  COUNSELOR
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ServiceStatus {
+  IN_SERVICE
+  COMPLETED
+}
+
+enum AccountStatus {
+  ACTIVE
+  LOCKED
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REASSIGNED
+}
+
+enum TaskAssignee {
+  STUDENT
+  COUNSELOR
+}
+
+enum FileType {
+  WORD
+  EXCEL
+  PDF
+  IMAGE
+  VIDEO
+  AUDIO
+  OTHER
+}
+
+enum NotificationType {
+  ANNOUNCEMENT
+  MESSAGE
+  TASK
+  FILE
+  FEEDBACK
+  SYSTEM
+}
+
+enum NotificationTab {
+  ALL
+  ANNOUNCEMENT
+  MESSAGE
+  FEEDBACK
+}
+
+enum FeedbackStatus {
+  PENDING
+  REPLIED
+  CLOSED
+}
+
+enum AnnouncementTarget {
+  ALL
+  STUDENTS
+  COUNSELORS
+  ADMINS
+}
+
+// ── Models ─────────────────────────────────────────────
+
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  password      String
+  name          String
+  role          Role
+  gender        Gender?
+  phone         String?
+  dateOfBirth   DateTime?
+  avatar        String?
+  title         String?       // counselor title
+  country       String?       // counselor country
+  city          String?       // counselor city
+  serviceStatus ServiceStatus @default(IN_SERVICE)
+  accountStatus AccountStatus @default(ACTIVE)
+  studentId     String?       @unique // display ID like "STU-001"
+  counselorId   String?       @unique // display ID like "COU-001"
+
+  webNotifications   Boolean @default(true)
+  smsNotifications   Boolean @default(true)
+  emailNotifications Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Student → Counselor assignment
+  assignedCounselor   User?   @relation("StudentCounselor", fields: [assignedCounselorId], references: [id])
+  assignedCounselorId String?
+  students            User[]  @relation("StudentCounselor")
+
+  // Counselor tags
+  tags Tag[]
+
+  // Relations
+  projects           Project[]       @relation("StudentProjects")
+  counselorProjects  Project[]       @relation("CounselorProjects")
+  sentMessages       Message[]       @relation("SentMessages")
+  uploadedFiles      File[]          @relation("UploadedFiles")
+  notifications      Notification[]  @relation("UserNotifications")
+  loginLogs          LoginLog[]
+  uploadLogs         UploadLog[]
+  feedbacks          Feedback[]      @relation("UserFeedbacks")
+  feedbackReplies    FeedbackReply[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+
+  users User[]
+
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id             String        @id @default(cuid())
+  universityName String
+  major          String
+  country        String?
+  city           String?
+  deadline       DateTime?
+  status         ProjectStatus @default(ACTIVE)
+
+  student   User   @relation("StudentProjects", fields: [studentId], references: [id])
+  studentId String
+
+  counselor   User   @relation("CounselorProjects", fields: [counselorId], references: [id])
+  counselorId String
+
+  milestones Milestone[]
+  files      File[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Milestone {
+  id          String          @id @default(cuid())
+  name        String
+  description String?
+  order       Int             @default(0)
+  status      MilestoneStatus @default(PENDING)
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+
+  tasks Task[]
+  files File[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  deadline    DateTime?
+  status      TaskStatus   @default(PENDING)
+  assignedTo  TaskAssignee @default(STUDENT)
+
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId String
+
+  messages Message[]
+  files    File[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id      String  @id @default(cuid())
+  content String
+
+  sender   User   @relation("SentMessages", fields: [senderId], references: [id])
+  senderId String
+
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+
+  attachments File[]
+
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  path         String
+  size         Int
+  mimeType     String
+  fileType     FileType
+  isFinalVersion Boolean @default(false)
+
+  uploader   User   @relation("UploadedFiles", fields: [uploaderId], references: [id])
+  uploaderId String
+
+  project     Project?   @relation(fields: [projectId], references: [id])
+  projectId   String?
+  milestone   Milestone? @relation(fields: [milestoneId], references: [id])
+  milestoneId String?
+  task        Task?      @relation(fields: [taskId], references: [id])
+  taskId      String?
+  message     Message?   @relation(fields: [messageId], references: [id])
+  messageId   String?
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id      String           @id @default(cuid())
+  type    NotificationType
+  title   String
+  content String
+  isRead  Boolean          @default(false)
+  link    String?
+
+  user   User   @relation("UserNotifications", fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+}
+
+model LoginLog {
+  id        String @id @default(cuid())
+  ip        String?
+  userAgent String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+}
+
+model UploadLog {
+  id           String @id @default(cuid())
+  filename     String
+  originalName String
+  size         Int
+  fileType     FileType
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+}
+
+model Feedback {
+  id          String         @id @default(cuid())
+  type        String
+  description String
+  status      FeedbackStatus @default(PENDING)
+
+  user   User   @relation("UserFeedbacks", fields: [userId], references: [id])
+  userId String
+
+  replies FeedbackReply[]
+  // files stored via File model with feedback reference
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FeedbackReply {
+  id      String @id @default(cuid())
+  content String
+
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  feedbackId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+}
+
+model FeedbackType {
+  id   String @id @default(cuid())
+  name String @unique
+
+  createdAt DateTime @default(now())
+}
+
+model FAQ {
+  id       String @id @default(cuid())
+  question String
+  answer   String
+  category String
+  order    Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Announcement {
+  id      String             @id @default(cuid())
+  title   String
+  content String
+  target  AnnouncementTarget @default(ALL)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
