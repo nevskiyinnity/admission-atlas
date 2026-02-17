@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { put } from '@vercel/blob';
 import { prisma } from '@/lib/prisma';
 import { getFileType } from '@/lib/utils';
 
@@ -17,30 +16,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'File and uploaderId required' }, { status: 400 });
   }
 
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  // Create date-based directory
-  const now = new Date();
-  const yearMonth = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}`;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', yearMonth);
-  await mkdir(uploadDir, { recursive: true });
-
-  // Generate unique filename
-  const ext = path.extname(file.name);
-  const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
-  const filePath = path.join(uploadDir, filename);
-
-  await writeFile(filePath, buffer);
+  // Upload to Vercel Blob
+  const blob = await put(file.name, file, { access: 'public' });
 
   const fileType = getFileType(file.type);
-  const relativePath = `/uploads/${yearMonth}/${filename}`;
 
   const fileRecord = await prisma.file.create({
     data: {
-      filename,
+      filename: blob.pathname,
       originalName: file.name,
-      path: relativePath,
+      path: blob.url,
       size: file.size,
       mimeType: file.type,
       fileType,
@@ -58,7 +43,7 @@ export async function POST(req: NextRequest) {
   // Create upload log
   await prisma.uploadLog.create({
     data: {
-      filename,
+      filename: blob.pathname,
       originalName: file.name,
       size: file.size,
       fileType,

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { unlink } from 'fs/promises';
-import path from 'path';
+import { del } from '@vercel/blob';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -25,12 +24,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     return NextResponse.json({ error: 'File not found' }, { status: 404 });
   }
 
-  // Delete physical file
+  // Delete from Vercel Blob
   try {
-    const fullPath = path.join(process.cwd(), 'public', file.path);
-    await unlink(fullPath);
+    await del(file.path);
   } catch {
-    // File may not exist on disk
+    // Blob may not exist
   }
 
   await prisma.file.delete({ where: { id } });
