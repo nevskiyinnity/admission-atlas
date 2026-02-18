@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { sanitizeUser } from '@/lib/api-helpers';
 import { updateUserSchema, parseBody } from '@/lib/validations';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -36,7 +37,7 @@ export async function GET(
     const sanitizedUser = sanitizeUser(user);
     return NextResponse.json(sanitizedUser);
   } catch (error) {
-    console.error('GET /api/users/[id] error:', error);
+    logger.error('GET /api/users/[id] error', error);
     return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
   }
 }
@@ -101,7 +102,7 @@ export async function PUT(
     const sanitizedUser = sanitizeUser(updatedUser);
     return NextResponse.json(sanitizedUser);
   } catch (error) {
-    console.error('PUT /api/users/[id] error:', error);
+    logger.error('PUT /api/users/[id] error', error);
     return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
   }
 }

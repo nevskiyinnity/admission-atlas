@@ -6,6 +6,7 @@ import { generateDisplayId } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { sanitizeUser, sanitizeUsers } from '@/lib/api-helpers';
 import { createUserSchema, parseBody } from '@/lib/validations';
+import { logger } from '@/lib/logger';
 
 // GET /api/users - List users with optional filters, search, and pagination
 export async function GET(request: NextRequest) {
@@ -64,7 +65,7 @@ export async function GET(request: NextRequest) {
       limit,
     });
   } catch (error) {
-    console.error('GET /api/users error:', error);
+    logger.error('GET /api/users error', error);
     return NextResponse.json(
       { error: 'Failed to fetch users' },
       { status: 500 }
@@ -132,7 +133,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(sanitizedUser, { status: 201 });
   } catch (error) {
-    console.error('POST /api/users error:', error);
+    logger.error('POST /api/users error', error);
     return NextResponse.json(
       { error: 'Failed to create user' },
       { status: 500 }
