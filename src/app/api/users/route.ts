@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { generateDisplayId } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { sanitizeUser, sanitizeUsers } from '@/lib/api-helpers';
 
 // GET /api/users - List users with optional filters, search, and pagination
 export async function GET(request: NextRequest) {
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Strip passwords from response
-    const sanitizedUsers = users.map(({ password: _, ...user }) => user);
+    const sanitizedUsers = sanitizeUsers(users);
 
     return NextResponse.json({
       users: sanitizedUsers,
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Strip password from response
-    const { password: _, ...sanitizedUser } = user;
+    const sanitizedUser = sanitizeUser(user);
 
     return NextResponse.json(sanitizedUser, { status: 201 });
   } catch (error) {

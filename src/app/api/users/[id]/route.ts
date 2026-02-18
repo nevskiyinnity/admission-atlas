@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { sanitizeUser } from '@/lib/api-helpers';
 
 export async function GET(
   request: NextRequest,
@@ -30,7 +31,7 @@ export async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const { password: _, ...sanitizedUser } = user;
+    const sanitizedUser = sanitizeUser(user);
     return NextResponse.json(sanitizedUser);
   } catch (error) {
     console.error('GET /api/users/[id] error:', error);
@@ -90,7 +91,7 @@ export async function PUT(
       },
     });
 
-    const { password: _, ...sanitizedUser } = updatedUser;
+    const sanitizedUser = sanitizeUser(updatedUser);
     return NextResponse.json(sanitizedUser);
   } catch (error) {
     console.error('PUT /api/users/[id] error:', error);
