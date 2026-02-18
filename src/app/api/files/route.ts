@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   if (projectId) where.projectId = projectId;
   if (milestoneId) where.milestoneId = milestoneId;
   if (uploaderId) where.uploaderId = uploaderId;
-  if (fileType) where.fileType = fileType;
+  if (fileType) where.fileType = fileType as unknown as Prisma.FileWhereInput["fileType"];
   if (finalOnly) where.isFinalVersion = true;
   if (dateFrom || dateTo) {
     where.createdAt = {};

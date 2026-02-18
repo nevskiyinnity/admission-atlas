@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const where: Prisma.UserWhereInput = {};
 
     if (role) {
-      where.role = role;
+      where.role = role as Prisma.UserWhereInput["role"];
     }
 
     if (search) {

@@ -70,8 +70,6 @@ export async function PUT(
     if (phone !== undefined) data.phone = phone;
     if (gender !== undefined) data.gender = gender;
     if (avatar !== undefined) data.avatar = avatar;
-    if (nationality !== undefined) data.nationality = nationality;
-    if (address !== undefined) data.address = address;
     if (serviceStatus !== undefined) data.serviceStatus = serviceStatus;
 
     // Only ADMINs may change role and accountStatus (defense-in-depth)
