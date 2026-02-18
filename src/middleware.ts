@@ -60,7 +60,7 @@ export default async function middleware(req: NextRequest) {
     const forwarded = req.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0].trim() : req.headers.get('x-real-ip') || '127.0.0.1';
     const maxRequests = req.method === 'GET' ? 100 : 20;
-    if (isRateLimited(ip, maxRequests)) {
+    if (await isRateLimited(ip, maxRequests)) {
       return applySecurityHeaders(
         NextResponse.json(
           { error: 'Too many requests. Please try again later.' },
