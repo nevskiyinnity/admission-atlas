@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createFeedbackTypeSchema, parseBody } from '@/lib/validations';
 
 export async function GET() {
   const auth = await requireAuth();
@@ -14,7 +15,12 @@ export async function POST(req: NextRequest) {
   const auth = await requireAuth(['ADMIN']);
   if (isAuthError(auth)) return auth;
 
-  const { name } = await req.json();
+  const body = await req.json();
+  const parsed = parseBody(createFeedbackTypeSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+  const { name } = parsed.data;
   const existing = await prisma.feedbackType.findUnique({ where: { name } });
   if (existing) return NextResponse.json({ error: 'Already exists' }, { status: 400 });
   const type = await prisma.feedbackType.create({ data: { name } });

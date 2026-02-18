@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { assignCounselorSchema, parseBody } from '@/lib/validations';
 
 // POST /api/users/[id]/assign-counselor - Assign or switch a counselor for a student
 export async function POST(
@@ -13,14 +14,11 @@ export async function POST(
   try {
     const { id } = params;
     const body = await request.json();
-    const { counselorId } = body;
-
-    if (!counselorId) {
-      return NextResponse.json(
-        { error: 'Missing required field: counselorId' },
-        { status: 400 }
-      );
+    const parsed = parseBody(assignCounselorSchema, body);
+    if (parsed.error) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
+    const { counselorId } = parsed.data;
 
     // Verify the student exists
     const student = await prisma.user.findUnique({

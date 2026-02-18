@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createProjectSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth();
@@ -10,7 +12,7 @@ export async function GET(req: NextRequest) {
   const studentId = searchParams.get('studentId');
   const counselorId = searchParams.get('counselorId');
 
-  const where: any = {};
+  const where: Prisma.ProjectWhereInput = {};
   if (studentId) where.studentId = studentId;
   if (counselorId) where.counselorId = counselorId;
 
@@ -37,11 +39,11 @@ export async function POST(req: NextRequest) {
   if (isAuthError(auth)) return auth;
 
   const body = await req.json();
-  const { universityName, major, country, city, deadline, studentId, counselorId } = body;
-
-  if (!universityName || !major || !studentId || !counselorId) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  const parsed = parseBody(createProjectSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { universityName, major, country, city, deadline, studentId, counselorId } = parsed.data;
 
   const project = await prisma.project.create({
     data: {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
@@ -10,7 +11,7 @@ export async function GET(req: NextRequest) {
   const userId = searchParams.get('userId');
   const search = searchParams.get('search');
 
-  const where: any = {};
+  const where: Prisma.UploadLogWhereInput = {};
   if (userId) where.userId = userId;
   if (search) {
     where.user = { name: { contains: search, mode: 'insensitive' } };

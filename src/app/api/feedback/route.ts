@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createFeedbackSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth();
@@ -10,9 +12,9 @@ export async function GET(req: NextRequest) {
   const userId = searchParams.get('userId');
   const status = searchParams.get('status');
 
-  const where: any = {};
+  const where: Prisma.FeedbackWhereInput = {};
   if (userId) where.userId = userId;
-  if (status) where.status = status;
+  if (status) where.status = status as Prisma.EnumFeedbackStatusFilter;
 
   const feedbacks = await prisma.feedback.findMany({
     where,
@@ -34,7 +36,11 @@ export async function POST(req: NextRequest) {
   if (isAuthError(auth)) return auth;
 
   const body = await req.json();
-  const { type, description, userId } = body;
+  const parsed = parseBody(createFeedbackSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+  const { type, description, userId } = parsed.data;
 
   const feedback = await prisma.feedback.create({
     data: { type, description, userId },

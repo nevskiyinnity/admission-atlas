@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createNotificationSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth();
@@ -14,8 +16,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'userId required' }, { status: 400 });
   }
 
-  const where: any = { userId };
-  if (type && type !== 'ALL') where.type = type;
+  const where: Prisma.NotificationWhereInput = { userId };
+  if (type && type !== 'ALL') where.type = type as Prisma.EnumNotificationTypeFilter;
 
   const notifications = await prisma.notification.findMany({
     where,
@@ -30,10 +32,13 @@ export async function POST(req: NextRequest) {
   if (isAuthError(auth)) return auth;
 
   const body = await req.json();
-  const { type, title, content, userId, link } = body;
+  const parsed = parseBody(createNotificationSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
 
   const notification = await prisma.notification.create({
-    data: { type, title, content, userId, link },
+    data: parsed.data,
   });
 
   return NextResponse.json(notification);

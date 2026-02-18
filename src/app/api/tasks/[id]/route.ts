@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { updateTaskSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAuth();
@@ -40,11 +42,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const { id } = params;
   const body = await req.json();
-  const { name, description, deadline } = body;
+  const parsed = parseBody(updateTaskSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+  const { deadline, ...fields } = parsed.data;
+  const data: Prisma.TaskUpdateInput = {};
 
-  const data: any = {};
-  if (name !== undefined) data.name = name;
-  if (description !== undefined) data.description = description;
+  for (const [key, value] of Object.entries(fields)) {
+    if (value !== undefined) (data as Record<string, unknown>)[key] = value;
+  }
   if (deadline !== undefined) data.deadline = deadline ? new Date(deadline) : null;
 
   const task = await prisma.task.update({ where: { id }, data });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
 
-  const where: any = {};
+  const where: Prisma.FileWhereInput = {};
   if (taskId) where.taskId = taskId;
   if (projectId) where.projectId = projectId;
   if (milestoneId) where.milestoneId = milestoneId;

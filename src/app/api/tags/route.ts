@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createTagSchema, parseBody } from '@/lib/validations';
 
 // GET /api/tags - List all tags with optional search
 export async function GET(request: NextRequest) {
@@ -39,14 +40,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { name } = body;
-
-    if (!name) {
-      return NextResponse.json(
-        { error: 'Missing required field: name' },
-        { status: 400 }
-      );
+    const parsed = parseBody(createTagSchema, body);
+    if (parsed.error) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
+    const { name } = parsed.data;
 
     // Check for duplicate tag name
     const existingTag = await prisma.tag.findUnique({

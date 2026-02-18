@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createTaskSchema, parseBody } from '@/lib/validations';
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth(['ADMIN', 'COUNSELOR']);
   if (isAuthError(auth)) return auth;
 
   const body = await req.json();
-  const { name, description, deadline, milestoneId } = body;
-
-  if (!name || !milestoneId) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  const parsed = parseBody(createTaskSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { name, description, deadline, milestoneId } = parsed.data;
 
   const task = await prisma.task.create({
     data: {

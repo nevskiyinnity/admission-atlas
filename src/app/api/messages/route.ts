@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { createMessageSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth();
@@ -9,7 +11,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const taskId = searchParams.get('taskId');
 
-  const where: any = {};
+  const where: Prisma.MessageWhereInput = {};
   if (taskId) where.taskId = taskId;
 
   const messages = await prisma.message.findMany({
@@ -31,11 +33,11 @@ export async function POST(req: NextRequest) {
   if (isAuthError(auth)) return auth;
 
   const body = await req.json();
-  const { content, senderId, taskId } = body;
-
-  if (!content || !senderId || !taskId) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  const parsed = parseBody(createMessageSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { content, senderId, taskId } = parsed.data;
 
   const message = await prisma.message.create({
     data: {

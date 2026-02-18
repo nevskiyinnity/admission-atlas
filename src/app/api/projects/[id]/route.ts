@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { updateProjectSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAuth();
@@ -37,17 +38,17 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const { id } = params;
   const body = await req.json();
+  const parsed = parseBody(updateProjectSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+  const { deadline, ...fields } = parsed.data;
 
   const project = await prisma.project.update({
     where: { id },
     data: {
-      universityName: body.universityName,
-      major: body.major,
-      country: body.country,
-      city: body.city,
-      deadline: body.deadline ? new Date(body.deadline) : body.deadline,
-      status: body.status,
-      notes: body.notes,
+      ...fields,
+      ...(deadline !== undefined && { deadline: deadline ? new Date(deadline) : null }),
     },
   });
 

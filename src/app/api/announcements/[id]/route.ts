@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { updateAnnouncementSchema, parseBody } from '@/lib/validations';
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAuth(['ADMIN', 'COUNSELOR']);
@@ -8,13 +9,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const { id } = params;
   const body = await req.json();
+  const parsed = parseBody(updateAnnouncementSchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
   const announcement = await prisma.announcement.update({
     where: { id },
-    data: {
-      title: body.title,
-      content: body.content,
-      target: body.target,
-    },
+    data: parsed.data,
   });
   return NextResponse.json(announcement);
 }

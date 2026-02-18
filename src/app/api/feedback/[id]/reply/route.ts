@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { feedbackReplySchema, parseBody } from '@/lib/validations';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
 
   const { id } = params;
-  const { content, userId } = await req.json();
+  const body = await req.json();
+  const parsed = parseBody(feedbackReplySchema, body);
+  if (parsed.error) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
+  }
+  const { content, userId } = parsed.data;
 
   const reply = await prisma.feedbackReply.create({
     data: { content, feedbackId: id, userId },

@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { generateDisplayId } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { sanitizeUser, sanitizeUsers } from '@/lib/api-helpers';
+import { createUserSchema, parseBody } from '@/lib/validations';
 
 // GET /api/users - List users with optional filters, search, and pagination
 export async function GET(request: NextRequest) {
@@ -77,23 +78,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { email, password, name, role, ...rest } = body;
-
-    // Validate required fields
-    if (!email || !password || !name || !role) {
-      return NextResponse.json(
-        { error: 'Missing required fields: email, password, name, role' },
-        { status: 400 }
-      );
+    const parsed = parseBody(createUserSchema, body);
+    if (parsed.error) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
-
-    // Validate role
-    if (!['STUDENT', 'COUNSELOR', 'ADMIN'].includes(role)) {
-      return NextResponse.json(
-        { error: 'Invalid role. Must be STUDENT, COUNSELOR, or ADMIN' },
-        { status: 400 }
-      );
-    }
+    const { email, password, name, role } = parsed.data;
 
     // Check for existing user with this email
     const existingUser = await prisma.user.findUnique({
@@ -134,7 +123,6 @@ export async function POST(request: NextRequest) {
         role,
         studentId,
         counselorId,
-        ...rest,
       },
     });
 
