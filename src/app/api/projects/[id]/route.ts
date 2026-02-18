@@ -40,7 +40,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const project = await prisma.project.update({
     where: { id },
-    data: body,
+    data: {
+      universityName: body.universityName,
+      major: body.major,
+      country: body.country,
+      city: body.city,
+      deadline: body.deadline ? new Date(body.deadline) : body.deadline,
+      status: body.status,
+      notes: body.notes,
+    },
   });
 
   return NextResponse.json(project);

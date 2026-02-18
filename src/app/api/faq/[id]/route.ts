@@ -8,7 +8,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   const { id } = params;
   const body = await req.json();
-  const faq = await prisma.fAQ.update({ where: { id }, data: body });
+  const faq = await prisma.fAQ.update({
+    where: { id },
+    data: {
+      question: body.question,
+      answer: body.answer,
+      category: body.category,
+      order: body.order,
+    },
+  });
   return NextResponse.json(faq);
 }
 

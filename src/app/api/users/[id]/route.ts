@@ -48,26 +48,37 @@ export async function PUT(
   try {
     const { id } = params;
     const body = await request.json();
-    const { password, tagIds, dateOfBirth, assignedCounselorId, ...rest } = body;
 
     const existingUser = await prisma.user.findUnique({ where: { id } });
     if (!existingUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const data: any = { ...rest };
+    const data: Record<string, unknown> = {};
 
-    if (password) {
-      data.password = await bcrypt.hash(password, 10);
+    // Explicit field whitelist — never spread raw request body
+    if (body.name !== undefined) data.name = body.name;
+    if (body.email !== undefined) data.email = body.email;
+    if (body.phone !== undefined) data.phone = body.phone;
+    if (body.gender !== undefined) data.gender = body.gender;
+    if (body.avatar !== undefined) data.avatar = body.avatar;
+    if (body.nationality !== undefined) data.nationality = body.nationality;
+    if (body.address !== undefined) data.address = body.address;
+    if (body.serviceStatus !== undefined) data.serviceStatus = body.serviceStatus;
+    if (body.role !== undefined) data.role = body.role;
+    if (body.accountStatus !== undefined) data.accountStatus = body.accountStatus;
+
+    if (body.password) {
+      data.password = await bcrypt.hash(body.password, 10);
     }
-    if (dateOfBirth !== undefined) {
-      data.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
+    if (body.dateOfBirth !== undefined) {
+      data.dateOfBirth = body.dateOfBirth ? new Date(body.dateOfBirth) : null;
     }
-    if (assignedCounselorId !== undefined) {
-      data.assignedCounselorId = assignedCounselorId || null;
+    if (body.assignedCounselorId !== undefined) {
+      data.assignedCounselorId = body.assignedCounselorId || null;
     }
-    if (tagIds !== undefined) {
-      data.tags = { set: tagIds.map((tid: string) => ({ id: tid })) };
+    if (body.tagIds !== undefined) {
+      data.tags = { set: body.tagIds.map((tid: string) => ({ id: tid })) };
     }
 
     const updatedUser = await prisma.user.update({
