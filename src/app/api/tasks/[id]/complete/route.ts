@@ -10,22 +10,25 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { id } = params;
 
   try {
-    const task = await prisma.task.update({
-      where: { id },
-      data: { status: 'COMPLETED' },
-      include: { milestone: { include: { tasks: true } } },
+    const result = await prisma.$transaction(async (tx) => {
+      const task = await tx.task.update({
+        where: { id },
+        data: { status: 'COMPLETED' },
+        include: { milestone: { include: { tasks: true } } },
+      });
+
+      const allCompleted = task.milestone.tasks.every((t) => t.status === 'COMPLETED');
+      if (allCompleted) {
+        await tx.milestone.update({
+          where: { id: task.milestoneId },
+          data: { status: 'COMPLETED' },
+        });
+      }
+
+      return task;
     });
 
-    // Check if all tasks in milestone are completed
-    const allCompleted = task.milestone.tasks.every((t) => t.status === 'COMPLETED');
-    if (allCompleted) {
-      await prisma.milestone.update({
-        where: { id: task.milestoneId },
-        data: { status: 'COMPLETED' },
-      });
-    }
-
-    return NextResponse.json(task);
+    return NextResponse.json(result);
   } catch (error) {
     logger.error('POST /api/tasks/[id]/complete error', error);
     return NextResponse.json({ error: 'Failed to complete task' }, { status: 500 });
