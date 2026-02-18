@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { id } = params;
 
@@ -38,6 +42,9 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { id } = params;
     const body = await request.json();

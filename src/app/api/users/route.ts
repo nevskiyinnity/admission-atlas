@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { generateDisplayId } from '@/lib/utils';
+import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 // GET /api/users - List users with optional filters, search, and pagination
 export async function GET(request: NextRequest) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { searchParams } = new URL(request.url);
     const role = searchParams.get('role');
@@ -67,6 +71,9 @@ export async function GET(request: NextRequest) {
 
 // POST /api/users - Create a new user
 export async function POST(request: NextRequest) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const body = await request.json();
     const { email, password, name, role, ...rest } = body;

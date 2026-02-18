@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 // GET /api/tags - List all tags with optional search
 export async function GET(request: NextRequest) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search');
@@ -30,6 +34,9 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tags - Create a new tag
 export async function POST(request: NextRequest) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const body = await request.json();
     const { name } = body;
@@ -69,6 +76,9 @@ export async function POST(request: NextRequest) {
 
 // DELETE /api/tags?id=xxx - Delete a tag by id
 export async function DELETE(request: NextRequest) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

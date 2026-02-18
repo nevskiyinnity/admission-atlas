@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 // POST /api/users/[id]/lock - Toggle lock/unlock a user account
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const auth = await requireAuth(['ADMIN']);
+  if (isAuthError(auth)) return auth;
+
   try {
     const { id } = params;
 

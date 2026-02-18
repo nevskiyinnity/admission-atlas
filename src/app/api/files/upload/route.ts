@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { prisma } from '@/lib/prisma';
 import { getFileType } from '@/lib/utils';
+import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth();
+  if (isAuthError(auth)) return auth;
+
   const formData = await req.formData();
   const file = formData.get('file') as File | null;
   const uploaderId = formData.get('uploaderId') as string;
