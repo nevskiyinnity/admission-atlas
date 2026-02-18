@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { requireAuth, isAuthError, canAccessProject } from '@/lib/api-auth';
+import { logger } from '@/lib/logger';
 import { updateProjectSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -29,6 +30,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: 'Project not found' }, { status: 404 });
   }
 
+  if (!canAccessProject(auth.user.id, auth.user.role, project)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   return NextResponse.json(project);
 }
 
@@ -44,15 +49,31 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
   const { deadline, ...fields } = parsed.data;
 
-  const project = await prisma.project.update({
-    where: { id },
-    data: {
-      ...fields,
-      ...(deadline !== undefined && { deadline: deadline ? new Date(deadline) : null }),
-    },
-  });
+  try {
+    const existing = await prisma.project.findUnique({
+      where: { id },
+      select: { studentId: true, counselorId: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+    if (!canAccessProject(auth.user.id, auth.user.role, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
-  return NextResponse.json(project);
+    const project = await prisma.project.update({
+      where: { id },
+      data: {
+        ...fields,
+        ...(deadline !== undefined && { deadline: deadline ? new Date(deadline) : null }),
+      },
+    });
+
+    return NextResponse.json(project);
+  } catch (error) {
+    logger.error('PUT /api/projects/[id] error', error);
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
@@ -60,6 +81,23 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   if (isAuthError(auth)) return auth;
 
   const { id } = params;
-  await prisma.project.delete({ where: { id } });
-  return NextResponse.json({ success: true });
+
+  try {
+    const existing = await prisma.project.findUnique({
+      where: { id },
+      select: { studentId: true, counselorId: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+    if (!canAccessProject(auth.user.id, auth.user.role, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    await prisma.project.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    logger.error('DELETE /api/projects/[id] error', error);
+    return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 });
+  }
 }
