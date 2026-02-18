@@ -179,6 +179,44 @@ export const createTagSchema = z.object({
     name: z.string().min(1),
 });
 
+// ── Analyze (college analysis) ──────────────────────────
+
+const MAX_FIELD_LENGTH = 1000;
+const boundedString = z.string().max(MAX_FIELD_LENGTH);
+
+export const analyzeProfileSchema = z.object({
+    name: boundedString.min(1, 'Name is required'),
+    residency: boundedString.optional(),
+    gpa: boundedString.optional(),
+    sat: boundedString.optional(),
+    internationalExams: boundedString.optional(),
+    otherExams: boundedString.optional(),
+    coursework: boundedString.optional(),
+    activities: boundedString.optional(),
+    awards: boundedString.optional(),
+    university: boundedString.min(1, 'Target university is required'),
+    major: boundedString.min(1, 'Major is required'),
+    preferredRegions: boundedString.optional(),
+    question1: boundedString.optional(),
+    question2: boundedString.optional(),
+    question3: boundedString.optional(),
+    question4: boundedString.optional(),
+    question5: boundedString.optional(),
+    question6: boundedString.min(1, 'Budget range (question 6) is required'),
+    question7: boundedString.optional(),
+    question8: boundedString.optional(),
+    question9: boundedString.optional(),
+}).refine(
+    (data) =>
+        Boolean(
+            (data.gpa || '').trim() ||
+            (data.sat || '').trim() ||
+            (data.internationalExams || '').trim() ||
+            (data.otherExams || '').trim(),
+        ),
+    { message: 'At least one exam or grade metric is required' },
+);
+
 // ── Feedback Types ──────────────────────────────────────
 
 export const createFeedbackTypeSchema = z.object({
