@@ -53,7 +53,7 @@ export async function PUT(
     const { id } = params;
     const body = await request.json();
     const parsed = parseBody(updateUserSchema, body);
-    if (parsed.error) {
+    if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
 

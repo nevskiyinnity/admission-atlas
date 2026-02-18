@@ -16,7 +16,7 @@ export async function POST(
     const { id } = params;
     const body = await request.json();
     const parsed = parseBody(assignCounselorSchema, body);
-    if (parsed.error) {
+    if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
     const { counselorId } = parsed.data;

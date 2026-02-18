@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const parsed = parseBody(createTagSchema, body);
-    if (parsed.error) {
+    if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
     const { name } = parsed.data;

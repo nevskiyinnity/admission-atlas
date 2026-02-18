@@ -225,16 +225,20 @@ export const createFeedbackTypeSchema = z.object({
 // ── Helper ──────────────────────────────────────────────
 
 /** Parse body with a Zod schema. Returns { data } on success or { error } on failure. */
+type ParseSuccess<T> = { ok: true; data: T; error?: undefined };
+type ParseError = { ok: false; data?: undefined; error: string };
+export type ParseResult<T> = ParseSuccess<T> | ParseError;
+
 export function parseBody<T>(
     schema: z.ZodType<T>,
     body: unknown,
-): { data: T; error?: never } | { data?: never; error: string } {
+): ParseResult<T> {
     const result = schema.safeParse(body);
     if (result.success) {
-        return { data: result.data };
+        return { ok: true, data: result.data };
     }
     const messages = result.error.issues.map(
         (i) => `${i.path.join(".")}: ${i.message}`,
     );
-    return { error: messages.join("; ") };
+    return { ok: false, error: messages.join("; ") };
 }

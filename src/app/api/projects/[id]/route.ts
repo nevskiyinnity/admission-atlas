@@ -44,7 +44,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   const { id } = params;
   const body = await req.json();
   const parsed = parseBody(updateProjectSchema, body);
-  if (parsed.error) {
+  if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
   const { deadline, ...fields } = parsed.data;

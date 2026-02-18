@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const parsed = parseBody(createMilestoneSchema, body);
-  if (parsed.error) {
+  if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
   const { name, description, projectId } = parsed.data;

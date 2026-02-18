@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const parsed = parseBody(createUserSchema, body);
-    if (parsed.error) {
+    if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
     const { email, password, name, role } = parsed.data;

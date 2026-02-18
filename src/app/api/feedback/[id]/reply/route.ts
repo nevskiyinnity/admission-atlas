@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { id } = params;
   const body = await req.json();
   const parsed = parseBody(feedbackReplySchema, body);
-  if (parsed.error) {
+  if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
   const { content, userId } = parsed.data;

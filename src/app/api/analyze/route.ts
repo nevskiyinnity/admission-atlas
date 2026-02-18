@@ -15,11 +15,11 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const parsed = parseBody(analyzeProfileSchema, body);
-    if (parsed.error) {
+    if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
 
-    const payload = parsed.data!;
+    const payload = parsed.data;
 
     // When no real API key is configured, return a mock response
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY_HERE') {
