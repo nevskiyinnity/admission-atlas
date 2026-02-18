@@ -13,7 +13,7 @@ import {
 describe('createUserSchema', () => {
   const validUser = {
     email: 'alice@example.com',
-    password: 'secret123',
+    password: 'Secret1!x',
     name: 'Alice',
     role: 'STUDENT' as const,
   };
@@ -42,13 +42,28 @@ describe('createUserSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects password shorter than 6 characters', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: '12345' });
+  it('rejects password shorter than 8 characters', () => {
+    const result = createUserSchema.safeParse({ ...validUser, password: 'Aa1!xyz' });
     expect(result.success).toBe(false);
   });
 
-  it('accepts password with exactly 6 characters', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: '123456' });
+  it('rejects password without uppercase letter', () => {
+    const result = createUserSchema.safeParse({ ...validUser, password: 'secret1!' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects password without digit', () => {
+    const result = createUserSchema.safeParse({ ...validUser, password: 'Secret!x' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects password without special character', () => {
+    const result = createUserSchema.safeParse({ ...validUser, password: 'Secret1xx' });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts password meeting all complexity requirements', () => {
+    const result = createUserSchema.safeParse({ ...validUser, password: 'Str0ng!Pass' });
     expect(result.success).toBe(true);
   });
 
@@ -95,8 +110,13 @@ describe('updateUserSchema', () => {
     }
   });
 
-  it('rejects password shorter than 6 characters when provided', () => {
-    const result = updateUserSchema.safeParse({ password: 'short' });
+  it('rejects password shorter than 8 characters when provided', () => {
+    const result = updateUserSchema.safeParse({ password: 'Aa1!x' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects password without complexity when provided', () => {
+    const result = updateUserSchema.safeParse({ password: 'simplepwd' });
     expect(result.success).toBe(false);
   });
 });
@@ -199,7 +219,7 @@ describe('parseBody', () => {
   it('returns { data } on valid input', () => {
     const result = parseBody(createUserSchema, {
       email: 'a@b.com',
-      password: '123456',
+      password: 'Str0ng!P',
       name: 'A',
       role: 'STUDENT',
     });
@@ -207,7 +227,7 @@ describe('parseBody', () => {
     expect(result.error).toBeUndefined();
     expect(result.data).toEqual({
       email: 'a@b.com',
-      password: '123456',
+      password: 'Str0ng!P',
       name: 'A',
       role: 'STUDENT',
     });
