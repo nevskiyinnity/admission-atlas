@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { logger } from '@/lib/logger';
 
 // POST /api/users/[id]/lock - Toggle lock/unlock a user account
 export async function POST(
@@ -39,7 +40,7 @@ export async function POST(
 
     return NextResponse.json(sanitizedUser);
   } catch (error) {
-    console.error('POST /api/users/[id]/lock error:', error);
+    logger.error('POST /api/users/[id]/lock error', error);
     return NextResponse.json(
       { error: 'Failed to toggle user lock status' },
       { status: 500 }

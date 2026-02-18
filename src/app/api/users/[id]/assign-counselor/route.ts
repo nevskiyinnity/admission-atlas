@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { assignCounselorSchema, parseBody } from '@/lib/validations';
+import { logger } from '@/lib/logger';
 
 // POST /api/users/[id]/assign-counselor - Assign or switch a counselor for a student
 export async function POST(
@@ -76,7 +77,7 @@ export async function POST(
 
     return NextResponse.json(sanitizedUser);
   } catch (error) {
-    console.error('POST /api/users/[id]/assign-counselor error:', error);
+    logger.error('POST /api/users/[id]/assign-counselor error', error);
     return NextResponse.json(
       { error: 'Failed to assign counselor' },
       { status: 500 }
