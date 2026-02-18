@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const role = searchParams.get('role');
-    const search = searchParams.get('search');
+    const search = searchParams.get('search')?.slice(0, 200) || null;
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '10', 10), 100);
     const skip = (page - 1) * limit;
 
     // Build where clause

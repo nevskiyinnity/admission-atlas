@@ -3,12 +3,25 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { createFaqSchema, parseBody } from '@/lib/validations';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
 
-  const faqs = await prisma.fAQ.findMany({ orderBy: [{ category: 'asc' }, { order: 'asc' }] });
-  return NextResponse.json(faqs);
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 100);
+  const skip = (page - 1) * limit;
+
+  const [faqs, total] = await Promise.all([
+    prisma.fAQ.findMany({
+      skip,
+      take: limit,
+      orderBy: [{ category: 'asc' }, { order: 'asc' }],
+    }),
+    prisma.fAQ.count(),
+  ]);
+
+  return NextResponse.json({ faqs, total, page, limit });
 }
 
 export async function POST(req: NextRequest) {

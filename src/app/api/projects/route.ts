@@ -11,27 +11,35 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const studentId = searchParams.get('studentId');
   const counselorId = searchParams.get('counselorId');
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 100);
+  const skip = (page - 1) * limit;
 
   const where: Prisma.ProjectWhereInput = {};
   if (studentId) where.studentId = studentId;
   if (counselorId) where.counselorId = counselorId;
 
-  const projects = await prisma.project.findMany({
-    where,
-    include: {
-      student: { select: { id: true, name: true, studentId: true } },
-      counselor: { select: { id: true, name: true } },
-      milestones: {
-        include: {
-          tasks: { select: { id: true, status: true, deadline: true, name: true } },
+  const [projects, total] = await Promise.all([
+    prisma.project.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        student: { select: { id: true, name: true, studentId: true } },
+        counselor: { select: { id: true, name: true } },
+        milestones: {
+          include: {
+            tasks: { select: { id: true, status: true, deadline: true, name: true } },
+          },
+          orderBy: { order: 'asc' },
         },
-        orderBy: { order: 'asc' },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.project.count({ where }),
+  ]);
 
-  return NextResponse.json(projects);
+  return NextResponse.json({ projects, total, page, limit });
 }
 
 export async function POST(req: NextRequest) {

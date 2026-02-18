@@ -3,12 +3,25 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { createAnnouncementSchema, parseBody } from '@/lib/validations';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
 
-  const announcements = await prisma.announcement.findMany({ orderBy: { createdAt: 'desc' } });
-  return NextResponse.json(announcements);
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 100);
+  const skip = (page - 1) * limit;
+
+  const [announcements, total] = await Promise.all([
+    prisma.announcement.findMany({
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.announcement.count(),
+  ]);
+
+  return NextResponse.json({ announcements, total, page, limit });
 }
 
 export async function POST(req: NextRequest) {
