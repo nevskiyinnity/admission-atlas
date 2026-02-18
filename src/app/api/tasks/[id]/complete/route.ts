@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { requireAuth, isAuthError, canAccessTask } from '@/lib/api-auth';
 import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
@@ -10,6 +10,17 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { id } = params;
 
   try {
+    const existing = await prisma.task.findUnique({
+      where: { id },
+      include: { milestone: { include: { project: { select: { studentId: true, counselorId: true } } } } },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+    if (!canAccessTask(auth.user.id, auth.user.role, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const result = await prisma.$transaction(async (tx) => {
       const task = await tx.task.update({
         where: { id },
