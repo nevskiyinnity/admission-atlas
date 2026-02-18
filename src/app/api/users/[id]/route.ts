@@ -73,8 +73,12 @@ export async function PUT(
     if (nationality !== undefined) data.nationality = nationality;
     if (address !== undefined) data.address = address;
     if (serviceStatus !== undefined) data.serviceStatus = serviceStatus;
-    if (role !== undefined) data.role = role;
-    if (accountStatus !== undefined) data.accountStatus = accountStatus;
+
+    // Only ADMINs may change role and accountStatus (defense-in-depth)
+    if (auth.user.role === 'ADMIN') {
+      if (role !== undefined) data.role = role;
+      if (accountStatus !== undefined) data.accountStatus = accountStatus;
+    }
     if (password) {
       data.password = await bcrypt.hash(password, 10);
     }
