@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
-import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { requireAuth, isAuthError, canAccessTask } from '@/lib/api-auth';
+import { logger } from '@/lib/logger';
 import { updateTaskSchema, parseBody } from '@/lib/validations';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -24,13 +25,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         orderBy: { createdAt: 'desc' },
       },
       milestone: {
-        include: { project: { select: { id: true, universityName: true } } },
+        include: { project: { select: { id: true, universityName: true, studentId: true, counselorId: true } } },
       },
     },
   });
 
   if (!task) {
     return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+  }
+
+  if (!canAccessTask(auth.user.id, auth.user.role, task)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
   return NextResponse.json(task);
@@ -47,14 +52,30 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
   const { deadline, name, description, status, assignedTo } = parsed.data;
-  const data: Prisma.TaskUpdateInput = {};
 
-  if (name !== undefined) data.name = name;
-  if (description !== undefined) data.description = description;
-  if (status !== undefined) data.status = status;
-  if (assignedTo !== undefined) data.assignedTo = assignedTo;
-  if (deadline !== undefined) data.deadline = deadline ? new Date(deadline) : null;
+  try {
+    const existing = await prisma.task.findUnique({
+      where: { id },
+      include: { milestone: { include: { project: { select: { studentId: true, counselorId: true } } } } },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+    if (!canAccessTask(auth.user.id, auth.user.role, existing)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
-  const task = await prisma.task.update({ where: { id }, data });
-  return NextResponse.json(task);
+    const data: Prisma.TaskUpdateInput = {};
+    if (name !== undefined) data.name = name;
+    if (description !== undefined) data.description = description;
+    if (status !== undefined) data.status = status;
+    if (assignedTo !== undefined) data.assignedTo = assignedTo;
+    if (deadline !== undefined) data.deadline = deadline ? new Date(deadline) : null;
+
+    const task = await prisma.task.update({ where: { id }, data });
+    return NextResponse.json(task);
+  } catch (error) {
+    logger.error('PUT /api/tasks/[id] error', error);
+    return NextResponse.json({ error: 'Failed to update task' }, { status: 500 });
+  }
 }
