@@ -97,39 +97,48 @@ export function buildMockResponse(payload: AnalysisPayload): AnalysisResult {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function normalizeResult(raw: any, payload: AnalysisPayload): AnalysisResult {
-  const categoryScores: unknown[] = Array.isArray(raw.categoryScores) ? raw.categoryScores : [];
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+export function normalizeResult(raw: unknown, payload: AnalysisPayload): AnalysisResult {
+  const obj = isRecord(raw) ? raw : {};
+
+  const categoryScores: unknown[] = Array.isArray(obj.categoryScores) ? obj.categoryScores : [];
   const normalizedCategories = categoryScores
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((item: any) => ({
-      label: String(item?.label || '').trim(),
-      score: clampPercent(item?.score, 70),
-    }))
+    .map((item: unknown) => {
+      const rec = isRecord(item) ? item : {};
+      return {
+        label: String(rec.label || '').trim(),
+        score: clampPercent(rec.score, 70),
+      };
+    })
     .filter((item) => item.label)
     .slice(0, 6);
 
-  const alternatives: Alternative[] = Array.isArray(raw.alternatives)
-    ? raw.alternatives
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((item: any) => ({
-          name: String(item?.name || '').trim(),
-          country: String(item?.country || '').trim(),
-          matchPercent: clampPercent(item?.matchPercent, 70),
-          why: String(item?.why || '').trim(),
-        }))
+  const alternatives: Alternative[] = Array.isArray(obj.alternatives)
+    ? obj.alternatives
+        .map((item: unknown) => {
+          const rec = isRecord(item) ? item : {};
+          return {
+            name: String(rec.name || '').trim(),
+            country: String(rec.country || '').trim(),
+            matchPercent: clampPercent(rec.matchPercent, 70),
+            why: String(rec.why || '').trim(),
+          };
+        })
         .filter((item: Alternative) => item.name)
         .slice(0, 6)
     : [];
 
   return {
-    institution: String(raw.institution || payload.university),
-    userTyped: String(raw.userTyped || payload.university),
-    targetMatchPercent: clampPercent(raw.targetMatchPercent ?? raw.compatibilityScore, 70),
-    summary: String(raw.summary || `${payload.name}'s profile has a moderate-to-strong fit for ${payload.university}.`),
-    strengths: ensureStringArray(raw.strengths, ['Competitive academics for the target major.']),
-    concerns: ensureStringArray(raw.concerns, ['Selective admissions uncertainty remains high.']),
-    nextSteps: ensureStringArray(raw.nextSteps, ['Strengthen application narrative with school-specific fit.']),
+    institution: String(obj.institution || payload.university),
+    userTyped: String(obj.userTyped || payload.university),
+    targetMatchPercent: clampPercent(obj.targetMatchPercent ?? obj.compatibilityScore, 70),
+    summary: String(obj.summary || `${payload.name}'s profile has a moderate-to-strong fit for ${payload.university}.`),
+    strengths: ensureStringArray(obj.strengths, ['Competitive academics for the target major.']),
+    concerns: ensureStringArray(obj.concerns, ['Selective admissions uncertainty remains high.']),
+    nextSteps: ensureStringArray(obj.nextSteps, ['Strengthen application narrative with school-specific fit.']),
     categoryScores: normalizedCategories.length
       ? normalizedCategories
       : [
@@ -140,6 +149,6 @@ export function normalizeResult(raw: any, payload: AnalysisPayload): AnalysisRes
           { label: 'Affordability', score: 69 },
         ],
     alternatives,
-    logs: ensureStringArray(raw.logs, ['Generating admissions analysis...']),
+    logs: ensureStringArray(obj.logs, ['Generating admissions analysis...']),
   };
 }
