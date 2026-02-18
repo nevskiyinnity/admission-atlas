@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { createTagSchema, parseBody } from '@/lib/validations';
+import { logger } from '@/lib/logger';
 
 // GET /api/tags - List all tags with optional search
 export async function GET(request: NextRequest) {
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(tags);
   } catch (error) {
-    console.error('GET /api/tags error:', error);
+    logger.error('GET /api/tags error', error);
     return NextResponse.json(
       { error: 'Failed to fetch tags' },
       { status: 500 }
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(tag, { status: 201 });
   } catch (error) {
-    console.error('POST /api/tags error:', error);
+    logger.error('POST /api/tags error', error);
     return NextResponse.json(
       { error: 'Failed to create tag' },
       { status: 500 }
@@ -107,7 +108,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('DELETE /api/tags error:', error);
+    logger.error('DELETE /api/tags error', error);
     return NextResponse.json(
       { error: 'Failed to delete tag' },
       { status: 500 }
