@@ -4,6 +4,18 @@ import { prisma } from '@/lib/prisma';
 import { getFileType } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 
+const ALLOWED_MIME_TYPES = new Set([
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/gif',
+]);
+
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
@@ -23,6 +35,10 @@ export async function POST(req: NextRequest) {
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
   if (file.size > MAX_FILE_SIZE) {
     return NextResponse.json({ error: 'File exceeds 50MB size limit' }, { status: 413 });
+  }
+
+  if (!ALLOWED_MIME_TYPES.has(file.type)) {
+    return NextResponse.json({ error: 'File type not allowed' }, { status: 400 });
   }
 
   // Upload to Vercel Blob
