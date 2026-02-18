@@ -8,6 +8,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (isAuthError(auth)) return auth;
 
   const { id } = params;
+
+  if (auth.user.id !== id && auth.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const body = await req.json();
   const parsed = parseBody(updateSettingsSchema, body);
   if (parsed.error) {
