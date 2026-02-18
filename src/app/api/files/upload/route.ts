@@ -20,6 +20,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'File and uploaderId required' }, { status: 400 });
   }
 
+  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+  if (file.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: 'File exceeds 50MB size limit' }, { status: 413 });
+  }
+
   // Upload to Vercel Blob
   const blob = await put(file.name, file, { access: 'public' });
 
