@@ -2,6 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { routing } from '@/i18n/routing';
+import { validateOrigin } from '@/lib/csrf';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -19,8 +20,39 @@ const roleHomeMap: Record<string, string> = {
   ADMIN: '/admin/dashboard',
 };
 
+const securityHeaders: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+};
+
+function applySecurityHeaders(response: NextResponse): NextResponse {
+  for (const [key, value] of Object.entries(securityHeaders)) {
+    response.headers.set(key, value);
+  }
+  return response;
+}
+
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // CSRF protection for API mutation requests
+  if (
+    pathname.startsWith('/api') &&
+    ['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)
+  ) {
+    if (!validateOrigin(req)) {
+      return applySecurityHeaders(
+        NextResponse.json(
+          { error: 'CSRF validation failed: origin mismatch' },
+          { status: 403 }
+        )
+      );
+    }
+  }
 
   // Skip API routes and static files
   if (
@@ -29,7 +61,7 @@ export default async function middleware(req: NextRequest) {
     pathname.startsWith('/uploads') ||
     pathname.includes('.')
   ) {
-    return NextResponse.next();
+    return applySecurityHeaders(NextResponse.next());
   }
 
   // Apply intl middleware first
@@ -94,9 +126,9 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
-  return intlResponse;
+  return applySecurityHeaders(intlResponse as NextResponse);
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)',],
 };
