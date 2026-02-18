@@ -139,6 +139,10 @@ model User {
   uploadLogs         UploadLog[]
   feedbacks          Feedback[]      @relation("UserFeedbacks")
   feedbackReplies    FeedbackReply[]
+
+  @@index([role])
+  @@index([assignedCounselorId])
+  @@index([email])
 }
 
 model Tag {
@@ -170,6 +174,9 @@ model Project {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([counselorId])
 }
 
 model Milestone {
@@ -187,6 +194,8 @@ model Milestone {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([projectId])
 }
 
 model Task {
@@ -205,6 +214,8 @@ model Task {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([milestoneId])
 }
 
 model Message {
@@ -220,6 +231,8 @@ model Message {
   attachments File[]
 
   createdAt DateTime @default(now())
+
+  @@index([taskId])
 }
 
 model File {
@@ -245,6 +258,10 @@ model File {
   messageId   String?
 
   createdAt DateTime @default(now())
+
+  @@index([uploaderId])
+  @@index([projectId])
+  @@index([taskId])
 }
 
 model Notification {
@@ -259,6 +276,8 @@ model Notification {
   userId String
 
   createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model LoginLog {
@@ -270,6 +289,8 @@ model LoginLog {
   userId String
 
   createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model UploadLog {
@@ -299,6 +320,8 @@ model Feedback {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model FeedbackReply {
