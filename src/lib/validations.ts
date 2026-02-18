@@ -22,7 +22,10 @@ const NotificationType = z.enum([
 
 export const createUserSchema = z.object({
     email: z.email(),
-    password: z.string().min(6),
+    password: z.string().min(8, 'Password must be at least 8 characters')
+        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .regex(/[0-9]/, 'Password must contain at least one digit')
+        .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
     name: z.string().min(1),
     role: Role,
 });
@@ -38,7 +41,11 @@ export const updateUserSchema = z.object({
     serviceStatus: ServiceStatus.optional(),
     role: Role.optional(),
     accountStatus: AccountStatus.optional(),
-    password: z.string().min(6).optional(),
+    password: z.string().min(8, 'Password must be at least 8 characters')
+        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .regex(/[0-9]/, 'Password must contain at least one digit')
+        .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
+        .optional(),
     dateOfBirth: z.string().optional().nullable(),
     assignedCounselorId: z.string().optional().nullable(),
     tagIds: z.array(z.string()).optional(),
