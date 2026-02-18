@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { generateDisplayId } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { sanitizeUser, sanitizeUsers } from '@/lib/api-helpers';
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: Record<string, unknown> = {};
+    const where: Prisma.UserWhereInput = {};
 
     if (role) {
       where.role = role;

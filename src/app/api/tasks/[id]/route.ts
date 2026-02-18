@@ -46,12 +46,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (parsed.error) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
-  const { deadline, ...fields } = parsed.data;
+  const { deadline, name, description, status, assignedTo } = parsed.data;
   const data: Prisma.TaskUpdateInput = {};
 
-  for (const [key, value] of Object.entries(fields)) {
-    if (value !== undefined) (data as Record<string, unknown>)[key] = value;
-  }
+  if (name !== undefined) data.name = name;
+  if (description !== undefined) data.description = description;
+  if (status !== undefined) data.status = status;
+  if (assignedTo !== undefined) data.assignedTo = assignedTo;
   if (deadline !== undefined) data.deadline = deadline ? new Date(deadline) : null;
 
   const task = await prisma.task.update({ where: { id }, data });

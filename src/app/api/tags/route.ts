@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { createTagSchema, parseBody } from '@/lib/validations';
 
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search');
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.TagWhereInput = {};
 
     if (search) {
       where.name = { contains: search, mode: 'insensitive' };

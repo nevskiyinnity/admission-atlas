@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 import { sanitizeUser } from '@/lib/api-helpers';
 import { updateUserSchema, parseBody } from '@/lib/validations';
@@ -60,13 +61,19 @@ export async function PUT(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const { tagIds, password, dateOfBirth, assignedCounselorId, ...fields } = parsed.data;
-    const data: Record<string, unknown> = {};
+    const { tagIds, password, dateOfBirth, assignedCounselorId, name, email, phone, gender, avatar, nationality, address, serviceStatus, role, accountStatus } = parsed.data;
+    const data: Prisma.UserUpdateInput = {};
 
-    for (const [key, value] of Object.entries(fields)) {
-      if (value !== undefined) data[key] = value;
-    }
-
+    if (name !== undefined) data.name = name;
+    if (email !== undefined) data.email = email;
+    if (phone !== undefined) data.phone = phone;
+    if (gender !== undefined) data.gender = gender;
+    if (avatar !== undefined) data.avatar = avatar;
+    if (nationality !== undefined) data.nationality = nationality;
+    if (address !== undefined) data.address = address;
+    if (serviceStatus !== undefined) data.serviceStatus = serviceStatus;
+    if (role !== undefined) data.role = role;
+    if (accountStatus !== undefined) data.accountStatus = accountStatus;
     if (password) {
       data.password = await bcrypt.hash(password, 10);
     }
@@ -74,7 +81,9 @@ export async function PUT(
       data.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
     }
     if (assignedCounselorId !== undefined) {
-      data.assignedCounselorId = assignedCounselorId || null;
+      data.assignedCounselor = assignedCounselorId
+        ? { connect: { id: assignedCounselorId } }
+        : { disconnect: true };
     }
     if (tagIds !== undefined) {
       data.tags = { set: tagIds.map((tid) => ({ id: tid })) };
