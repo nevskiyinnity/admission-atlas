@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { routing } from '@/i18n/routing';
 import { validateOrigin } from '@/lib/csrf';
+import { isRateLimited } from '@/lib/rate-limit';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -49,6 +50,21 @@ export default async function middleware(req: NextRequest) {
         NextResponse.json(
           { error: 'CSRF validation failed: origin mismatch' },
           { status: 403 }
+        )
+      );
+    }
+  }
+
+  // Rate limiting for API routes
+  if (pathname.startsWith('/api')) {
+    const forwarded = req.headers.get('x-forwarded-for');
+    const ip = forwarded ? forwarded.split(',')[0].trim() : req.headers.get('x-real-ip') || '127.0.0.1';
+    const maxRequests = req.method === 'GET' ? 100 : 20;
+    if (isRateLimited(ip, maxRequests)) {
+      return applySecurityHeaders(
+        NextResponse.json(
+          { error: 'Too many requests. Please try again later.' },
+          { status: 429 }
         )
       );
     }
