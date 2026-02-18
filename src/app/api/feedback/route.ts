@@ -48,10 +48,10 @@ export async function POST(req: NextRequest) {
   if (parsed.error) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
-  const { type, description, userId } = parsed.data;
+  const { type, description } = parsed.data;
 
   const feedback = await prisma.feedback.create({
-    data: { type, description, userId },
+    data: { type, description, userId: auth.user.id },
   });
 
   return NextResponse.json(feedback);

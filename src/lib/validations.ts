@@ -151,7 +151,6 @@ export const updateFaqSchema = z.object({
 export const createFeedbackSchema = z.object({
     type: z.string().min(1),
     description: z.string().min(1),
-    userId: z.string().min(1),
 });
 
 export const feedbackReplySchema = z.object({
