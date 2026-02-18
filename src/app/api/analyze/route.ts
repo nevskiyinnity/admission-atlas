@@ -6,7 +6,9 @@ import { SYSTEM_MESSAGE, buildAnalysisPrompt } from '@/lib/prompts';
 import { buildMockResponse, normalizeResult } from '@/lib/analysis-utils';
 import { logger } from '@/lib/logger';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy' });
+}
 
 export async function POST(req: NextRequest) {
   const auth = await requireAuth();
@@ -26,7 +28,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(buildMockResponse(payload));
     }
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4o-mini',
       response_format: { type: 'json_object' },
       messages: [
