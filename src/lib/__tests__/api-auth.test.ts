@@ -3,30 +3,23 @@ import { NextResponse } from 'next/server';
 
 // ── Mocks ────────────────────────────────────────────────
 
-vi.mock('next-auth', () => ({
-  getServerSession: vi.fn(),
-}));
+const mockAuth = vi.fn();
 
-vi.mock('@/lib/auth', () => ({
-  authOptions: { providers: [] },
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: () => mockAuth(),
 }));
 
 import { requireAuth, isAuthError } from '@/lib/api-auth';
-import { getServerSession } from 'next-auth';
-
-const mockedGetServerSession = vi.mocked(getServerSession);
 
 // ── Helpers ──────────────────────────────────────────────
 
-function makeSession(role: 'STUDENT' | 'COUNSELOR' | 'ADMIN') {
+function makeClerkAuth(userId: string, role: 'STUDENT' | 'COUNSELOR' | 'ADMIN', email = 'test@example.com') {
   return {
-    user: {
-      id: 'user-1',
-      name: 'Test User',
-      email: 'test@example.com',
-      role,
+    userId,
+    sessionClaims: {
+      metadata: { role },
+      email,
     },
-    expires: '2099-01-01T00:00:00.000Z',
   };
 }
 
@@ -37,8 +30,8 @@ describe('requireAuth', () => {
     vi.clearAllMocks();
   });
 
-  it('returns 401 NextResponse when there is no session', async () => {
-    mockedGetServerSession.mockResolvedValue(null);
+  it('returns 401 NextResponse when there is no userId', async () => {
+    mockAuth.mockResolvedValue({ userId: null, sessionClaims: null });
 
     const result = await requireAuth();
 
@@ -49,17 +42,8 @@ describe('requireAuth', () => {
     expect(body).toEqual({ error: 'Unauthorized' });
   });
 
-  it('returns 401 NextResponse when session exists but user is undefined', async () => {
-    mockedGetServerSession.mockResolvedValue({ expires: '', user: undefined } as never);
-
-    const result = await requireAuth();
-
-    expect(result).toBeInstanceOf(NextResponse);
-    expect((result as NextResponse).status).toBe(401);
-  });
-
   it('returns 403 when user role is not in allowedRoles', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession('STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-1', 'STUDENT'));
 
     const result = await requireAuth(['ADMIN', 'COUNSELOR']);
 
@@ -70,33 +54,36 @@ describe('requireAuth', () => {
     expect(body).toEqual({ error: 'Forbidden' });
   });
 
-  it('returns the session when user has a correct role', async () => {
-    const session = makeSession('ADMIN');
-    mockedGetServerSession.mockResolvedValue(session);
+  it('returns user object when user has a correct role', async () => {
+    mockAuth.mockResolvedValue(makeClerkAuth('user-1', 'ADMIN'));
 
     const result = await requireAuth(['ADMIN']);
 
     expect(result).not.toBeInstanceOf(NextResponse);
-    expect(result).toEqual(session);
+    expect(result).toEqual({
+      user: { id: 'user-1', role: 'ADMIN', email: 'test@example.com' },
+    });
   });
 
-  it('returns the session when allowedRoles is undefined (no restriction)', async () => {
-    const session = makeSession('STUDENT');
-    mockedGetServerSession.mockResolvedValue(session);
+  it('returns user object when allowedRoles is undefined (no restriction)', async () => {
+    mockAuth.mockResolvedValue(makeClerkAuth('user-1', 'STUDENT'));
 
     const result = await requireAuth();
 
     expect(result).not.toBeInstanceOf(NextResponse);
-    expect(result).toEqual(session);
+    expect(result).toEqual({
+      user: { id: 'user-1', role: 'STUDENT', email: 'test@example.com' },
+    });
   });
 
-  it('returns the session when allowedRoles list contains the user role among others', async () => {
-    const session = makeSession('COUNSELOR');
-    mockedGetServerSession.mockResolvedValue(session);
+  it('returns user object when allowedRoles list contains the user role among others', async () => {
+    mockAuth.mockResolvedValue(makeClerkAuth('user-1', 'COUNSELOR'));
 
     const result = await requireAuth(['STUDENT', 'COUNSELOR', 'ADMIN']);
 
-    expect(result).toEqual(session);
+    expect(result).toEqual({
+      user: { id: 'user-1', role: 'COUNSELOR', email: 'test@example.com' },
+    });
   });
 });
 
@@ -106,8 +93,8 @@ describe('isAuthError', () => {
     expect(isAuthError(response)).toBe(true);
   });
 
-  it('returns false for a session object', () => {
-    const session = makeSession('STUDENT');
-    expect(isAuthError(session as Awaited<ReturnType<typeof requireAuth>>)).toBe(false);
+  it('returns false for a user object', () => {
+    const result = { user: { id: 'user-1', role: 'STUDENT', email: 'test@example.com' } };
+    expect(isAuthError(result)).toBe(false);
   });
 });

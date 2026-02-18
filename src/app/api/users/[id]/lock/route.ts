@@ -35,10 +35,7 @@ export async function POST(
       data: { accountStatus: newStatus },
     });
 
-    // Strip password from response
-    const { password: _, ...sanitizedUser } = updatedUser;
-
-    return NextResponse.json(sanitizedUser);
+    return NextResponse.json(updatedUser);
   } catch (error) {
     logger.error('POST /api/users/[id]/lock error', error);
     return NextResponse.json(

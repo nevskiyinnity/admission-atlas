@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut, useSession } from 'next-auth/react';
+import { useUser, useClerk } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { LogOut, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,13 +14,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function UserMenu() {
-  const { data: session } = useSession();
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const t = useTranslations('common');
 
-  if (!session?.user) return null;
+  if (!isLoaded || !user) return null;
 
-  const initials = session.user.name
-    ?.split(' ')
+  const displayName = user.fullName || user.firstName || 'User';
+  const initials = displayName
+    .split(' ')
     .map((n) => n[0])
     .join('')
     .toUpperCase() || 'U';
@@ -30,16 +32,16 @@ export function UserMenu() {
       <DropdownMenuTrigger>
         <div className="flex items-center gap-2 cursor-pointer">
           <Avatar className="h-8 w-8">
-            {session.user.avatar && <AvatarImage src={session.user.avatar} />}
+            {user.imageUrl && <AvatarImage src={user.imageUrl} />}
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium hidden md:block">{session.user.name}</span>
+          <span className="text-sm font-medium hidden md:block">{displayName}</span>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{session.user.email}</DropdownMenuLabel>
+        <DropdownMenuLabel>{user.primaryEmailAddress?.emailAddress}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
+        <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/login' })}>
           <LogOut className="mr-2 h-4 w-4" />
           {t('logout')}
         </DropdownMenuItem>

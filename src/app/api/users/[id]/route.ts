@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
@@ -62,7 +61,7 @@ export async function PUT(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const { tagIds, password, dateOfBirth, assignedCounselorId, name, email, phone, gender, avatar, nationality, address, serviceStatus, role, accountStatus } = parsed.data;
+    const { tagIds, dateOfBirth, assignedCounselorId, name, email, phone, gender, avatar, serviceStatus, role, accountStatus } = parsed.data;
     const data: Prisma.UserUpdateInput = {};
 
     if (name !== undefined) data.name = name;
@@ -76,9 +75,6 @@ export async function PUT(
     if (auth.user.role === 'ADMIN') {
       if (role !== undefined) data.role = role;
       if (accountStatus !== undefined) data.accountStatus = accountStatus;
-    }
-    if (password) {
-      data.password = await bcrypt.hash(password, 10);
     }
     if (dateOfBirth !== undefined) {
       data.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;

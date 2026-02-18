@@ -12,18 +12,14 @@ const { mockPrisma } = vi.hoisted(() => ({
   },
 }));
 
-const { mockGetServerSession } = vi.hoisted(() => ({
-  mockGetServerSession: vi.fn(),
+const { mockAuth } = vi.hoisted(() => ({
+  mockAuth: vi.fn(),
 }));
 
 // ── Mocks ───────────────────────────────────────────────
 
-vi.mock('next-auth', () => ({
-  getServerSession: mockGetServerSession,
-}));
-
-vi.mock('@/lib/auth', () => ({
-  authOptions: { providers: [] },
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: () => mockAuth(),
 }));
 
 vi.mock('@/lib/prisma', () => ({
@@ -34,20 +30,19 @@ vi.mock('@/lib/logger', () => ({
   logger: { error: vi.fn(), warn: vi.fn(), info: vi.fn() },
 }));
 
-vi.mock('bcryptjs', () => ({
-  default: { hash: vi.fn().mockResolvedValue('hashed-pw') },
-}));
-
 // ── Imports (after mocks) ───────────────────────────────
 
 import { PUT as putUser } from '@/app/api/users/[id]/route';
 
 // ── Helpers ─────────────────────────────────────────────
 
-function makeSession(id: string, role: 'STUDENT' | 'COUNSELOR' | 'ADMIN') {
+function makeClerkAuth(id: string, role: 'STUDENT' | 'COUNSELOR' | 'ADMIN') {
   return {
-    user: { id, name: 'Test', email: 'test@example.com', role },
-    expires: '2099-01-01T00:00:00.000Z',
+    userId: id,
+    sessionClaims: {
+      metadata: { role },
+      email: 'test@example.com',
+    },
   };
 }
 
@@ -75,13 +70,8 @@ beforeEach(() => {
 });
 
 describe('Mass-Assignment Prevention — PUT /api/users/[id]', () => {
-  // The PUT handler requires ADMIN role. A non-admin cannot even reach the
-  // mass-assignment logic because requireAuth(['ADMIN']) blocks them first.
-  // This confirms the defense-in-depth: role-based access control prevents
-  // non-admin users from calling the endpoint at all.
-
   it('rejects a STUDENT trying to call the endpoint (403 from role check)', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-1', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-1', 'STUDENT'));
 
     const res = await putUser(
       makeRequest('/api/users/user-1', { role: 'ADMIN' }),
@@ -93,7 +83,7 @@ describe('Mass-Assignment Prevention — PUT /api/users/[id]', () => {
   });
 
   it('rejects a COUNSELOR trying to change role (403 from role check)', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('counselor-1', 'COUNSELOR'));
+    mockAuth.mockResolvedValue(makeClerkAuth('counselor-1', 'COUNSELOR'));
 
     const res = await putUser(
       makeRequest('/api/users/user-1', { role: 'ADMIN', accountStatus: 'LOCKED' }),
@@ -105,7 +95,7 @@ describe('Mass-Assignment Prevention — PUT /api/users/[id]', () => {
   });
 
   it('ADMIN can update role and accountStatus', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.user.update.mockResolvedValue({
       ...existingUser,
       role: 'COUNSELOR',
@@ -119,14 +109,13 @@ describe('Mass-Assignment Prevention — PUT /api/users/[id]', () => {
 
     expect(res.status).toBe(200);
 
-    // Verify the data passed to prisma.user.update includes role + accountStatus
     const updateCall = mockPrisma.user.update.mock.calls[0][0];
     expect(updateCall.data.role).toBe('COUNSELOR');
     expect(updateCall.data.accountStatus).toBe('LOCKED');
   });
 
   it('ADMIN can update regular fields (name, email, phone)', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.user.update.mockResolvedValue({
       ...existingUser,
       name: 'Updated Name',
@@ -151,7 +140,7 @@ describe('Mass-Assignment Prevention — PUT /api/users/[id]', () => {
   });
 
   it('ADMIN update without role/accountStatus does not set them', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.user.update.mockResolvedValue({
       ...existingUser,
       name: 'Just Name',

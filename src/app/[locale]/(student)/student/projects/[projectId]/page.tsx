@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -35,7 +35,7 @@ interface Message {
 export default function StudentProjectPage() {
   const t = useTranslations('student.task');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const params = useParams();
   const projectId = params.projectId as string;
 
@@ -71,11 +71,11 @@ export default function StudentProjectPage() {
   const currentTask = currentMilestone?.tasks.find((t) => t.id === selectedTask);
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedTask || !session?.user?.id) return;
+    if (!newMessage.trim() || !selectedTask || !userId) return;
     await fetch('/api/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: newMessage.trim(), senderId: session.user.id, taskId: selectedTask }),
+      body: JSON.stringify({ content: newMessage.trim(), senderId: userId, taskId: selectedTask }),
     });
     setNewMessage('');
     const res = await fetch(`/api/messages?taskId=${selectedTask}`);
@@ -140,7 +140,7 @@ export default function StudentProjectPage() {
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((msg) => {
-                const isMe = msg.sender.id === session?.user?.id;
+                const isMe = msg.sender.id === userId;
                 const initials = msg.sender.name.split(' ').map((n) => n[0]).join('').toUpperCase();
                 return (
                   <div key={msg.id} className={cn('flex gap-2', isMe && 'flex-row-reverse')}>
@@ -154,9 +154,9 @@ export default function StudentProjectPage() {
               })}
             </div>
             <div className="p-3 border-t space-y-2">
-              {session?.user?.id && selectedTask && (
+              {userId && selectedTask && (
                 <FileUpload
-                  uploaderId={session.user.id}
+                  uploaderId={userId}
                   taskId={selectedTask}
                   projectId={projectId}
                   milestoneId={selectedMilestone || undefined}

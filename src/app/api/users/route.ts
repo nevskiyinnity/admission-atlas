@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { generateDisplayId } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
-import { sanitizeUser, sanitizeUsers } from '@/lib/api-helpers';
+import { sanitizeUsers } from '@/lib/api-helpers';
 import { createUserSchema, parseBody } from '@/lib/validations';
 import { logger } from '@/lib/logger';
 
@@ -55,7 +54,6 @@ export async function GET(request: NextRequest) {
       prisma.user.count({ where }),
     ]);
 
-    // Strip passwords from response
     const sanitizedUsers = sanitizeUsers(users);
 
     return NextResponse.json({
@@ -73,7 +71,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/users - Create a new user
+// POST /api/users - Create a new user (admin-only, creates local DB record)
 export async function POST(request: NextRequest) {
   const auth = await requireAuth(['ADMIN']);
   if (isAuthError(auth)) return auth;
@@ -84,7 +82,7 @@ export async function POST(request: NextRequest) {
     if (!parsed.ok) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
-    const { email, password, name, role } = parsed.data;
+    const { email, name, role } = parsed.data;
 
     // Check for existing user with this email
     const existingUser = await prisma.user.findUnique({
@@ -97,9 +95,6 @@ export async function POST(request: NextRequest) {
         { status: 409 }
       );
     }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Auto-generate studentId or counselorId
     let studentId: string | undefined;
@@ -120,7 +115,6 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({
       data: {
         email,
-        password: hashedPassword,
         name,
         role,
         studentId,
@@ -128,10 +122,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Strip password from response
-    const sanitizedUser = sanitizeUser(user);
-
-    return NextResponse.json(sanitizedUser, { status: 201 });
+    return NextResponse.json(user, { status: 201 });
   } catch (error) {
     logger.error('POST /api/users error', error);
     return NextResponse.json(

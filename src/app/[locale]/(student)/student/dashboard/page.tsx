@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,16 +20,16 @@ interface Project {
 export default function StudentDashboardPage() {
   const t = useTranslations('student.dashboard');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!session?.user?.id) return;
-    fetch(`/api/projects?studentId=${session.user.id}`)
+    if (!userId) return;
+    fetch(`/api/projects?studentId=${userId}`)
       .then((res) => res.json())
       .then((data) => { setProjects(data); setLoading(false); });
-  }, [session?.user?.id]);
+  }, [userId]);
 
   if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;
 

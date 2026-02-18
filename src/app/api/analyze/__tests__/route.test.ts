@@ -7,14 +7,14 @@ const { mockCreate } = vi.hoisted(() => ({
   mockCreate: vi.fn(),
 }));
 
-// ── Mocks ────────────────────────────────────────────────
-
-vi.mock('next-auth', () => ({
-  getServerSession: vi.fn(),
+const { mockAuth } = vi.hoisted(() => ({
+  mockAuth: vi.fn(),
 }));
 
-vi.mock('@/lib/auth', () => ({
-  authOptions: { providers: [] },
+// ── Mocks ────────────────────────────────────────────────
+
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: () => mockAuth(),
 }));
 
 vi.mock('openai', () => ({
@@ -23,10 +23,7 @@ vi.mock('openai', () => ({
   },
 }));
 
-import { getServerSession } from 'next-auth';
 import { POST } from '@/app/api/analyze/route';
-
-const mockedGetServerSession = vi.mocked(getServerSession);
 
 // ── Helpers ─────────────────────────────────────────────
 
@@ -34,15 +31,13 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-function makeSession() {
+function makeClerkAuth() {
   return {
-    user: {
-      id: 'user-1',
-      name: 'Test User',
+    userId: 'user-1',
+    sessionClaims: {
+      metadata: { role: 'STUDENT' },
       email: 'test@example.com',
-      role: 'STUDENT',
     },
-    expires: '2099-01-01T00:00:00.000Z',
   };
 }
 
@@ -66,7 +61,7 @@ const validBody = {
 
 describe('POST /api/analyze', () => {
   it('returns 401 when not authenticated', async () => {
-    mockedGetServerSession.mockResolvedValue(null);
+    mockAuth.mockResolvedValue({ userId: null, sessionClaims: null });
 
     const response = await POST(makeRequest(validBody));
 
@@ -76,7 +71,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns 400 when required fields are missing', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
 
     const response = await POST(makeRequest({ name: 'Jordan' }));
 
@@ -86,7 +81,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns 400 when no academic metric is provided', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
 
     const response = await POST(
       makeRequest({
@@ -103,7 +98,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns a mock response when no OPENAI_API_KEY is set', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
     const originalKey = process.env.OPENAI_API_KEY;
     delete process.env.OPENAI_API_KEY;
 
@@ -125,7 +120,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns a mock response when OPENAI_API_KEY is placeholder', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
     const originalKey = process.env.OPENAI_API_KEY;
     process.env.OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY_HERE';
 
@@ -145,7 +140,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('calls OpenAI and returns normalized response when API key is real', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
     const originalKey = process.env.OPENAI_API_KEY;
     process.env.OPENAI_API_KEY = 'sk-test-real-key';
 
@@ -188,7 +183,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns 500 when OpenAI call fails', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
     const originalKey = process.env.OPENAI_API_KEY;
     process.env.OPENAI_API_KEY = 'sk-test-real-key';
 
@@ -210,7 +205,7 @@ describe('POST /api/analyze', () => {
   });
 
   it('returns 400 when a field exceeds 1000 characters', async () => {
-    mockedGetServerSession.mockResolvedValue(makeSession());
+    mockAuth.mockResolvedValue(makeClerkAuth());
 
     const response = await POST(
       makeRequest({

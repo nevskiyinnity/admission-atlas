@@ -10,8 +10,8 @@ const { mockPrisma } = vi.hoisted(() => ({
   },
 }));
 
-const { mockGetServerSession } = vi.hoisted(() => ({
-  mockGetServerSession: vi.fn(),
+const { mockAuth } = vi.hoisted(() => ({
+  mockAuth: vi.fn(),
 }));
 
 const { mockPut } = vi.hoisted(() => ({
@@ -20,12 +20,8 @@ const { mockPut } = vi.hoisted(() => ({
 
 // ── Mocks ───────────────────────────────────────────────
 
-vi.mock('next-auth', () => ({
-  getServerSession: mockGetServerSession,
-}));
-
-vi.mock('@/lib/auth', () => ({
-  authOptions: { providers: [] },
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: () => mockAuth(),
 }));
 
 vi.mock('@/lib/prisma', () => ({
@@ -46,10 +42,13 @@ import { POST } from '@/app/api/files/upload/route';
 
 // ── Helpers ─────────────────────────────────────────────
 
-function makeSession() {
+function makeClerkAuth() {
   return {
-    user: { id: 'user-1', name: 'Test', email: 'test@example.com', role: 'STUDENT' },
-    expires: '2099-01-01T00:00:00.000Z',
+    userId: 'user-1',
+    sessionClaims: {
+      metadata: { role: 'STUDENT' },
+      email: 'test@example.com',
+    },
   };
 }
 
@@ -122,7 +121,7 @@ function buildFakeSizeRequest(
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockGetServerSession.mockResolvedValue(makeSession());
+  mockAuth.mockResolvedValue(makeClerkAuth());
   mockPut.mockResolvedValue({ pathname: 'test-file.pdf', url: 'https://blob.example.com/test-file.pdf' });
   mockPrisma.file.create.mockResolvedValue({
     id: 'file-1',
@@ -214,7 +213,7 @@ describe('File Upload — Missing fields', () => {
   });
 
   it('returns 401 when not authenticated', async () => {
-    mockGetServerSession.mockResolvedValue(null);
+    mockAuth.mockResolvedValue({ userId: null, sessionClaims: null });
 
     const req = buildFormDataRequest('test.pdf', 'application/pdf', 1024);
     const res = await POST(req);

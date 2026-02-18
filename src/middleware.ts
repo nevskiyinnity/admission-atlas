@@ -1,11 +1,11 @@
-import createMiddleware from 'next-intl/middleware';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 import { routing } from '@/i18n/routing';
 import { validateOrigin } from '@/lib/csrf';
 import { isRateLimited } from '@/lib/rate-limit';
 
-const intlMiddleware = createMiddleware(routing);
+const intlMiddleware = createIntlMiddleware(routing);
 
 const publicPages = ['/login', '/forgot-password'];
 
@@ -37,7 +37,13 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
-export default async function middleware(req: NextRequest) {
+const isPublicRoute = createRouteMatcher([
+  '/(en|zh)/login(.*)',
+  '/(en|zh)/forgot-password(.*)',
+  '/api/webhooks/(.*)',
+]);
+
+export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { pathname } = req.nextUrl;
 
   // CSRF protection for API mutation requests
@@ -70,7 +76,7 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
-  // Skip API routes and static files
+  // Skip API routes and static files for intl/auth page logic
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
@@ -91,38 +97,36 @@ export default async function middleware(req: NextRequest) {
     (page) => pathnameWithoutLocale === page || pathnameWithoutLocale.startsWith(page)
   );
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const { userId, sessionClaims } = await auth();
+  const role = (sessionClaims?.metadata as Record<string, unknown>)?.role as string | undefined;
 
   // If on public page and already logged in, redirect to home
-  if (isPublicPage && token) {
-    const role = token.role as string;
-    const home = roleHomeMap[role] || '/login';
+  if (isPublicPage && userId) {
+    const home = roleHomeMap[role || ''] || '/login';
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
   }
 
   // If not public page and not logged in, redirect to login
-  if (!isPublicPage && !token && pathnameWithoutLocale !== '/') {
+  if (!isPublicPage && !userId && pathnameWithoutLocale !== '/') {
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
 
   // Root redirect
-  if (pathnameWithoutLocale === '/' && token) {
-    const role = token.role as string;
-    const home = roleHomeMap[role] || '/login';
+  if (pathnameWithoutLocale === '/' && userId) {
+    const home = roleHomeMap[role || ''] || '/login';
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
   }
 
-  if (pathnameWithoutLocale === '/' && !token) {
+  if (pathnameWithoutLocale === '/' && !userId) {
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
 
   // Role-based route guard
-  if (token) {
-    const role = token.role as string;
+  if (userId && role) {
     const allowedPrefixes = roleRouteMap[role] || [];
 
     const isProtectedRoute = Object.values(roleRouteMap)
@@ -143,8 +147,8 @@ export default async function middleware(req: NextRequest) {
   }
 
   return applySecurityHeaders(intlResponse as NextResponse);
-}
+});
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)',],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };

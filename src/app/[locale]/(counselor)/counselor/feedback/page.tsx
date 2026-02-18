@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -14,7 +14,7 @@ interface FeedbackItem { id: string; type: string; description: string; status: 
 export default function CounselorFeedbackPage() {
   const t = useTranslations('feedback');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [types, setTypes] = useState<FeedbackType[]>([]);
   const [form, setForm] = useState({ type: '', description: '' });
@@ -22,20 +22,20 @@ export default function CounselorFeedbackPage() {
 
   useEffect(() => {
     fetch('/api/feedback-types').then((r) => r.json()).then(setTypes);
-    if (session?.user?.id) {
-      fetch(`/api/feedback?userId=${session.user.id}`).then((r) => r.json()).then(setFeedbacks);
+    if (userId) {
+      fetch(`/api/feedback?userId=${userId}`).then((r) => r.json()).then(setFeedbacks);
     }
-  }, [session?.user?.id]);
+  }, [userId]);
 
   const submitFeedback = async () => {
-    if (!form.type || !form.description || !session?.user?.id) return;
+    if (!form.type || !form.description || !userId) return;
     await fetch('/api/feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, userId: session.user.id }),
+      body: JSON.stringify({ ...form, userId: userId }),
     });
     setForm({ type: '', description: '' });
-    const res = await fetch(`/api/feedback?userId=${session.user.id}`);
+    const res = await fetch(`/api/feedback?userId=${userId}`);
     setFeedbacks(await res.json());
   };
 

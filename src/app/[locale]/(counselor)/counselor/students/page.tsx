@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Input } from '@/components/ui/input';
@@ -22,13 +22,13 @@ interface Student {
 export default function CounselorStudentsPage() {
   const t = useTranslations('counselor.students');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [students, setStudents] = useState<Student[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!session?.user?.id) return;
+    if (!userId) return;
     const timer = setTimeout(async () => {
       setLoading(true);
       const params = new URLSearchParams({ role: 'STUDENT', limit: '100' });
@@ -37,13 +37,13 @@ export default function CounselorStudentsPage() {
       const data = await res.json();
       // Filter to only students assigned to this counselor
       const myStudents = (data.users || []).filter(
-        (u: any) => u.assignedCounselorId === session.user.id
+        (u: any) => u.assignedCounselorId === userId
       );
       setStudents(myStudents);
       setLoading(false);
     }, 300);
     return () => clearTimeout(timer);
-  }, [session?.user?.id, search]);
+  }, [userId, search]);
 
   return (
     <div>

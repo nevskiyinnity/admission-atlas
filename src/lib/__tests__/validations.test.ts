@@ -13,7 +13,6 @@ import {
 describe('createUserSchema', () => {
   const validUser = {
     email: 'alice@example.com',
-    password: 'Secret1!x',
     name: 'Alice',
     role: 'STUDENT' as const,
   };
@@ -40,31 +39,6 @@ describe('createUserSchema', () => {
   it('rejects invalid email', () => {
     const result = createUserSchema.safeParse({ ...validUser, email: 'not-an-email' });
     expect(result.success).toBe(false);
-  });
-
-  it('rejects password shorter than 8 characters', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: 'Aa1!xyz' });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects password without uppercase letter', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: 'secret1!' });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects password without digit', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: 'Secret!x' });
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects password without special character', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: 'Secret1xx' });
-    expect(result.success).toBe(false);
-  });
-
-  it('accepts password meeting all complexity requirements', () => {
-    const result = createUserSchema.safeParse({ ...validUser, password: 'Str0ng!Pass' });
-    expect(result.success).toBe(true);
   });
 
   it('rejects invalid role', () => {
@@ -110,14 +84,18 @@ describe('updateUserSchema', () => {
     }
   });
 
-  it('rejects password shorter than 8 characters when provided', () => {
-    const result = updateUserSchema.safeParse({ password: 'Aa1!x' });
-    expect(result.success).toBe(false);
+  it('accepts valid role values', () => {
+    for (const role of ['STUDENT', 'COUNSELOR', 'ADMIN']) {
+      const result = updateUserSchema.safeParse({ role });
+      expect(result.success).toBe(true);
+    }
   });
 
-  it('rejects password without complexity when provided', () => {
-    const result = updateUserSchema.safeParse({ password: 'simplepwd' });
-    expect(result.success).toBe(false);
+  it('accepts valid accountStatus values', () => {
+    for (const accountStatus of ['ACTIVE', 'LOCKED']) {
+      const result = updateUserSchema.safeParse({ accountStatus });
+      expect(result.success).toBe(true);
+    }
   });
 });
 
@@ -219,7 +197,6 @@ describe('parseBody', () => {
   it('returns { data } on valid input', () => {
     const result = parseBody(createUserSchema, {
       email: 'a@b.com',
-      password: 'Str0ng!P',
       name: 'A',
       role: 'STUDENT',
     });
@@ -227,7 +204,6 @@ describe('parseBody', () => {
     expect(result.error).toBeUndefined();
     expect(result.data).toEqual({
       email: 'a@b.com',
-      password: 'Str0ng!P',
       name: 'A',
       role: 'STUDENT',
     });
@@ -242,11 +218,11 @@ describe('parseBody', () => {
   });
 
   it('includes field paths in error message', () => {
-    const result = parseBody(createUserSchema, { email: 'not-email', password: '12' });
+    const result = parseBody(createUserSchema, { email: 'not-email' });
 
     expect(result.error).toBeDefined();
     // The error should reference the failing field paths
-    expect(result.error).toContain('password');
+    expect(result.error).toContain('name');
   });
 
   it('joins multiple errors with semicolons', () => {

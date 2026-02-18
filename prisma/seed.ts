@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -23,8 +22,6 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.tag.deleteMany();
 
-  const password = await bcrypt.hash('password123', 10);
-
   // ── Tags ──
   const tags = await Promise.all(
     ['IELTS', 'TOEFL', 'SAT', 'GRE', 'GMAT', 'UK', 'US', 'Canada', 'Australia', 'CS', 'Business', 'Engineering'].map(
@@ -35,7 +32,7 @@ async function main() {
   // ── Admin ──
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@atlas.com', password, name: 'System Admin', role: 'ADMIN',
+      email: 'admin@atlas.com', name: 'System Admin', role: 'ADMIN',
       gender: 'MALE', phone: '+1-555-0100',
     },
   });
@@ -43,7 +40,7 @@ async function main() {
   // ── Counselors (3) ──
   const counselor1 = await prisma.user.create({
     data: {
-      email: 'counselor@atlas.com', password, name: 'Dr. Sarah Chen', role: 'COUNSELOR',
+      email: 'counselor@atlas.com', name: 'Dr. Sarah Chen', role: 'COUNSELOR',
       gender: 'FEMALE', phone: '+1-555-0200', title: 'Senior Counselor',
       country: 'United Kingdom', city: 'London', counselorId: 'COU-001',
       tags: { connect: [{ id: tags[0].id }, { id: tags[5].id }, { id: tags[9].id }] },
@@ -51,7 +48,7 @@ async function main() {
   });
   const counselor2 = await prisma.user.create({
     data: {
-      email: 'counselor2@atlas.com', password, name: 'Prof. James Wilson', role: 'COUNSELOR',
+      email: 'counselor2@atlas.com', name: 'Prof. James Wilson', role: 'COUNSELOR',
       gender: 'MALE', phone: '+1-555-0201', title: 'Admissions Specialist',
       country: 'United States', city: 'New York', counselorId: 'COU-002',
       tags: { connect: [{ id: tags[1].id }, { id: tags[6].id }, { id: tags[10].id }] },
@@ -59,7 +56,7 @@ async function main() {
   });
   const counselor3 = await prisma.user.create({
     data: {
-      email: 'counselor3@atlas.com', password, name: 'Dr. Emily Zhang', role: 'COUNSELOR',
+      email: 'counselor3@atlas.com', name: 'Dr. Emily Zhang', role: 'COUNSELOR',
       gender: 'FEMALE', phone: '+1-555-0202', title: 'Graduate Advisor',
       country: 'Canada', city: 'Toronto', counselorId: 'COU-003',
       tags: { connect: [{ id: tags[3].id }, { id: tags[7].id }, { id: tags[11].id }] },
@@ -84,7 +81,7 @@ async function main() {
   for (const s of studentData) {
     const student = await prisma.user.create({
       data: {
-        email: s.email, password, name: s.name, role: 'STUDENT',
+        email: s.email, name: s.name, role: 'STUDENT',
         gender: s.gender, phone: s.phone, dateOfBirth: new Date(s.dob),
         studentId: s.id, assignedCounselorId: s.counselor.id,
       },
@@ -255,7 +252,7 @@ async function main() {
 
   console.log('Seed complete!');
   console.log('');
-  console.log('Login credentials (all passwords: password123):');
+  console.log('User accounts (authentication managed by Clerk):');
   console.log('  Admin:      admin@atlas.com');
   console.log('  Counselor:  counselor@atlas.com / counselor2@atlas.com / counselor3@atlas.com');
   console.log('  Students:   student@atlas.com through student10@atlas.com');

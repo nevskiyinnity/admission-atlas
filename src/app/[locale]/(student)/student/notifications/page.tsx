@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,28 +23,28 @@ const tabs = ['ALL', 'ANNOUNCEMENT', 'MESSAGE', 'FEEDBACK'] as const;
 export default function StudentNotificationsPage() {
   const t = useTranslations('notifications');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [activeTab, setActiveTab] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    if (!session?.user?.id) return;
-    const params = new URLSearchParams({ userId: session.user.id });
+    if (!userId) return;
+    const params = new URLSearchParams({ userId: userId });
     if (activeTab !== 'ALL') params.set('type', activeTab);
     const res = await fetch(`/api/notifications?${params}`);
     setNotifications(await res.json());
     setLoading(false);
   };
 
-  useEffect(() => { fetchNotifications(); }, [session?.user?.id, activeTab]);
+  useEffect(() => { fetchNotifications(); }, [userId, activeTab]);
 
   const markAllRead = async () => {
-    if (!session?.user?.id) return;
+    if (!userId) return;
     await fetch('/api/notifications/mark-all-read', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: session.user.id }),
+      body: JSON.stringify({ userId: userId }),
     });
     fetchNotifications();
   };

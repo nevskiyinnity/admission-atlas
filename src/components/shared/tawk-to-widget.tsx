@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 
 declare global {
   interface Window {
@@ -11,7 +11,7 @@ declare global {
 }
 
 export function TawkToWidget() {
-  const { data: session } = useSession();
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
     // Replace with your actual tawk.to property ID and widget ID
@@ -36,14 +36,14 @@ export function TawkToWidget() {
   }, []);
 
   useEffect(() => {
-    if (session?.user && window.Tawk_API?.setAttributes) {
+    if (isLoaded && user && window.Tawk_API?.setAttributes) {
       window.Tawk_API.setAttributes({
-        name: session.user.name,
-        email: session.user.email,
-        role: session.user.role,
+        name: user.fullName || user.firstName || 'User',
+        email: user.primaryEmailAddress?.emailAddress,
+        role: (user.publicMetadata as Record<string, unknown>)?.role,
       });
     }
-  }, [session]);
+  }, [user, isLoaded]);
 
   return null;
 }

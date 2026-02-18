@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,7 @@ interface FeedbackItem {
 export default function AdminFeedbackPage() {
   const t = useTranslations('admin.feedback');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState<Record<string, string>>({});
@@ -37,11 +37,11 @@ export default function AdminFeedbackPage() {
 
   const sendReply = async (feedbackId: string) => {
     const text = replyText[feedbackId]?.trim();
-    if (!text || !session?.user?.id) return;
+    if (!text || !userId) return;
     await fetch(`/api/feedback/${feedbackId}/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: text, userId: session.user.id }),
+      body: JSON.stringify({ content: text, userId }),
     });
     setReplyText({ ...replyText, [feedbackId]: '' });
     fetchFeedbacks();

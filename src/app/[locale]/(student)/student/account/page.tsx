@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,7 @@ const tabKeys = ['info', 'password', 'loginHistory'] as const;
 export default function StudentAccountPage() {
   const t = useTranslations('account');
   const tc = useTranslations('common');
-  const { data: session } = useSession();
+  const { userId } = useAuth();
   const [activeTab, setActiveTab] = useState<string>('info');
   const [user, setUser] = useState<any>(null);
   const [loginLogs, setLoginLogs] = useState<LoginLogEntry[]>([]);
@@ -28,16 +28,16 @@ export default function StudentAccountPage() {
   const [codeSent, setCodeSent] = useState(false);
 
   useEffect(() => {
-    if (session?.user?.id) {
-      fetch(`/api/users/${session.user.id}`).then((r) => r.json()).then(setUser);
-      fetch(`/api/login-logs?userId=${session.user.id}`).then((r) => r.json()).then(setLoginLogs);
+    if (userId) {
+      fetch(`/api/users/${userId}`).then((r) => r.json()).then(setUser);
+      fetch(`/api/login-logs?userId=${userId}`).then((r) => r.json()).then(setLoginLogs);
     }
-  }, [session?.user?.id]);
+  }, [userId]);
 
   const sendCode = () => setCodeSent(true);
   const changePassword = async () => {
     if (passwordForm.newPassword !== passwordForm.confirmPassword) return;
-    await fetch(`/api/users/${session?.user?.id}`, {
+    await fetch(`/api/users/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: passwordForm.newPassword }),

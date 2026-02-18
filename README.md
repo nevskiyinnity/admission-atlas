@@ -6,7 +6,7 @@ Full-stack admin portal for managing the university admissions consulting pipeli
 
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
-- **Auth:** NextAuth.js (Credentials + JWT)
+- **Auth:** Clerk (managed authentication)
 - **Database:** PostgreSQL + Prisma ORM
 - **File Storage:** Vercel Blob
 - **i18n:** next-intl (English, Chinese)
@@ -46,8 +46,9 @@ npm run db:studio      # Prisma Studio UI
 | Variable | Required | Notes |
 |---|---|---|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `NEXTAUTH_SECRET` | Yes | Random string for JWT signing |
-| `NEXTAUTH_URL` | Yes | App URL (e.g. `http://localhost:3000`) |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk publishable key |
+| `CLERK_SECRET_KEY` | Yes | Clerk secret key |
+| `CLERK_WEBHOOK_SECRET` | Yes | Clerk webhook signing secret |
 | `BLOB_READ_WRITE_TOKEN` | Yes | Vercel Blob token for file uploads |
 
 ## Features
@@ -77,7 +78,7 @@ npm run db:studio      # Prisma Studio UI
 │   │   └── api/               # REST API routes
 │   ├── components/
 │   ├── lib/
-│   │   ├── auth.ts            # NextAuth config
+│   │   ├── api-auth.ts        # Clerk auth helpers
 │   │   └── prisma.ts          # Prisma singleton
 │   ├── i18n/
 │   └── middleware.ts          # Locale routing + role guards

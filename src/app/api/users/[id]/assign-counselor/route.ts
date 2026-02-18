@@ -72,10 +72,7 @@ export async function POST(
       },
     });
 
-    // Strip password from response
-    const { password: _, ...sanitizedUser } = updatedUser;
-
-    return NextResponse.json(sanitizedUser);
+    return NextResponse.json(updatedUser);
   } catch (error) {
     logger.error('POST /api/users/[id]/assign-counselor error', error);
     return NextResponse.json(

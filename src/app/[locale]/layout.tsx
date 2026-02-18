@@ -3,9 +3,9 @@ import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { ClerkProvider } from '@clerk/nextjs';
 import { routing } from '@/i18n/routing';
 import '@/app/globals.css';
-import { AuthProvider } from '@/components/providers/auth-provider';
 import { TawkToWidget } from '@/components/shared/tawk-to-widget';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -33,12 +33,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <AuthProvider>
+        <ClerkProvider>
           <NextIntlClientProvider messages={messages}>
             {children}
             <TawkToWidget />
           </NextIntlClientProvider>
-        </AuthProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

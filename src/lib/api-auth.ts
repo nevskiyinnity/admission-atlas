@@ -1,25 +1,35 @@
+import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 
 type Role = 'STUDENT' | 'COUNSELOR' | 'ADMIN';
 
 /**
  * Require authentication (and optionally specific roles) for an API route.
- * Returns the session on success, or a NextResponse error on failure.
+ * Returns a user object on success, or a NextResponse error on failure.
+ *
+ * The return shape preserves `{ user: { id, role, email } }` to keep
+ * all existing API route code working without changes.
  */
 export async function requireAuth(allowedRoles?: Role[]) {
-  const session = await getServerSession(authOptions);
+  const { userId, sessionClaims } = await auth();
 
-  if (!session?.user) {
+  if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (allowedRoles && !allowedRoles.includes(session.user.role)) {
+  const role = (sessionClaims?.metadata as Record<string, unknown>)?.role as Role | undefined;
+
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  return session;
+  return {
+    user: {
+      id: userId,
+      role: role || ('STUDENT' as Role),
+      email: (sessionClaims as Record<string, unknown>)?.email as string | undefined,
+    },
+  };
 }
 
 /** Type guard: true when requireAuth returned an error response instead of a session. */

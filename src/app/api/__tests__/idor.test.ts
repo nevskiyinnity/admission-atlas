@@ -12,18 +12,14 @@ const { mockPrisma } = vi.hoisted(() => ({
   },
 }));
 
-const { mockGetServerSession } = vi.hoisted(() => ({
-  mockGetServerSession: vi.fn(),
+const { mockAuth } = vi.hoisted(() => ({
+  mockAuth: vi.fn(),
 }));
 
 // ── Mocks ───────────────────────────────────────────────
 
-vi.mock('next-auth', () => ({
-  getServerSession: mockGetServerSession,
-}));
-
-vi.mock('@/lib/auth', () => ({
-  authOptions: { providers: [] },
+vi.mock('@clerk/nextjs/server', () => ({
+  auth: () => mockAuth(),
 }));
 
 vi.mock('@/lib/prisma', () => ({
@@ -49,10 +45,13 @@ import { PUT as putSettings } from '@/app/api/users/[id]/settings/route';
 
 type Role = 'STUDENT' | 'COUNSELOR' | 'ADMIN';
 
-function makeSession(id: string, role: Role) {
+function makeClerkAuth(id: string, role: Role) {
   return {
-    user: { id, name: 'Test', email: 'test@example.com', role },
-    expires: '2099-01-01T00:00:00.000Z',
+    userId: id,
+    sessionClaims: {
+      metadata: { role },
+      email: 'test@example.com',
+    },
   };
 }
 
@@ -79,7 +78,7 @@ describe('IDOR Prevention — Projects', () => {
   };
 
   it('returns 403 when User B tries to access User A project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-b', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-b', 'STUDENT'));
     mockPrisma.project.findUnique.mockResolvedValue(projectOwnedByUserA);
 
     const res = await getProject(
@@ -93,7 +92,7 @@ describe('IDOR Prevention — Projects', () => {
   });
 
   it('allows the project owner (student) to access their own project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.project.findUnique.mockResolvedValue(projectOwnedByUserA);
 
     const res = await getProject(
@@ -107,7 +106,7 @@ describe('IDOR Prevention — Projects', () => {
   });
 
   it('allows the assigned counselor to access the student project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('counselor-1', 'COUNSELOR'));
+    mockAuth.mockResolvedValue(makeClerkAuth('counselor-1', 'COUNSELOR'));
     mockPrisma.project.findUnique.mockResolvedValue(projectOwnedByUserA);
 
     const res = await getProject(
@@ -121,7 +120,7 @@ describe('IDOR Prevention — Projects', () => {
   });
 
   it('allows an admin to access any project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.project.findUnique.mockResolvedValue(projectOwnedByUserA);
 
     const res = await getProject(
@@ -135,7 +134,7 @@ describe('IDOR Prevention — Projects', () => {
   });
 
   it('returns 404 when project does not exist', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.project.findUnique.mockResolvedValue(null);
 
     const res = await getProject(
@@ -163,7 +162,7 @@ describe('IDOR Prevention — Tasks', () => {
   };
 
   it('returns 403 when User B tries to access a task belonging to User A project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-b', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-b', 'STUDENT'));
     mockPrisma.task.findUnique.mockResolvedValue(taskOwnedByUserA);
 
     const res = await getTask(
@@ -177,7 +176,7 @@ describe('IDOR Prevention — Tasks', () => {
   });
 
   it('allows the project student to access the task', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.task.findUnique.mockResolvedValue(taskOwnedByUserA);
 
     const res = await getTask(
@@ -189,7 +188,7 @@ describe('IDOR Prevention — Tasks', () => {
   });
 
   it('allows an admin to access any task', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.task.findUnique.mockResolvedValue(taskOwnedByUserA);
 
     const res = await getTask(
@@ -201,7 +200,7 @@ describe('IDOR Prevention — Tasks', () => {
   });
 
   it('returns 404 when task does not exist', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.task.findUnique.mockResolvedValue(null);
 
     const res = await getTask(
@@ -222,7 +221,7 @@ describe('IDOR Prevention — Files', () => {
   };
 
   it('returns 403 when User B tries to access a file uploaded by User A', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-b', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-b', 'STUDENT'));
     mockPrisma.file.findUnique.mockResolvedValue(fileOwnedByUserA);
 
     const res = await getFile(
@@ -236,7 +235,7 @@ describe('IDOR Prevention — Files', () => {
   });
 
   it('allows the uploader to access their own file', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.file.findUnique.mockResolvedValue(fileOwnedByUserA);
 
     const res = await getFile(
@@ -248,7 +247,7 @@ describe('IDOR Prevention — Files', () => {
   });
 
   it('allows the assigned counselor to access a file in their project', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('counselor-1', 'COUNSELOR'));
+    mockAuth.mockResolvedValue(makeClerkAuth('counselor-1', 'COUNSELOR'));
     mockPrisma.file.findUnique.mockResolvedValue(fileOwnedByUserA);
 
     const res = await getFile(
@@ -260,7 +259,7 @@ describe('IDOR Prevention — Files', () => {
   });
 
   it('allows an admin to access any file', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.file.findUnique.mockResolvedValue(fileOwnedByUserA);
 
     const res = await getFile(
@@ -278,7 +277,7 @@ describe('IDOR Prevention — Files', () => {
       uploader: { id: 'user-a', name: 'A', role: 'STUDENT' },
       project: null,
     };
-    mockGetServerSession.mockResolvedValue(makeSession('user-b', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-b', 'STUDENT'));
     mockPrisma.file.findUnique.mockResolvedValue(orphanFile);
 
     const res = await getFile(
@@ -292,7 +291,7 @@ describe('IDOR Prevention — Files', () => {
 
 describe('IDOR Prevention — User Settings', () => {
   it('returns 403 when a user tries to update another user settings', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
 
     const res = await putSettings(
       makeRequest('/api/users/user-b/settings', 'PUT', { webNotifications: true }),
@@ -305,7 +304,7 @@ describe('IDOR Prevention — User Settings', () => {
   });
 
   it('allows a user to update their own settings', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('user-a', 'STUDENT'));
+    mockAuth.mockResolvedValue(makeClerkAuth('user-a', 'STUDENT'));
     mockPrisma.user.update.mockResolvedValue({
       id: 'user-a',
       webNotifications: true,
@@ -320,7 +319,7 @@ describe('IDOR Prevention — User Settings', () => {
   });
 
   it('allows an admin to update any user settings', async () => {
-    mockGetServerSession.mockResolvedValue(makeSession('admin-1', 'ADMIN'));
+    mockAuth.mockResolvedValue(makeClerkAuth('admin-1', 'ADMIN'));
     mockPrisma.user.update.mockResolvedValue({
       id: 'user-b',
       webNotifications: false,
