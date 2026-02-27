@@ -85,6 +85,13 @@
     animation: none !important;
   }
 
+  /* SplitText word wrappers -- ensure text visible if matchMedia edge case */
+  .landing-scope .shell h1 div,
+  .landing-scope .shell h2 div {
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+
   /* Disable FAQ accordion transition */
   .landing-scope .shell .h-faq-body {
     transition: none !important;
