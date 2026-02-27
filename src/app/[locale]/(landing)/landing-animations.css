@@ -3,6 +3,14 @@
    Elements start invisible; GSAP reveals them on scroll.
    translateY(24px) MUST match GSAP from({ y: 24 }) used in later phases. */
 
+/* ── Compositor Property Exceptions (Phase 9 audit) ──
+   Two non-compositor properties are used and accepted:
+   1. background-position (breathing gradient meshes on ::before/::after pseudo-elements,
+      15-25s animation cycles, paint-only — no layout trigger, decorative only)
+   2. grid-template-rows (FAQ accordion transition, fires only on user click,
+      standard CSS-only height animation pattern — no scroll-linked usage)
+   All scroll-linked and entrance animations use transform/opacity/clip-path only. */
+
 /* Hero children — each child animates independently in Phase 5 */
 .landing-scope .shell .h-hero > * {
   opacity: 0;
