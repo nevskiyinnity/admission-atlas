@@ -68,4 +68,9 @@
   .landing-scope .shell .h-final::before {
     animation: none !important;
   }
+
+  /* Disable SVG accent animations */
+  .landing-scope .shell .h-accent {
+    animation: none !important;
+  }
 }

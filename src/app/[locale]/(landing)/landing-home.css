@@ -391,6 +391,7 @@
 .landing-scope .shell .h-sect-head {
   text-align: center;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .landing-scope .shell .h-kicker {
@@ -423,6 +424,31 @@
   max-width: 54ch;
   margin: 0 auto 56px;
 }
+
+/* ── SVG geometry accents ── */
+.landing-scope .shell .h-accent {
+  position: absolute;
+  color: var(--hm-gold);
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+.landing-scope .shell .h-accent--diamond {
+  width: 20px;
+  height: 20px;
+  animation: hm-spin-slow 35s linear infinite;
+}
+
+.landing-scope .shell .h-accent--ring {
+  width: 28px;
+  height: 28px;
+  animation: hm-pulse-ring 6s ease-in-out infinite alternate;
+}
+
+.landing-scope .shell .h-accent--tr { top: -6px; right: -36px; }
+.landing-scope .shell .h-accent--bl { bottom: -8px; left: -32px; }
+.landing-scope .shell .h-accent--tl { top: -6px; left: -36px; }
+.landing-scope .shell .h-accent--br { bottom: -8px; right: -32px; }
 
 /* ══════════════════════════════════════
    BENTO — asymmetric service grid
@@ -1000,6 +1026,15 @@
   100% { background-position: 100% 0%; }
 }
 
+@keyframes hm-spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hm-pulse-ring {
+  0%   { opacity: 0.08; transform: scale(1); }
+  100% { opacity: 0.12; transform: scale(1.15); }
+}
+
 /* Scroll-triggered reveals via IntersectionObserver-like CSS.
    Using @starting-style + transition for broad support (Chrome 117+, Safari 17.5+).
    Falls back to fully visible for older browsers. */
@@ -1034,6 +1069,8 @@
 }
 
 @media (max-width: 768px) {
+  .landing-scope .shell .h-accent { display: none; }
+
   .landing-scope .h-nav-links { display: none; }
   .landing-scope .h-nav-inner { padding: 8px 8px 8px 22px; }
 

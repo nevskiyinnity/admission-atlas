@@ -100,6 +100,12 @@ export default function LandingHomePage() {
                 <h2>
                   Full-spectrum strategy — not disconnected advice
                 </h2>
+                <svg className="h-accent h-accent--diamond h-accent--tr" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="6" y="6" width="12" height="12" transform="rotate(45 12 12)" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
+                <svg className="h-accent h-accent--ring h-accent--bl" viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
               </div>
               <p className="h-sect-sub">
                 Every engagement follows a structured system. Nothing gets
@@ -164,6 +170,9 @@ export default function LandingHomePage() {
               <div className="h-sect-head">
                 <span className="h-kicker">How It Works</span>
                 <h2>Diagnostic to submission</h2>
+                <svg className="h-accent h-accent--ring h-accent--tr" viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
               </div>
               <div className="h-timeline">
                 <div className="h-timeline-track" aria-hidden="true" />
@@ -267,6 +276,9 @@ export default function LandingHomePage() {
               <div className="h-sect-head">
                 <span className="h-kicker">Programs</span>
                 <h2>Matched to your timeline</h2>
+                <svg className="h-accent h-accent--diamond h-accent--tl" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="6" y="6" width="12" height="12" transform="rotate(45 12 12)" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
               </div>
               <div className="h-plans">
                 <article className="h-plan-card">
@@ -340,6 +352,9 @@ export default function LandingHomePage() {
               <div className="h-sect-head">
                 <span className="h-kicker">FAQ</span>
                 <h2>Common questions, direct answers</h2>
+                <svg className="h-accent h-accent--ring h-accent--br" viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1"/>
+                </svg>
               </div>
               <div className="h-faq">
                 <details className="h-faq-item">
