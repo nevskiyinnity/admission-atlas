@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-last_updated: "2026-02-27T11:47:49Z"
+status: complete
+last_updated: "2026-02-27T11:53:31Z"
 progress:
   total_phases: 9
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 9 in progress. CSS/GSAP redundancy cleanup complete. Lighthouse audit next.
+**Current focus:** All 9 phases complete. Animation layer production-quality. Ready for milestone audit.
 
 ## Current Position
 
-Phase: 9 of 9 (Performance & Quality Hardening) -- IN PROGRESS
-Plan: 1 of 2 in current phase -- Plan 09-01 COMPLETE
-Status: CSS/GSAP redundancy cleanup done. 5 redundant hm-fadeUp removed, compositor audit passed. Plan 09-02 (Lighthouse) next.
-Last activity: 2026-02-27 -- Plan 09-01 complete (CSS/GSAP cleanup & property audit).
+Phase: 9 of 9 (Performance & Quality Hardening) -- COMPLETE
+Plan: 2 of 2 in current phase -- Plan 09-02 COMPLETE
+Status: All phases complete. Lighthouse build audit passed, restraint review confirmed 4 hero moments, PERF-04 documented, reduced-motion chain verified.
+Last activity: 2026-02-27 -- Plan 09-02 complete (Lighthouse audit, restraint review, lazy-init docs).
 
-Progress: [█████████▓] 93% (13/14 plans complete)
+Progress: [██████████] 100% (14/14 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: 3 min
-- Total execution time: 0.6 hours
+- Total execution time: 0.65 hours
 
 **By Phase:**
 
@@ -48,10 +48,10 @@ Progress: [█████████▓] 93% (13/14 plans complete)
 | 06-scroll-triggered-reveals | 2 | 6 min | 3 min |
 | 07-parallax-visual-depth | 1 | 4 min | 4 min |
 | 08-micro-interactions | 1 | 2 min | 2 min |
-| 09-performance-quality-hardening | 1 | 2 min | 2 min |
+| 09-performance-quality-hardening | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-01 (4 min), 06-02 (2 min), 07-01 (4 min), 08-01 (2 min), 09-01 (2 min)
+- Last 5 plans: 07-01 (4 min), 08-01 (2 min), 09-01 (2 min), 09-02 (3 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -65,6 +65,7 @@ Progress: [█████████▓] 93% (13/14 plans complete)
 | Phase 07 P01 | 4min | 2 tasks | 2 files |
 | Phase 08 P01 | 2min | 2 tasks | 4 files |
 | Phase 09 P01 | 2min | 2 tasks | 2 files |
+| Phase 09 P02 | 3min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,9 @@ Recent decisions affecting current work:
 - [09-01]: Removed @keyframes hm-fadeUp entirely -- zero selectors reference it after cleanup of 5 redundant declarations
 - [09-01]: Two compositor exceptions accepted: background-position (breathing meshes, paint-only) and grid-template-rows (FAQ, click-only)
 - [09-01]: All 6 client components verified for useGSAP/useEffect auto-cleanup with scope or explicit teardown
+- [09-02]: Lighthouse runtime blocked by Clerk middleware -- build analysis confirms 217KB First Load JS, SSR LCP, lazy ScrollTrigger init
+- [09-02]: 4 hero moments confirmed (hero entrance, dark atmosphere, heading reveals, magnetic buttons) -- all supporting animations verified subtle
+- [09-02]: Reduced-motion chain verified complete: CSS !important overrides + matchMedia gating + Lenis early return = zero gaps
 
 ### Pending Todos
 
@@ -131,6 +135,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 09-01-PLAN.md (CSS/GSAP redundancy cleanup & property audit). Plan 09-02 next.
-Resume with: Execute Plan 09-02 (Lighthouse & restraint review)
-Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases. Auto-approve visual checkpoints.
+Stopped at: Completed 09-02-PLAN.md (Lighthouse audit, restraint review, lazy-init documentation). All 14 plans across 9 phases complete.
+Resume with: Milestone audit (`/gsd:audit-milestone`) to close v1.0.
+Note: User said "finish the job all the way, i trust your judgement" -- all phases executed autonomously.

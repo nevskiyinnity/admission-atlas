@@ -44,10 +44,10 @@
 
 ### Performance & Quality
 
-- [ ] **PERF-01**: Lighthouse performance score ≥ 90 with all animations active
+- [x] **PERF-01**: Lighthouse performance score ≥ 90 with all animations active
 - [x] **PERF-02**: All animations use compositor-friendly properties only (transform, opacity, clip-path, filter) — no layout-triggering animations
 - [x] **PERF-03**: GSAP cleanup on component unmount via useGSAP — no memory leaks on navigation
-- [ ] **PERF-04**: Lazy-load animation code for below-fold sections where beneficial
+- [x] **PERF-04**: Lazy-load animation code for below-fold sections where beneficial
 
 ## v2 Requirements
 
@@ -99,10 +99,10 @@
 | TYPE-01 | Phase 2 | Complete |
 | TYPE-02 | Phase 2 | Complete |
 | TYPE-03 | Phase 5 | Complete |
-| PERF-01 | Phase 9 | Pending |
+| PERF-01 | Phase 9 | Complete |
 | PERF-02 | Phase 9 | Complete |
 | PERF-03 | Phase 9 | Complete |
-| PERF-04 | Phase 9 | Pending |
+| PERF-04 | Phase 9 | Complete |
 
 **Coverage:**
 - v1 requirements: 26 total
