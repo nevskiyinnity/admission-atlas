@@ -220,6 +220,9 @@ export default function LandingHomePage() {
           <AnimatedSection>
             <section id="outcomes" className="h-dark-sect">
               <div className="h-dark-inner">
+                <div className="h-dark-grain" aria-hidden="true" />
+                <div className="h-dark-glow h-dark-glow--1" aria-hidden="true" />
+                <div className="h-dark-glow h-dark-glow--2" aria-hidden="true" />
                 <span className="h-kicker h-kicker--light">
                   What Structure Changes
                 </span>

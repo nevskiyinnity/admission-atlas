@@ -74,6 +74,11 @@
     animation: none !important;
   }
 
+  /* Dark section glow animations */
+  .landing-scope .shell .h-dark-glow {
+    animation: none !important;
+  }
+
   /* Disable FAQ accordion transition */
   .landing-scope .shell .h-faq-body {
     transition: none !important;

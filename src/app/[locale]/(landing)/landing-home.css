@@ -664,6 +664,45 @@
   z-index: 2;
 }
 
+/* ── Dark section grain overlay ── */
+.landing-scope .shell .h-dark-grain {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ── Dark section animated glows ── */
+.landing-scope .shell .h-dark-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+  z-index: 1;
+}
+
+.landing-scope .shell .h-dark-glow--1 {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: 15%;
+  background: radial-gradient(circle, rgba(158, 124, 56, 0.12) 0%, transparent 70%);
+  animation: hm-dark-glow 18s ease-in-out infinite alternate;
+}
+
+.landing-scope .shell .h-dark-glow--2 {
+  width: 250px;
+  height: 250px;
+  bottom: 10%;
+  right: 15%;
+  background: radial-gradient(circle, rgba(26, 107, 90, 0.10) 0%, transparent 70%);
+  animation: hm-dark-glow 22s ease-in-out infinite alternate-reverse;
+}
+
 .landing-scope .shell .h-kicker--light {
   color: rgba(255,255,255,0.4);
 }
@@ -1104,6 +1143,12 @@
 @keyframes hm-pulse-ring {
   0%   { opacity: 0.08; transform: scale(1); }
   100% { opacity: 0.12; transform: scale(1.15); }
+}
+
+@keyframes hm-dark-glow {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  50%  { transform: translate(30px, -20px) scale(1.1); opacity: 1; }
+  100% { transform: translate(-20px, 15px) scale(0.95); opacity: 0.8; }
 }
 
 /* Scroll-triggered reveals via IntersectionObserver-like CSS.
