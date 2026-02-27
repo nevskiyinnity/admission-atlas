@@ -7,7 +7,7 @@ import { isRateLimited } from '@/lib/rate-limit';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const publicPages = ['/', '/team', '/results', '/contact', '/login', '/forgot-password'];
+const publicPages = ['/', '/team', '/results', '/contact', '/login'];
 
 const roleRouteMap: Record<string, string[]> = {
   STUDENT: ['/student'],
@@ -41,7 +41,6 @@ const isPublicRoute = createRouteMatcher([
   '/(en|zh)',
   '/(en|zh)/(team|results|contact)(.*)',
   '/(en|zh)/login(.*)',
-  '/(en|zh)/forgot-password(.*)',
   '/api/webhooks/(.*)',
 ]);
 

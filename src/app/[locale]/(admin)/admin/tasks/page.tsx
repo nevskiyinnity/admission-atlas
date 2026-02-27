@@ -24,9 +24,9 @@ export default function AdminTasksPage() {
   useEffect(() => {
     fetch('/api/projects')
       .then((r) => r.json())
-      .then((projects: any[]) => {
+      .then((data: any) => {
         const allTasks: TaskRecord[] = [];
-        for (const p of projects) {
+        for (const p of (data.projects || [])) {
           for (const m of p.milestones || []) {
             for (const task of m.tasks || []) {
               allTasks.push({ ...task, milestone: { name: m.name, project: { universityName: p.universityName } } });

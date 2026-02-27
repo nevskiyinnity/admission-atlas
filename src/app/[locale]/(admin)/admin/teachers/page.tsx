@@ -46,7 +46,7 @@ export default function TeachersPage() {
   }, [search]);
 
   useEffect(() => { const timer = setTimeout(() => fetchTeachers(), 300); return () => clearTimeout(timer); }, [fetchTeachers]);
-  useEffect(() => { fetch('/api/tags').then(r => r.json()).then(setAllTags); }, []);
+  useEffect(() => { fetch('/api/tags').then(r => r.json()).then(d => setAllTags(Array.isArray(d) ? d : [])); }, []);
 
   const openCreate = () => { setEditingUser(null); setForm({ name: '', email: '', phone: '', gender: '', password: '', title: '', country: '', city: '', dateOfBirth: '', tagIds: [] }); setShowModal(true); };
   const openEdit = (teacher: Teacher) => { setEditingUser(teacher); setForm({ name: teacher.name, email: teacher.email, phone: teacher.phone || '', gender: teacher.gender || '', password: '', title: teacher.title || '', country: teacher.country || '', city: teacher.city || '', dateOfBirth: '', tagIds: teacher.tags.map(t => t.id) }); setShowModal(true); };

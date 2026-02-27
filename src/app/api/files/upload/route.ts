@@ -3,6 +3,7 @@ import { put } from '@vercel/blob';
 import { prisma } from '@/lib/prisma';
 import { getFileType } from '@/lib/utils';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { logger } from '@/lib/logger';
 
 const ALLOWED_MIME_TYPES = new Set([
   'application/pdf',
@@ -41,40 +42,48 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'File type not allowed' }, { status: 400 });
   }
 
-  // Upload to Vercel Blob
-  const blob = await put(file.name, file, { access: 'public' });
+  try {
+    // Upload to Vercel Blob
+    const blob = await put(file.name, file, { access: 'public' });
 
-  const fileType = getFileType(file.type);
+    const fileType = getFileType(file.type);
 
-  const fileRecord = await prisma.file.create({
-    data: {
-      filename: blob.pathname,
-      originalName: file.name,
-      path: blob.url,
-      size: file.size,
-      mimeType: file.type,
-      fileType,
-      uploaderId,
-      projectId: projectId || undefined,
-      milestoneId: milestoneId || undefined,
-      taskId: taskId || undefined,
-      messageId: messageId || undefined,
-    },
-    include: {
-      uploader: { select: { id: true, name: true, role: true } },
-    },
-  });
+    const fileRecord = await prisma.file.create({
+      data: {
+        filename: blob.pathname,
+        originalName: file.name,
+        path: blob.url,
+        size: file.size,
+        mimeType: file.type,
+        fileType,
+        uploaderId,
+        projectId: projectId || undefined,
+        milestoneId: milestoneId || undefined,
+        taskId: taskId || undefined,
+        messageId: messageId || undefined,
+      },
+      include: {
+        uploader: { select: { id: true, name: true, role: true } },
+      },
+    });
 
-  // Create upload log
-  await prisma.uploadLog.create({
-    data: {
-      filename: blob.pathname,
-      originalName: file.name,
-      size: file.size,
-      fileType,
-      userId: uploaderId,
-    },
-  });
+    // Create upload log
+    await prisma.uploadLog.create({
+      data: {
+        filename: blob.pathname,
+        originalName: file.name,
+        size: file.size,
+        fileType,
+        userId: uploaderId,
+      },
+    });
 
-  return NextResponse.json(fileRecord, { status: 201 });
+    return NextResponse.json(fileRecord, { status: 201 });
+  } catch (error) {
+    logger.error('POST /api/files/upload error', error);
+    return NextResponse.json(
+      { error: 'Failed to upload file' },
+      { status: 500 }
+    );
+  }
 }

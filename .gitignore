@@ -39,7 +39,6 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 
 # prisma
-/prisma/migrations/
 
 # clerk configuration (can include secrets)
 /.clerk/
