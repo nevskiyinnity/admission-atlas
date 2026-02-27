@@ -10,25 +10,6 @@ export const metadata: Metadata = {
 export default function TeamPage() {
   return (
     <>
-      <div className="noise" />
-
-      <header className="topbar">
-        <Link className="brand" href="/">
-          Admission Atlas
-        </Link>
-        <nav className="topnav">
-          <Link href="/">Home</Link>
-          <Link className="active" href="/team">
-            Team
-          </Link>
-          <Link href="/results">Results</Link>
-          <Link href="/contact">Contact</Link>
-          <Link className="cta-nav" href="/login">
-            Login
-          </Link>
-        </nav>
-      </header>
-
       <main className="page">
         {/* ─── HERO ─── */}
         <section className="hero-banner">
@@ -323,15 +304,6 @@ export default function TeamPage() {
           </Link>
         </section>
       </main>
-
-      <footer className="site-footer">
-        <div className="footer-inner">
-          <span className="footer-brand">Admission Atlas</span>
-          <span className="footer-tagline">
-            Built for rigor, clarity, and better admissions decisions.
-          </span>
-        </div>
-      </footer>
     </>
   );
 }

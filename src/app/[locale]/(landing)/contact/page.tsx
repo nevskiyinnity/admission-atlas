@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Contact Admission Atlas | Strategy Consultation',
@@ -10,25 +9,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <div className="grain" />
-      <div className="orb orb-left" />
-      <div className="orb orb-right" />
-
-      <header className="site-nav">
-        <div className="brand">Admission Atlas</div>
-        <nav className="nav-links">
-          <Link href="/">Home</Link>
-          <Link href="/team">Team</Link>
-          <Link href="/results">Results</Link>
-          <Link className="active" href="/contact">
-            Contact
-          </Link>
-          <Link className="nav-cta" href="/login">
-            Login
-          </Link>
-        </nav>
-      </header>
-
       <main className="page">
         <section className="hero-wrap">
           <article className="hero">
@@ -183,11 +163,6 @@ export default function ContactPage() {
           </a>
         </section>
       </main>
-
-      <footer className="footer">
-        <span>Admission Atlas Contact</span>
-        <span>Tell us your goals and constraints. We will map clear next steps.</span>
-      </footer>
     </>
   );
 }

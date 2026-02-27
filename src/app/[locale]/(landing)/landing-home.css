@@ -89,7 +89,8 @@
   transition: color 160ms var(--hm-ease), background 160ms var(--hm-ease);
 }
 
-.landing-scope .h-nav-links a:hover {
+.landing-scope .h-nav-links a:hover,
+.landing-scope .h-nav-links a.active {
   color: var(--hm-ink);
   background: rgba(0,0,0,0.04);
 }
@@ -142,8 +143,8 @@
   pointer-events: none;
 }
 
-/* Override atlas warm gradient for home page */
-.landing-scope:has(.shell) {
+/* Global premium gradient — applies to all landing pages */
+.landing-scope {
   background: linear-gradient(180deg, #FAFAF7 0%, var(--hm-bg) 40%, #F2EDE4 100%);
 }
 
@@ -175,13 +176,17 @@
 .landing-scope .shell .h-hero::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 30% 20%, rgba(158,124,56,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 80%, rgba(26,107,90,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(15,25,35,0.06) 0%, transparent 60%);
+    radial-gradient(ellipse at 30% 20%, rgba(158,124,56,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(26,107,90,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(15,25,35,0.03) 0%, transparent 70%);
   background-size: 200% 200%;
   animation: hm-gradient-breathe 22s ease-in-out infinite alternate;
 }

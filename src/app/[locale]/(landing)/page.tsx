@@ -16,33 +16,6 @@ export const metadata: Metadata = {
 export default function LandingHomePage() {
   return (
     <>
-      {/* Ambient grain */}
-      <div className="h-grain" />
-
-      {/* ─── NAV ─── */}
-      <header className="h-nav">
-        <div className="h-nav-inner">
-          <Link className="h-brand" href="/">
-            <span className="h-brand-mark" aria-hidden="true" />
-            Admission Atlas
-          </Link>
-          <nav className="h-nav-links">
-            <a href="#services">Services</a>
-            <a href="#process">Process</a>
-            <a href="#outcomes">Outcomes</a>
-            <Link href="/team">Team</Link>
-          </nav>
-          <div className="h-nav-right">
-            <Link href="/login" className="h-nav-login">
-              Log in
-            </Link>
-            <Link href="/contact" className="h-nav-cta">
-              Book a Call
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <SmoothScrollProvider>
         <ScrollProgressBar />
         <main className="shell">
@@ -474,23 +447,6 @@ export default function LandingHomePage() {
           </AnimatedSection>
         </main>
       </SmoothScrollProvider>
-
-      {/* ─── FOOTER ─── */}
-      <footer className="h-foot">
-        <div className="h-foot-inner">
-          <div className="h-foot-left">
-            <span className="h-foot-brand">Admission Atlas</span>
-            <span className="h-foot-tag">
-              Strategic admissions counsel.
-            </span>
-          </div>
-          <nav className="h-foot-links">
-            <Link href="/team">Team</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/login">Log in</Link>
-          </nav>
-        </div>
-      </footer>
     </>
   );
 }

@@ -5,6 +5,8 @@ import {
   Instrument_Serif,
   Plus_Jakarta_Sans,
 } from 'next/font/google';
+import { LandingNav } from './_components/landing-nav';
+import { LandingFooter } from './_components/landing-footer';
 import './landing-atlas.css';
 import './landing-home.css';
 import './landing-animations.css';
@@ -65,7 +67,10 @@ export default function LandingLayout({
           }
         `}</style>
       </noscript>
+      <div className="h-grain" />
+      <LandingNav />
       {children}
+      <LandingFooter />
     </div>
   );
 }
