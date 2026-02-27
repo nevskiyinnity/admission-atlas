@@ -13,7 +13,7 @@ Transform the Admission Atlas landing page from a well-made editorial template t
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Motion Foundation** - GSAP + Lenis installed, Client Component islands architecture, animation CSS initial states, prefers-reduced-motion infrastructure
-- [ ] **Phase 2: Typography & Copy** - Typography drama with fluid scaling, copy restructuring for quiet authority
+- [x] **Phase 2: Typography & Copy** - Typography drama with fluid scaling, copy restructuring for quiet authority
 - [ ] **Phase 3: CSS Visual Polish** - Gradient mesh backgrounds, SVG geometry accents, enhanced hover transitions, FAQ accordion
 - [ ] **Phase 4: Section Transitions & Dark Atmosphere** - Seamless section flow, dark outcomes section atmospheric upgrade, grain density tuning
 - [ ] **Phase 5: Hero Entrance Sequence** - Cinematic orchestrated hero animation with SplitText reveals, the signature moment
@@ -51,7 +51,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 02-01: Typography scale update (clamp() values) + copy restructuring (quiet authority voice)
+- [x] 02-01: Typography scale update (clamp() values) + copy restructuring (quiet authority voice)
 
 ### Phase 3: CSS Visual Polish
 **Goal**: The page feels premium and alive through CSS-only effects -- gradient backgrounds breathe, geometry accents add sophistication, hover states feel tactile, and the FAQ opens smoothly
