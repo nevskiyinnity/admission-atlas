@@ -23,10 +23,10 @@
 
 ### Visual Depth
 
-- [ ] **VISUAL-01**: Animated gradient mesh / aurora backgrounds — slow-breathing radial gradients behind hero and CTA sections using CSS animations (15-25s cycles)
+- [x] **VISUAL-01**: Animated gradient mesh / aurora backgrounds — slow-breathing radial gradients behind hero and CTA sections using CSS animations (15-25s cycles)
 - [ ] **VISUAL-02**: Section transition design — gradient bleeds between sections, dark section feels like entering a different atmosphere (grain density shift, gradient overlay at boundary)
 - [ ] **VISUAL-03**: Parallax depth on decorative elements — hero orbs and SVG accents move at 0.4-0.6x scroll speed via ScrollTrigger scrub
-- [ ] **VISUAL-04**: Subtle animated SVG geometry accents — rotating diamonds, pulsing rings near section headings (CSS keyframes, 8-12% opacity)
+- [x] **VISUAL-04**: Subtle animated SVG geometry accents — rotating diamonds, pulsing rings near section headings (CSS keyframes, 8-12% opacity)
 - [ ] **VISUAL-05**: Dark outcomes section atmospheric upgrade — enveloping gradient, increased grain density, animated glow elements, gradient bleed transition from previous section
 
 ### Micro-interactions
@@ -87,10 +87,10 @@
 | SCROLL-02 | Phase 5 | Pending |
 | SCROLL-03 | Phase 6 | Pending |
 | SCROLL-04 | Phase 6 | Pending |
-| VISUAL-01 | Phase 3 | Pending |
+| VISUAL-01 | Phase 3 | Complete |
 | VISUAL-02 | Phase 4 | Pending |
 | VISUAL-03 | Phase 7 | Pending |
-| VISUAL-04 | Phase 3 | Pending |
+| VISUAL-04 | Phase 3 | Complete |
 | VISUAL-05 | Phase 4 | Pending |
 | MICRO-01 | Phase 8 | Pending |
 | MICRO-02 | Phase 8 | Pending |

@@ -65,7 +65,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 03-01: Gradient mesh backgrounds + SVG geometry accents (VISUAL-01, VISUAL-04)
+- [x] 03-01: Gradient mesh backgrounds + SVG geometry accents (VISUAL-01, VISUAL-04)
 - [ ] 03-02: FAQ accordion rewrite + hover transition audit (MICRO-03, MICRO-04)
 
 ### Phase 4: Section Transitions & Dark Atmosphere
@@ -164,7 +164,7 @@ Note: Phases 2 and 3 depend only on Phase 1 and can execute in parallel. Phases 
 |-------|----------------|--------|-----------|
 | 1. Motion Foundation | 2/2 | Complete | 2026-02-27 |
 | 2. Typography & Copy | 0/1 | Planned | - |
-| 3. CSS Visual Polish | 0/2 | Not started | - |
+| 3. CSS Visual Polish | 1/2 | In Progress | - |
 | 4. Section Transitions & Dark Atmosphere | 0/1 | Not started | - |
 | 5. Hero Entrance Sequence | 0/2 | Not started | - |
 | 6. Scroll-Triggered Reveals | 0/2 | Not started | - |
