@@ -24,8 +24,8 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 
 Phase: 5 of 9 (Hero Entrance Sequence)
 Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-02-27 -- Phases 1-4 complete. Phase 5 directory created, needs research + planning + execution.
+Status: Research complete, ready to plan
+Last activity: 2026-02-27 -- Phase 5 research written (SplitText API, timeline choreography, architecture).
 
 Progress: [███████░░░] 67%
 
@@ -95,6 +95,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Phases 1-4 complete. Phase 5 directory created but not yet researched/planned.
-Resume with: /gsd:plan-phase 5
+Stopped at: Phase 5 research complete. Needs planning (planner + checker) then execution.
+Resume with: /gsd:plan-phase 5 --skip-research
 Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (5-9). Auto-approve visual checkpoints.
