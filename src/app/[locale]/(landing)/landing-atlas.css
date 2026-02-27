@@ -1,0 +1,1072 @@
+/* ─────────────────────────────────────────
+   ATLAS DESIGN SYSTEM (Scoped)
+   Shared across team, results, contact pages
+   All selectors scoped under .landing-scope
+   ───────────────────────────────────────── */
+
+.landing-scope {
+    --bg: #f6f2e9;
+    --surface: #fffdf8;
+    --surface-soft: #f5eee2;
+    --ink: #1b2a40;
+    --ink-muted: #5c6f85;
+    --border: #ddd0ba;
+    --brand: #114a72;
+    --brand-deep: #0b3553;
+    --accent: #b26b2f;
+    --accent-soft: rgba(178, 107, 47, 0.12);
+    --radius: 20px;
+    --radius-sm: 14px;
+    --shadow: 0 12px 40px rgba(24, 45, 66, 0.09);
+    --shadow-hover: 0 18px 50px rgba(24, 45, 66, 0.14);
+    --transition: 220ms cubic-bezier(.4, 0, .2, 1);
+
+    /* Base styles (was on body) */
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 10% 5%, rgba(178, 107, 47, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 90% 10%, rgba(17, 74, 114, 0.14) 0%, transparent 40%),
+        linear-gradient(180deg, #f8f4eb 0%, #f6f2e9 50%, #efe6d7 100%);
+    padding: 0;
+    line-height: 1.65;
+}
+
+/* ── Reset ── */
+.landing-scope *,
+.landing-scope *::before,
+.landing-scope *::after {
+    box-sizing: border-box;
+}
+
+/* Noise overlay */
+.landing-scope .noise {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image:
+        linear-gradient(to right, rgba(27, 42, 64, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(27, 42, 64, 0.03) 1px, transparent 1px);
+    background-size: 38px 38px;
+}
+
+/* ─── TYPOGRAPHY ─── */
+.landing-scope h1,
+.landing-scope h2,
+.landing-scope h3,
+.landing-scope h4 {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+}
+
+.landing-scope h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+}
+
+.landing-scope h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+}
+
+.landing-scope h3 {
+    font-size: 1.15rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+}
+
+.landing-scope p {
+    margin: 0;
+}
+
+.landing-scope a {
+    color: inherit;
+}
+
+.landing-scope .eyebrow {
+    margin: 0 0 10px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* ─── PAGE CONTAINER ─── */
+.landing-scope .page {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── TOPBAR ─── */
+.landing-scope .topbar {
+    width: min(1100px, 100%);
+    margin: 20px auto 0;
+    padding: 10px 12px 10px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(219, 205, 181, 0.7);
+    border-radius: 999px;
+    background: rgba(255, 253, 248, 0.85);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 10;
+}
+
+.landing-scope .brand {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.landing-scope .topnav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.landing-scope .topnav a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: 0.84rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background var(--transition), color var(--transition);
+}
+
+.landing-scope .topnav a:hover {
+    background: rgba(17, 74, 114, 0.08);
+    color: var(--brand-deep);
+}
+
+.landing-scope .topnav a.active {
+    background: rgba(17, 74, 114, 0.12);
+    color: var(--brand-deep);
+}
+
+.landing-scope .cta-nav {
+    border: 1.5px solid var(--border) !important;
+    background: white !important;
+    color: var(--brand-deep) !important;
+}
+
+/* ─── BUTTONS ─── */
+.landing-scope .btn-primary,
+.landing-scope .btn-ghost {
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .btn-primary {
+    padding: 12px 24px;
+    border: none;
+    background: var(--brand);
+    color: #fff;
+}
+
+.landing-scope .btn-primary:hover {
+    background: var(--brand-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(11, 53, 83, 0.22);
+}
+
+.landing-scope .btn-ghost {
+    padding: 11px 22px;
+    border: 1.5px solid var(--border);
+    color: var(--brand-deep);
+    background: white;
+}
+
+.landing-scope .btn-ghost:hover {
+    background: var(--surface-soft);
+    transform: translateY(-1px);
+}
+
+.landing-scope .btn-lg {
+    padding: 15px 32px;
+    font-size: 0.95rem;
+}
+
+.landing-scope .btn-outline {
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    display: inline-block;
+    cursor: pointer;
+    padding: 11px 22px;
+    border: 1.5px solid var(--border);
+    color: var(--brand-deep);
+    background: white;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.landing-scope .btn-outline:hover {
+    background: var(--surface-soft);
+    transform: translateY(-1px);
+}
+
+/* ─── HERO BANNER ─── */
+.landing-scope .hero-banner {
+    margin-top: 40px;
+    padding: 48px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-scope .hero-lead {
+    margin: 16px auto 0;
+    max-width: 56ch;
+    color: var(--ink-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+.landing-scope .hero-actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ─── DIFFERENTIATOR STRIP ─── */
+.landing-scope .diff-strip {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.landing-scope .diff-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 20px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 16px rgba(24, 45, 66, 0.05);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-scope .diff-item:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.landing-scope .diff-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    border-radius: 12px;
+}
+
+.landing-scope .diff-item strong {
+    font-size: 0.88rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.landing-scope .diff-item p {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    line-height: 1.55;
+}
+
+/* ─── SECTIONS ─── */
+.landing-scope .section {
+    margin-top: 56px;
+}
+
+.landing-scope .section-header {
+    margin-bottom: 24px;
+}
+
+.landing-scope .section-header h2 {
+    margin-top: 2px;
+}
+
+/* ─── LEAD CARDS (Leadership) ─── */
+.landing-scope .lead-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.landing-scope .lead-card {
+    padding: 28px 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-scope .lead-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.landing-scope .featured-lead {
+    border-left: 4px solid var(--accent);
+}
+
+.landing-scope .lead-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.landing-scope .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+}
+
+.landing-scope .avatar.sm {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.landing-scope .role-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin-top: 3px;
+}
+
+.landing-scope .lead-card > p {
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-top: 0;
+}
+
+.landing-scope .expertise-row {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.landing-scope .tag {
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--brand-deep);
+    transition: background var(--transition);
+}
+
+.landing-scope .tag:hover {
+    background: var(--accent-soft);
+}
+
+/* ─── SPECIALIST CARDS ─── */
+.landing-scope .specialist-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.landing-scope .specialist-card {
+    padding: 24px 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 22px rgba(24, 45, 66, 0.06);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-scope .specialist-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.landing-scope .spec-header {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.landing-scope .specialist-card > p {
+    color: var(--ink-muted);
+    line-height: 1.65;
+    font-size: 0.92rem;
+}
+
+/* ─── PRINCIPLES LIST ─── */
+.landing-scope .principles-list {
+    display: grid;
+    gap: 12px;
+}
+
+.landing-scope .principle {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(24, 45, 66, 0.05);
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-scope .principle:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.landing-scope .principle-num {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: #7c4216;
+    background: rgba(242, 217, 190, 0.6);
+    border: 1.5px solid rgba(178, 107, 47, 0.35);
+}
+
+.landing-scope .principle-body h3 {
+    margin-bottom: 6px;
+}
+
+.landing-scope .principle-body p {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+/* ─── LOCATION CARDS ─── */
+.landing-scope .location-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.landing-scope .location-card {
+    padding: 28px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.landing-scope .location-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.landing-scope .location-flag {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.landing-scope .location-card h3 {
+    margin-bottom: 8px;
+}
+
+.landing-scope .location-card p {
+    color: var(--ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+/* ─── FINAL CTA ─── */
+.landing-scope .final-cta {
+    margin-top: 64px;
+    text-align: center;
+    padding: 48px 32px;
+    background: linear-gradient(165deg, var(--surface) 0%, var(--surface-soft) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.landing-scope .final-cta p {
+    margin: 14px auto 24px;
+    max-width: 50ch;
+    color: var(--ink-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+/* ─── FOOTER ─── */
+.landing-scope .site-footer {
+    margin-top: 48px;
+    padding: 20px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-scope .footer-inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 0 24px;
+    border-top: 1px solid rgba(27, 42, 64, 0.1);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.landing-scope .footer-brand {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+}
+
+.landing-scope .footer-tagline {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+}
+
+/* ─── SHARED COMPONENTS (results, contact pages) ─── */
+.landing-scope .site-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(219, 205, 181, 0.75);
+    border-radius: 999px;
+    background: rgba(255, 253, 248, 0.82);
+    backdrop-filter: blur(8px);
+    padding: 8px 10px 8px 14px;
+    width: min(1180px, 100%);
+    margin: 0 auto 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.landing-scope .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.landing-scope .nav-links a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 8px 11px;
+    border-radius: 999px;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.landing-scope .nav-links a:hover {
+    background: rgba(17, 74, 114, 0.08);
+    color: var(--brand-deep);
+}
+
+.landing-scope .nav-links a.active {
+    background: rgba(17, 74, 114, 0.13);
+    color: var(--brand-deep);
+}
+
+.landing-scope .nav-links .nav-cta {
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--brand-deep);
+}
+
+/* Legacy panel styles */
+.landing-scope .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    background-image: linear-gradient(to right, rgba(27, 42, 64, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(27, 42, 64, 0.03) 1px, transparent 1px);
+    background-size: 36px 36px;
+}
+
+.landing-scope .orb {
+    position: fixed;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.landing-scope .orb-left {
+    width: 300px;
+    height: 300px;
+    left: -130px;
+    top: 20%;
+    background: rgba(178, 107, 47, 0.14);
+    filter: blur(14px);
+}
+
+.landing-scope .orb-right {
+    width: 340px;
+    height: 340px;
+    right: -140px;
+    top: -80px;
+    background: rgba(17, 74, 114, 0.14);
+    filter: blur(16px);
+}
+
+.landing-scope .panel,
+.landing-scope .card,
+.landing-scope .stat,
+.landing-scope .story,
+.landing-scope .plan,
+.landing-scope .faq details,
+.landing-scope .form-shell,
+.landing-scope .hero,
+.landing-scope .hero-side,
+.landing-scope .cta,
+.landing-scope .member,
+.landing-scope .office,
+.landing-scope .contact-card,
+.landing-scope .timeline-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.landing-scope .hero-wrap {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 14px;
+}
+
+.landing-scope .hero,
+.landing-scope .hero-side {
+    padding: 24px;
+    min-width: 0;
+}
+
+.landing-scope .hero-side {
+    background: linear-gradient(165deg, var(--surface) 0%, var(--surface-soft) 100%);
+}
+
+.landing-scope .kicker {
+    margin: 0 0 8px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.landing-scope .lead {
+    margin: 13px 0 16px;
+    color: var(--ink-muted);
+    max-width: 62ch;
+    line-height: 1.65;
+}
+
+.landing-scope .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.landing-scope button.btn-primary {
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    display: inline-block;
+    transition: transform 150ms ease, background-color 150ms ease;
+    border: none;
+    background: var(--brand);
+    color: #fff;
+}
+
+.landing-scope button.btn-primary:hover {
+    background: var(--brand-deep);
+    transform: translateY(-1px);
+}
+
+.landing-scope .hero-list {
+    margin: 14px 0 0;
+    padding-left: 18px;
+    color: var(--ink-muted);
+    display: grid;
+    gap: 6px;
+    line-height: 1.6;
+    list-style: disc;
+}
+
+.landing-scope .metric-grid,
+.landing-scope .card-grid,
+.landing-scope .story-grid,
+.landing-scope .plan-grid,
+.landing-scope .team-grid,
+.landing-scope .office-grid,
+.landing-scope .contact-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.landing-scope .metric-grid {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    margin-top: 14px;
+}
+
+.landing-scope .stat {
+    padding: 14px;
+    min-width: 0;
+}
+
+.landing-scope .stat strong {
+    display: block;
+    font-size: 1.04rem;
+    color: var(--brand-deep);
+}
+
+.landing-scope .stat span,
+.landing-scope .muted {
+    color: var(--ink-muted);
+}
+
+.landing-scope .stat span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.landing-scope .section-head {
+    margin-bottom: 10px;
+}
+
+.landing-scope .section-head h2 {
+    font-size: 1.58rem;
+}
+
+.landing-scope .section-head p {
+    margin: 8px 0 0;
+    color: var(--ink-muted);
+    line-height: 1.6;
+}
+
+.landing-scope .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.landing-scope .card {
+    padding: 16px;
+}
+
+.landing-scope .card p,
+.landing-scope .story p,
+.landing-scope .plan li,
+.landing-scope .faq p,
+.landing-scope .form-shell p,
+.landing-scope .office p,
+.landing-scope .contact-card p,
+.landing-scope .member p {
+    color: var(--ink-muted);
+    line-height: 1.65;
+}
+
+.landing-scope .timeline {
+    display: grid;
+    gap: 10px;
+}
+
+.landing-scope .timeline-item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 10px;
+    padding: 12px;
+}
+
+.landing-scope .timeline-item span {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(178, 107, 47, 0.45);
+    background: rgba(242, 217, 190, 0.65);
+    color: #7c4216;
+    font-weight: 700;
+}
+
+.landing-scope .story-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.landing-scope .story {
+    padding: 15px;
+}
+
+.landing-scope .story h3 {
+    margin-bottom: 6px;
+}
+
+.landing-scope .faq {
+    display: grid;
+    gap: 10px;
+}
+
+.landing-scope .faq details {
+    padding: 12px 14px;
+}
+
+.landing-scope .faq summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.landing-scope .faq p {
+    margin: 8px 0 0;
+}
+
+.landing-scope .contact-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+.landing-scope .form-shell,
+.landing-scope .contact-card {
+    padding: 16px;
+}
+
+.landing-scope .form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.landing-scope .form label {
+    display: grid;
+    gap: 7px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.landing-scope .form .full {
+    grid-column: 1 / -1;
+}
+
+.landing-scope .form input,
+.landing-scope .form textarea,
+.landing-scope .form select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    padding: 11px 12px;
+    font: inherit;
+    color: var(--ink);
+}
+
+.landing-scope .form textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.landing-scope .form input:focus,
+.landing-scope .form textarea:focus,
+.landing-scope .form select:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(17, 74, 114, 0.14);
+}
+
+.landing-scope .cta {
+    margin-top: 20px;
+    text-align: center;
+    padding: 26px 16px;
+    background: linear-gradient(165deg, var(--surface) 0%, var(--surface-soft) 100%);
+}
+
+.landing-scope .cta p {
+    margin: 9px auto 13px;
+    max-width: 58ch;
+    color: var(--ink-muted);
+}
+
+.landing-scope .footer {
+    margin-top: 18px;
+    border-top: 1px solid rgba(27, 42, 64, 0.12);
+    padding-top: 12px;
+    color: var(--ink-muted);
+    font-size: 0.84rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    width: min(1180px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.landing-scope .notice {
+    border-left: 4px solid var(--accent);
+    background: #fef6ea;
+    padding: 11px 12px;
+    border-radius: 10px;
+    color: #73451a;
+    margin-top: 10px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1050px) {
+    .landing-scope .diff-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .landing-scope .lead-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .specialist-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .hero-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .card-grid,
+    .landing-scope .team-grid,
+    .landing-scope .plan-grid,
+    .landing-scope .office-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 780px) {
+    .landing-scope .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 20px;
+        padding: 14px 16px;
+    }
+
+    .landing-scope .topnav {
+        gap: 4px;
+    }
+
+    .landing-scope .site-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 20px;
+    }
+
+    .landing-scope .nav-links {
+        gap: 6px;
+    }
+
+    .landing-scope .hero-banner {
+        padding: 32px 20px;
+        margin-top: 24px;
+    }
+
+    .landing-scope h1 {
+        font-size: 1.9rem;
+    }
+
+    .landing-scope .diff-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .location-row {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .lead-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .specialist-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .section {
+        margin-top: 40px;
+    }
+
+    .landing-scope .hero,
+    .landing-scope .hero-side {
+        padding: 18px 14px;
+        border-radius: 18px;
+    }
+
+    .landing-scope .metric-grid,
+    .landing-scope .card-grid,
+    .landing-scope .story-grid,
+    .landing-scope .plan-grid,
+    .landing-scope .team-grid,
+    .landing-scope .office-grid,
+    .landing-scope .contact-grid,
+    .landing-scope .form {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .timeline-item {
+        grid-template-columns: 42px 1fr;
+    }
+
+    .landing-scope .section-head h2 {
+        font-size: 1.35rem;
+    }
+
+    .landing-scope .final-cta {
+        padding: 32px 20px;
+        margin-top: 40px;
+    }
+}

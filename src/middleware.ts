@@ -7,7 +7,7 @@ import { isRateLimited } from '@/lib/rate-limit';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const publicPages = ['/login', '/forgot-password'];
+const publicPages = ['/', '/team', '/results', '/contact', '/login', '/forgot-password'];
 
 const roleRouteMap: Record<string, string[]> = {
   STUDENT: ['/student'],
@@ -38,6 +38,8 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
 }
 
 const isPublicRoute = createRouteMatcher([
+  '/(en|zh)',
+  '/(en|zh)/(team|results|contact)(.*)',
   '/(en|zh)/login(.*)',
   '/(en|zh)/forgot-password(.*)',
   '/api/webhooks/(.*)',
@@ -86,41 +88,40 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return applySecurityHeaders(NextResponse.next());
   }
 
+  // Bare root without locale prefix → redirect to /en (landing page)
+  console.log('[MW] pathname:', pathname, 'full url:', req.url);
+  if (pathname === '/') {
+    console.log('[MW] Redirecting / to /en');
+    return applySecurityHeaders(
+      NextResponse.redirect(new URL('/en', req.url))
+    );
+  }
+
   // Apply intl middleware first
   const intlResponse = intlMiddleware(req);
 
   // Extract locale and path without locale
   const pathnameWithoutLocale = pathname.replace(/^\/(en|zh)/, '') || '/';
 
-  // Check if public page
+  // Check if public page (exact match for /, startsWith for others like /login/sso-callback)
   const isPublicPage = publicPages.some(
-    (page) => pathnameWithoutLocale === page || pathnameWithoutLocale.startsWith(page)
+    (page) =>
+      pathnameWithoutLocale === page ||
+      (page !== '/' && pathnameWithoutLocale.startsWith(page))
   );
 
   const { userId, sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as Record<string, unknown>)?.role as string | undefined;
 
-  // If on public page and already logged in, redirect to home
+  // Authenticated user on public page (login, landing) → redirect to dashboard
   if (isPublicPage && userId) {
     const home = roleHomeMap[role || ''] || '/login';
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
   }
 
-  // If not public page and not logged in, redirect to login
-  if (!isPublicPage && !userId && pathnameWithoutLocale !== '/') {
-    const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
-    return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
-  }
-
-  // Root redirect
-  if (pathnameWithoutLocale === '/' && userId) {
-    const home = roleHomeMap[role || ''] || '/login';
-    const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
-    return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
-  }
-
-  if (pathnameWithoutLocale === '/' && !userId) {
+  // Unauthenticated user on protected page → redirect to login
+  if (!isPublicPage && !userId) {
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
