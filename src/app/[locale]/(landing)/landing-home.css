@@ -157,6 +157,21 @@
   margin: 0 auto;
 }
 
+/* Breathing gradient mesh — ambient depth behind hero content */
+.landing-scope .shell .h-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(158,124,56,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(26,107,90,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(15,25,35,0.06) 0%, transparent 60%);
+  background-size: 200% 200%;
+  animation: hm-gradient-breathe 22s ease-in-out infinite alternate;
+}
+
 /* Decorative orbs */
 .landing-scope .shell .h-hero-orb {
   position: absolute;
@@ -743,6 +758,20 @@
   pointer-events: none;
 }
 
+/* Breathing gradient mesh — ambient movement on callout */
+.landing-scope .shell .h-callout-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 25% 30%, rgba(158,124,56,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 70%, rgba(26,107,90,0.06) 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: hm-gradient-breathe 25s ease-in-out infinite alternate;
+}
+
 .landing-scope .shell .h-callout-inner h2 {
   color: white;
   max-width: 18ch;
@@ -849,6 +878,21 @@
   overflow: hidden;
 }
 
+/* Breathing gradient mesh — ambient depth on final CTA */
+.landing-scope .shell .h-final::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 40% 20%, rgba(158,124,56,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(26,107,90,0.06) 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: hm-gradient-breathe 20s ease-in-out infinite alternate;
+}
+
 .landing-scope .shell .h-final-glow {
   position: absolute;
   top: -60px; left: 50%;
@@ -947,6 +991,13 @@
 @keyframes hm-pulse {
   from { opacity: 0.6; transform: scale(1); }
   to   { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes hm-gradient-breathe {
+  0%   { background-position: 0% 0%; }
+  33%  { background-position: 100% 50%; }
+  66%  { background-position: 50% 100%; }
+  100% { background-position: 100% 0%; }
 }
 
 /* Scroll-triggered reveals via IntersectionObserver-like CSS.

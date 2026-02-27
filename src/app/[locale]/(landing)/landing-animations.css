@@ -61,4 +61,11 @@
     transition: none !important;
     animation: none !important;
   }
+
+  /* Disable breathing gradient mesh animations */
+  .landing-scope .shell .h-hero::before,
+  .landing-scope .shell .h-callout-inner::after,
+  .landing-scope .shell .h-final::before {
+    animation: none !important;
+  }
 }
