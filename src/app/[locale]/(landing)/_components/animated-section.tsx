@@ -12,6 +12,13 @@ interface AnimatedSectionProps {
 export function AnimatedSection({ children, className }: AnimatedSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // PERF-04: Lazy animation initialization
+  // ScrollTrigger defers tween creation until the section approaches the viewport
+  // (triggered at 85% from top via 'top 85%'). No animation code executes for
+  // below-fold sections until the user scrolls near them. The GSAP bundle itself
+  // is shared across all components via the singleton registration in gsap-registration.ts,
+  // making per-section code-splitting counterproductive (adds async complexity for
+  // negligible bundle reduction since GSAP is the heavy dependency, loaded once).
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
