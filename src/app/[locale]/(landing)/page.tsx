@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SmoothScrollProvider } from './_components/smooth-scroll-provider';
 import { AnimatedSection } from './_components/animated-section';
 import { HeroEntrance } from './_components/hero-entrance';
+import { ScrollProgressBar } from './_components/scroll-progress-bar';
 
 export const metadata: Metadata = {
   title: 'Admission Atlas | Strategic University Admissions Counseling',
@@ -41,6 +42,7 @@ export default function LandingHomePage() {
       </header>
 
       <SmoothScrollProvider>
+        <ScrollProgressBar />
         <main className="shell">
           {/* ─── HERO ─── */}
           <HeroEntrance>

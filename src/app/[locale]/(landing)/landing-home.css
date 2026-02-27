@@ -128,6 +128,20 @@
   box-shadow: 0 4px 14px rgba(27, 58, 75, 0.22);
 }
 
+/* ── Scroll Progress ── */
+.landing-scope .h-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--hm-gold);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 101;
+  pointer-events: none;
+}
+
 /* Override atlas warm gradient for home page */
 .landing-scope:has(.shell) {
   background: linear-gradient(180deg, #FAFAF7 0%, var(--hm-bg) 40%, #F2EDE4 100%);

@@ -92,6 +92,11 @@
     opacity: 1 !important;
   }
 
+  /* Scroll progress bar -- hidden for reduced-motion users */
+  .landing-scope .h-scroll-progress {
+    display: none !important;
+  }
+
   /* Disable FAQ accordion transition */
   .landing-scope .shell .h-faq-body {
     transition: none !important;
