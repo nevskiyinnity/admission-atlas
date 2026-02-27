@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-last_updated: "2026-02-27T09:01:15Z"
+status: unknown
+last_updated: "2026-02-27T09:06:48.420Z"
 progress:
   total_phases: 6
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -18,21 +18,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 6 in progress. Plan 06-01 complete, Plan 06-02 next.
+**Current focus:** Phase 6 COMPLETE. All scroll-triggered reveals and scroll progress bar implemented. Phase 7 next.
 
 ## Current Position
 
-Phase: 6 of 9 (Scroll-Triggered Reveals) -- IN PROGRESS
-Plan: 1 of 2 in current phase -- Plan 06-01 COMPLETE
-Status: Plan 06-01 complete. Per-section choreographed scroll reveals implemented. Plan 06-02 next.
-Last activity: 2026-02-27 -- Plan 06-01 complete (per-section choreographed scroll reveal timelines).
+Phase: 6 of 9 (Scroll-Triggered Reveals) -- COMPLETE
+Plan: 2 of 2 in current phase -- Phase 06 COMPLETE
+Status: Phase 6 complete. Scroll progress bar and per-section choreographed reveals implemented. Phase 7 next.
+Last activity: 2026-02-27 -- Plan 06-02 complete (scroll progress bar).
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100% (Phases 1-6 complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: 3 min
 - Total execution time: 0.5 hours
 
@@ -45,10 +45,10 @@ Progress: [█████████░] 90%
 | 03-css-visual-polish | 2 | 6 min | 3 min |
 | 04-section-transitions | 1 | 3 min | 3 min |
 | 05-hero-entrance | 2 | 3 min | 1.5 min |
-| 06-scroll-triggered-reveals | 1 | 4 min | 4 min |
+| 06-scroll-triggered-reveals | 2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (3 min), 04-01 (3 min), 05-01 (2 min), 05-02 (1 min), 06-01 (4 min)
+- Last 5 plans: 04-01 (3 min), 05-01 (2 min), 05-02 (1 min), 06-01 (4 min), 06-02 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -58,6 +58,7 @@ Progress: [█████████░] 90%
 | Phase 05 P01 | 2min | 2 tasks | 3 files |
 | Phase 05 P02 | 1min | 2 tasks | 2 files |
 | Phase 06 P01 | 4min | 2 tasks | 1 files |
+| Phase 06 P02 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - [06-01]: Single timeline per section with positional offsets for reading-order choreography
 - [06-01]: h2 SplitText integrated into section timeline (replaces standalone Phase 5 code)
 - [06-01]: Metrics section uses simple gsap.from stagger -- no timeline for sections without kicker/heading
+- [06-02]: scaleX transform for scroll indicator -- compositor-friendly, no layout thrash
+- [06-02]: z-index 101 above nav (100) -- 3px bar at top:0 does not interfere with floating nav at top:20px
+- [06-02]: Dual reduced-motion: matchMedia prevents ScrollTrigger creation, CSS display:none removes from render tree
 
 ### Pending Todos
 
@@ -109,6 +113,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 06-01-PLAN.md (per-section choreographed scroll reveal timelines). Plan 06-02 next.
-Resume with: Continue Phase 6, Plan 06-02
-Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (6-9). Auto-approve visual checkpoints.
+Stopped at: Completed 06-02-PLAN.md (scroll progress bar). Phase 6 complete.
+Resume with: Plan Phase 7 or continue to next phase
+Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (7-9). Auto-approve visual checkpoints.
