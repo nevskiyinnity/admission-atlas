@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T09:11:15.280Z"
+last_updated: "2026-02-27T11:06:17Z"
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 10
-  completed_plans: 10
+  total_phases: 7
+  completed_phases: 7
+  total_plans: 11
+  completed_plans: 11
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 6 COMPLETE. All scroll-triggered reveals and scroll progress bar implemented. Phase 7 next.
+**Current focus:** Phase 7 COMPLETE. Parallax visual depth on all decorative elements. Phase 8 next.
 
 ## Current Position
 
-Phase: 6 of 9 (Scroll-Triggered Reveals) -- COMPLETE
-Plan: 2 of 2 in current phase -- Phase 06 COMPLETE
-Status: Phase 6 complete. Scroll progress bar and per-section choreographed reveals implemented. Phase 7 next.
-Last activity: 2026-02-27 -- Plan 06-02 complete (scroll progress bar).
+Phase: 7 of 9 (Parallax Visual Depth) -- COMPLETE
+Plan: 1 of 1 in current phase -- Phase 07 COMPLETE
+Status: Phase 7 complete. Scroll-linked parallax on hero orbs, SVG accents, and atmospheric glows. Phase 8 next.
+Last activity: 2026-02-27 -- Plan 07-01 complete (parallax visual depth).
 
-Progress: [██████████] 100% (Phases 1-6 complete)
+Progress: [██████████] 100% (Phases 1-7 complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: 3 min
-- Total execution time: 0.5 hours
+- Total execution time: 0.6 hours
 
 **By Phase:**
 
@@ -46,9 +46,10 @@ Progress: [██████████] 100% (Phases 1-6 complete)
 | 04-section-transitions | 1 | 3 min | 3 min |
 | 05-hero-entrance | 2 | 3 min | 1.5 min |
 | 06-scroll-triggered-reveals | 2 | 6 min | 3 min |
+| 07-parallax-visual-depth | 1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (3 min), 05-01 (2 min), 05-02 (1 min), 06-01 (4 min), 06-02 (2 min)
+- Last 5 plans: 05-01 (2 min), 05-02 (1 min), 06-01 (4 min), 06-02 (2 min), 07-01 (4 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -59,6 +60,7 @@ Progress: [██████████] 100% (Phases 1-6 complete)
 | Phase 05 P02 | 1min | 2 tasks | 2 files |
 | Phase 06 P01 | 4min | 2 tasks | 1 files |
 | Phase 06 P02 | 2min | 2 tasks | 4 files |
+| Phase 07 P01 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -100,6 +102,11 @@ Recent decisions affecting current work:
 - [06-02]: scaleX transform for scroll indicator -- compositor-friendly, no layout thrash
 - [06-02]: z-index 101 above nav (100) -- 3px bar at top:0 does not interfere with floating nav at top:20px
 - [06-02]: Dual reduced-motion: matchMedia prevents ScrollTrigger creation, CSS display:none removes from render tree
+- [07-01]: Separate matchMedia block for parallax (adds min-width:769px) vs entrance/reveal (motion-only)
+- [07-01]: gsap.to() on y property orthogonal to gsap.from() on scale/opacity -- zero conflict between entrance and parallax
+- [07-01]: scrub:0.5 for parallax matches scroll progress bar smoothing from Phase 6
+- [07-01]: Hero parallax 'top top'/'bottom top' (above fold); section parallax 'top bottom'/'bottom top' (full traversal)
+- [07-01]: Alternating accent displacement (-25px/-18px) prevents mechanical lockstep
 
 ### Pending Todos
 
@@ -113,6 +120,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 06-02-PLAN.md (scroll progress bar). Phase 6 complete.
-Resume with: Plan Phase 7 or continue to next phase
-Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (7-9). Auto-approve visual checkpoints.
+Stopped at: Completed 07-01-PLAN.md (parallax visual depth). Phase 7 complete.
+Resume with: Plan Phase 8 or continue to next phase
+Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (8-9). Auto-approve visual checkpoints.
