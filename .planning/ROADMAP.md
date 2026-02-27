@@ -12,7 +12,7 @@ Transform the Admission Atlas landing page from a well-made editorial template t
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Motion Foundation** - GSAP + Lenis installed, Client Component islands architecture, animation CSS initial states, prefers-reduced-motion infrastructure
+- [x] **Phase 1: Motion Foundation** - GSAP + Lenis installed, Client Component islands architecture, animation CSS initial states, prefers-reduced-motion infrastructure
 - [ ] **Phase 2: Typography & Copy** - Typography drama with fluid scaling, copy restructuring for quiet authority
 - [ ] **Phase 3: CSS Visual Polish** - Gradient mesh backgrounds, SVG geometry accents, enhanced hover transitions, FAQ accordion
 - [ ] **Phase 4: Section Transitions & Dark Atmosphere** - Seamless section flow, dark outcomes section atmospheric upgrade, grain density tuning
@@ -37,8 +37,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: Install GSAP + Lenis, create registration singleton, SmoothScrollProvider, AnimatedSection
-- [ ] 01-02: CSS initial states, reduced-motion overrides, wrap page.tsx sections in Client Component islands
+- [x] 01-01: Install GSAP + Lenis, create registration singleton, SmoothScrollProvider, AnimatedSection
+- [x] 01-02: CSS initial states, reduced-motion overrides, wrap page.tsx sections in Client Component islands
 
 ### Phase 2: Typography & Copy
 **Goal**: The page communicates quiet authority through typography alone -- display type dominates, copy is tighter and more confident, fluid scaling works across all breakpoints
@@ -162,7 +162,7 @@ Note: Phases 2 and 3 depend only on Phase 1 and can execute in parallel. Phases 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Motion Foundation | 0/2 | Not started | - |
+| 1. Motion Foundation | 2/2 | Complete | 2026-02-27 |
 | 2. Typography & Copy | 0/1 | Not started | - |
 | 3. CSS Visual Polish | 0/2 | Not started | - |
 | 4. Section Transitions & Dark Atmosphere | 0/1 | Not started | - |

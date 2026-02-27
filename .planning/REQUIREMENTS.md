@@ -9,9 +9,9 @@
 
 - [x] **FOUND-01**: GSAP 3.14 + ScrollTrigger + SplitText + @gsap/react installed and configured for Next.js 14 App Router
 - [x] **FOUND-02**: Lenis smooth scroll integrated with ScrollTrigger via ticker sync
-- [ ] **FOUND-03**: Client Component islands architecture — page.tsx stays Server Component, animated sections wrapped in thin Client Components
-- [ ] **FOUND-04**: CSS initial states in `landing-animations.css` to prevent FOUC on all animated elements
-- [ ] **FOUND-05**: `prefers-reduced-motion` support via `gsap.matchMedia()` — all animations disabled gracefully for users who prefer reduced motion
+- [x] **FOUND-03**: Client Component islands architecture — page.tsx stays Server Component, animated sections wrapped in thin Client Components
+- [x] **FOUND-04**: CSS initial states in `landing-animations.css` to prevent FOUC on all animated elements
+- [x] **FOUND-05**: `prefers-reduced-motion` support via `gsap.matchMedia()` — all animations disabled gracefully for users who prefer reduced motion
 - [x] **FOUND-06**: GSAP plugin registration singleton (`gsap-registration.ts`) to prevent duplicate registration
 
 ### Scroll Animation
@@ -79,9 +79,9 @@
 |-------------|-------|--------|
 | FOUND-01 | Phase 1 | Complete |
 | FOUND-02 | Phase 1 | Complete |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| FOUND-05 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Complete |
+| FOUND-04 | Phase 1 | Complete |
+| FOUND-05 | Phase 1 | Complete |
 | FOUND-06 | Phase 1 | Complete |
 | SCROLL-01 | Phase 6 | Pending |
 | SCROLL-02 | Phase 5 | Pending |
