@@ -270,13 +270,12 @@
   padding: 14px 30px;
   border: none; border-radius: 999px;
   cursor: pointer;
-  transition: background 200ms var(--hm-ease), transform 200ms var(--hm-ease), box-shadow 200ms var(--hm-ease);
+  transition: background 200ms var(--hm-ease), box-shadow 200ms var(--hm-ease);
   box-shadow: 0 2px 8px rgba(27,58,75,0.18);
 }
 
 .landing-scope .shell .h-btn-primary:hover {
   background: var(--hm-navy-deep);
-  transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(27,58,75,0.22);
 }
 
@@ -485,7 +484,28 @@
   padding: 32px 28px;
   position: relative;
   overflow: hidden;
-  transition: transform 300ms var(--hm-ease), box-shadow 300ms var(--hm-ease);
+  transition: box-shadow 300ms var(--hm-ease);
+}
+
+/* Light sheen — follows cursor via JS-updated custom properties */
+.landing-scope .shell .h-bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    300px 300px at var(--sheen-x, 50%) var(--sheen-y, 50%),
+    rgba(158, 124, 56, 0.06) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 300ms var(--hm-ease);
+  z-index: 1;
+}
+
+.landing-scope .shell .h-bento-card:hover::before {
+  opacity: 1;
 }
 
 .landing-scope .shell .h-bento-card::after {
@@ -500,7 +520,6 @@
 }
 
 .landing-scope .shell .h-bento-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 8px 32px rgba(15,25,35,0.06), 0 2px 8px rgba(15,25,35,0.03);
 }
 

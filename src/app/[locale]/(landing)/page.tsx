@@ -4,6 +4,8 @@ import { SmoothScrollProvider } from './_components/smooth-scroll-provider';
 import { AnimatedSection } from './_components/animated-section';
 import { HeroEntrance } from './_components/hero-entrance';
 import { ScrollProgressBar } from './_components/scroll-progress-bar';
+import { MagneticButton } from './_components/magnetic-button';
+import { TiltCard } from './_components/tilt-card';
 
 export const metadata: Metadata = {
   title: 'Admission Atlas | Strategic University Admissions Counseling',
@@ -60,12 +62,14 @@ export default function LandingHomePage() {
                 chance.
               </p>
               <div className="h-hero-actions">
-                <Link className="h-btn-primary" href="/contact">
-                  Start Your Strategy
-                  <span className="h-btn-arrow" aria-hidden="true">
-                    &rarr;
-                  </span>
-                </Link>
+                <MagneticButton>
+                  <Link className="h-btn-primary" href="/contact">
+                    Start Your Strategy
+                    <span className="h-btn-arrow" aria-hidden="true">
+                      &rarr;
+                    </span>
+                  </Link>
+                </MagneticButton>
                 <a className="h-btn-ghost" href="#services">
                   See the Process
                 </a>
@@ -117,52 +121,64 @@ export default function LandingHomePage() {
 
               {/* Bento grid — 2 wide + 4 narrow */}
               <div className="h-bento">
-                <article className="h-bento-card h-bento-wide">
-                  <span className="h-bento-num">01</span>
-                  <h3>School List Architecture</h3>
-                  <p>
-                    Balanced across regions, risk tiers, and what you can
-                    actually afford — not a top-heavy wish list.
-                  </p>
-                </article>
-                <article className="h-bento-card h-bento-wide">
-                  <span className="h-bento-num">02</span>
-                  <h3>Major-Fit Positioning</h3>
-                  <p>
-                    We translate coursework, projects, and activities into the
-                    signals departments actually evaluate.
-                  </p>
-                </article>
-                <article className="h-bento-card">
-                  <span className="h-bento-num">03</span>
-                  <h3>Narrative Strategy</h3>
-                  <p>
-                    Essays that demonstrate direction and depth — not platitudes.
-                  </p>
-                </article>
-                <article className="h-bento-card">
-                  <span className="h-bento-num">04</span>
-                  <h3>Execution Management</h3>
-                  <p>
-                    Deadlines, drafts, and revision cycles on a single visible
-                    timeline.
-                  </p>
-                </article>
-                <article className="h-bento-card">
-                  <span className="h-bento-num">05</span>
-                  <h3>Budget &amp; Aid</h3>
-                  <p>
-                    Tuition, aid probability, and scholarship odds — compared
-                    upfront, not after you fall in love with a school.
-                  </p>
-                </article>
-                <article className="h-bento-card">
-                  <span className="h-bento-num">06</span>
-                  <h3>Family Decisions</h3>
-                  <p>
-                    Trade-offs made explicit so decisions stay grounded in data.
-                  </p>
-                </article>
+                <TiltCard className="h-bento-wide">
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">01</span>
+                    <h3>School List Architecture</h3>
+                    <p>
+                      Balanced across regions, risk tiers, and what you can
+                      actually afford — not a top-heavy wish list.
+                    </p>
+                  </article>
+                </TiltCard>
+                <TiltCard className="h-bento-wide">
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">02</span>
+                    <h3>Major-Fit Positioning</h3>
+                    <p>
+                      We translate coursework, projects, and activities into the
+                      signals departments actually evaluate.
+                    </p>
+                  </article>
+                </TiltCard>
+                <TiltCard>
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">03</span>
+                    <h3>Narrative Strategy</h3>
+                    <p>
+                      Essays that demonstrate direction and depth — not platitudes.
+                    </p>
+                  </article>
+                </TiltCard>
+                <TiltCard>
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">04</span>
+                    <h3>Execution Management</h3>
+                    <p>
+                      Deadlines, drafts, and revision cycles on a single visible
+                      timeline.
+                    </p>
+                  </article>
+                </TiltCard>
+                <TiltCard>
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">05</span>
+                    <h3>Budget &amp; Aid</h3>
+                    <p>
+                      Tuition, aid probability, and scholarship odds — compared
+                      upfront, not after you fall in love with a school.
+                    </p>
+                  </article>
+                </TiltCard>
+                <TiltCard>
+                  <article className="h-bento-card">
+                    <span className="h-bento-num">06</span>
+                    <h3>Family Decisions</h3>
+                    <p>
+                      Trade-offs made explicit so decisions stay grounded in data.
+                    </p>
+                  </article>
+                </TiltCard>
               </div>
             </section>
           </AnimatedSection>
@@ -310,9 +326,11 @@ export default function LandingHomePage() {
                     <li>Application review cycles</li>
                     <li>Submission quality control</li>
                   </ul>
-                  <Link className="h-btn-primary" href="/contact">
-                    Book Consultation
-                  </Link>
+                  <MagneticButton>
+                    <Link className="h-btn-primary" href="/contact">
+                      Book Consultation
+                    </Link>
+                  </MagneticButton>
                 </article>
                 <article className="h-plan-card">
                   <span className="h-plan-tier">Intensive</span>
@@ -444,12 +462,14 @@ export default function LandingHomePage() {
                 Share your profile, target majors, and budget range. We&apos;ll
                 map the strongest path for your application cycle.
               </p>
-              <Link className="h-btn-primary h-btn-lg" href="/contact">
-                Book a Consultation
-                <span className="h-btn-arrow" aria-hidden="true">
-                  &rarr;
-                </span>
-              </Link>
+              <MagneticButton>
+                <Link className="h-btn-primary h-btn-lg" href="/contact">
+                  Book a Consultation
+                  <span className="h-btn-arrow" aria-hidden="true">
+                    &rarr;
+                  </span>
+                </Link>
+              </MagneticButton>
             </section>
           </AnimatedSection>
         </main>
