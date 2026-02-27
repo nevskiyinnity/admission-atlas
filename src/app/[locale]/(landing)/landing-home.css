@@ -1,15 +1,17 @@
 /* ──────────────────────────────────────────
    Admission Atlas – Home Page Overrides
    Loaded AFTER landing-atlas.css (base system)
+   ALL interior styles scoped under .shell
+   to prevent bleeding into contact/team/results
    ────────────────────────────────────────── */
 
-/* ── Home-specific tokens (extend atlas base) ── */
+/* ── Home-specific tokens ── */
 .landing-scope {
     --teal: #2a9d8f;
     --shadow-card: 0 2px 8px rgba(24, 45, 66, 0.05), 0 4px 14px rgba(24, 45, 66, 0.06);
 }
 
-/* ── Login link in nav ── */
+/* ── Login link in shared nav ── */
 .landing-scope .login-link {
     font-weight: 700 !important;
     color: var(--brand-deep) !important;
@@ -21,7 +23,7 @@
     background: rgba(17, 74, 114, 0.08);
 }
 
-/* ── Layout shell ── */
+/* ── Layout shell (home page container) ── */
 .landing-scope .shell {
     width: min(1100px, 100%);
     margin: 0 auto;
@@ -30,15 +32,14 @@
     z-index: 1;
 }
 
-/* ── Hero — undo atlas panel styles ── */
-.landing-scope .hero {
+/* ── Hero — override atlas panel styles for home page only ── */
+.landing-scope .shell .hero {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
     gap: 28px;
     align-items: start;
     margin-top: 24px;
     margin-bottom: 20px;
-    /* Reset atlas panel styles */
     border: none;
     border-radius: 0;
     background: transparent;
@@ -46,16 +47,16 @@
     padding: 0;
 }
 
-.landing-scope .hero-copy {
+.landing-scope .shell .hero-copy {
     padding: 48px 0 48px 0;
     animation: landingFadeIn 650ms cubic-bezier(.4, 0, .2, 1) both;
 }
 
-.landing-scope .hero-copy h1 {
+.landing-scope .shell .hero-copy h1 {
     margin-bottom: 20px;
 }
 
-.landing-scope .lead {
+.landing-scope .shell .lead {
     max-width: 54ch;
     color: var(--ink-muted);
     font-size: 1.08rem;
@@ -63,14 +64,14 @@
     margin: 0 0 32px;
 }
 
-.landing-scope .actions {
+.landing-scope .shell .actions {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
 }
 
 /* ── Hero aside card ── */
-.landing-scope .hero-aside {
+.landing-scope .shell .hero-aside {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -79,14 +80,14 @@
     animation: landingFadeIn 650ms 120ms cubic-bezier(.4, 0, .2, 1) both;
 }
 
-.landing-scope .stat-grid {
+.landing-scope .shell .stat-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     margin-bottom: 24px;
 }
 
-.landing-scope .stat-card {
+.landing-scope .shell .stat-card {
     text-align: center;
     padding: 16px 12px;
     border-radius: var(--radius-sm);
@@ -95,17 +96,17 @@
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .stat-card:hover {
+.landing-scope .shell .stat-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-card);
 }
 
-.landing-scope .accent-card {
+.landing-scope .shell .accent-card {
     background: var(--accent-soft);
     border-color: rgba(178, 107, 47, 0.2);
 }
 
-.landing-scope .stat-number {
+.landing-scope .shell .stat-number {
     display: block;
     font-family: "DM Serif Display", Georgia, serif;
     font-size: 1.6rem;
@@ -113,11 +114,11 @@
     line-height: 1.1;
 }
 
-.landing-scope .accent-card .stat-number {
+.landing-scope .shell .accent-card .stat-number {
     color: var(--accent);
 }
 
-.landing-scope .stat-label {
+.landing-scope .shell .stat-label {
     display: block;
     margin-top: 4px;
     font-size: 0.78rem;
@@ -126,19 +127,19 @@
     letter-spacing: 0.01em;
 }
 
-.landing-scope .hero-checklist h3 {
+.landing-scope .shell .hero-checklist h3 {
     font-size: 1.02rem;
     margin-bottom: 12px;
     color: var(--ink);
 }
 
-.landing-scope .hero-checklist ul {
+.landing-scope .shell .hero-checklist ul {
     padding-left: 0;
     display: grid;
     gap: 10px;
 }
 
-.landing-scope .hero-checklist li {
+.landing-scope .shell .hero-checklist li {
     font-size: 0.9rem;
     color: var(--ink-muted);
     padding-left: 22px;
@@ -146,7 +147,7 @@
     line-height: 1.5;
 }
 
-.landing-scope .hero-checklist li::before {
+.landing-scope .shell .hero-checklist li::before {
     content: "\2713";
     position: absolute;
     left: 0;
@@ -155,7 +156,7 @@
     font-size: 0.85rem;
 }
 
-.landing-scope .link-arrow {
+.landing-scope .shell .link-arrow {
     display: inline-block;
     margin-top: 14px;
     font-size: 0.86rem;
@@ -165,12 +166,12 @@
     transition: color 180ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .link-arrow:hover {
+.landing-scope .shell .link-arrow:hover {
     color: var(--accent);
 }
 
 /* ── Trust band ── */
-.landing-scope .trust-band {
+.landing-scope .shell .trust-band {
     max-width: 1100px;
     margin: 0 auto 12px;
     padding: 16px 28px;
@@ -183,7 +184,7 @@
     animation: landingFadeIn 500ms 200ms cubic-bezier(.4, 0, .2, 1) both;
 }
 
-.landing-scope .trust-band p {
+.landing-scope .shell .trust-band p {
     text-align: center;
     font-weight: 700;
     font-size: 0.92rem;
@@ -192,21 +193,21 @@
 }
 
 /* ── Section headers ── */
-.landing-scope .section {
+.landing-scope .shell .section {
     margin-top: 72px;
 }
 
-.landing-scope .section-header {
+.landing-scope .shell .section-header {
     text-align: center;
     margin-bottom: 36px;
 }
 
-.landing-scope .section-header h2 {
+.landing-scope .shell .section-header h2 {
     max-width: 28ch;
     margin: 0 auto 12px;
 }
 
-.landing-scope .section-sub {
+.landing-scope .shell .section-sub {
     max-width: 58ch;
     margin: 0 auto;
     color: var(--ink-muted);
@@ -214,16 +215,16 @@
 }
 
 /* ── Card grids ── */
-.landing-scope .card-grid {
+.landing-scope .shell .card-grid {
     display: grid;
     gap: 14px;
 }
 
-.landing-scope .cols-3 { grid-template-columns: repeat(3, 1fr); }
-.landing-scope .cols-2 { grid-template-columns: repeat(2, 1fr); }
+.landing-scope .shell .cols-3 { grid-template-columns: repeat(3, 1fr); }
+.landing-scope .shell .cols-2 { grid-template-columns: repeat(2, 1fr); }
 
 /* ── Feature cards ── */
-.landing-scope .feature-card {
+.landing-scope .shell .feature-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -232,12 +233,12 @@
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .feature-card:hover {
+.landing-scope .shell .feature-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow);
 }
 
-.landing-scope .card-icon {
+.landing-scope .shell .card-icon {
     font-size: 1.5rem;
     margin-bottom: 14px;
     width: 42px;
@@ -249,18 +250,18 @@
     border: 1px solid var(--border);
 }
 
-.landing-scope .feature-card h3 {
+.landing-scope .shell .feature-card h3 {
     margin-bottom: 8px;
 }
 
-.landing-scope .feature-card p {
+.landing-scope .shell .feature-card p {
     color: var(--ink-muted);
     font-size: 0.92rem;
     line-height: 1.65;
 }
 
 /* ── Outcome cards ── */
-.landing-scope .outcome-card {
+.landing-scope .shell .outcome-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -271,7 +272,7 @@
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .outcome-card::before {
+.landing-scope .shell .outcome-card::before {
     content: "";
     position: absolute;
     top: 0;
@@ -284,34 +285,34 @@
     transition: opacity 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .outcome-card:hover {
+.landing-scope .shell .outcome-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow);
 }
 
-.landing-scope .outcome-card:hover::before {
+.landing-scope .shell .outcome-card:hover::before {
     opacity: 1;
 }
 
-.landing-scope .outcome-card h3 {
+.landing-scope .shell .outcome-card h3 {
     margin-bottom: 8px;
 }
 
-.landing-scope .outcome-card p {
+.landing-scope .shell .outcome-card p {
     color: var(--ink-muted);
     font-size: 0.92rem;
     line-height: 1.65;
 }
 
 /* ── Timeline steps ── */
-.landing-scope .timeline {
+.landing-scope .shell .timeline {
     display: grid;
     gap: 12px;
     max-width: 780px;
     margin: 0 auto;
 }
 
-.landing-scope .step {
+.landing-scope .shell .step {
     display: grid;
     grid-template-columns: 56px 1fr;
     gap: 18px;
@@ -324,12 +325,12 @@
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .step:hover {
+.landing-scope .shell .step:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
 
-.landing-scope .step-num {
+.landing-scope .shell .step-num {
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -343,22 +344,22 @@
     flex-shrink: 0;
 }
 
-.landing-scope .step-body h3 {
+.landing-scope .shell .step-body h3 {
     margin-bottom: 6px;
 }
 
-.landing-scope .step-body p {
+.landing-scope .shell .step-body p {
     color: var(--ink-muted);
     font-size: 0.92rem;
 }
 
 /* ── Pricing cards ── */
-.landing-scope .pricing-grid {
+.landing-scope .shell .pricing-grid {
     max-width: 1000px;
     margin: 0 auto;
 }
 
-.landing-scope .plan-card {
+.landing-scope .shell .plan-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -370,12 +371,12 @@
     transition: transform 300ms cubic-bezier(.4, 0, .2, 1), box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .plan-card:hover {
+.landing-scope .shell .plan-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow);
 }
 
-.landing-scope .plan-card.featured {
+.landing-scope .shell .plan-card.featured {
     border-color: var(--brand);
     border-width: 2px;
     box-shadow: var(--shadow);
@@ -383,12 +384,12 @@
     background: linear-gradient(175deg, var(--surface) 0%, var(--surface-soft) 100%);
 }
 
-.landing-scope .plan-card.featured:hover {
+.landing-scope .shell .plan-card.featured:hover {
     transform: translateY(-10px);
     box-shadow: var(--shadow-hover);
 }
 
-.landing-scope .popular-badge {
+.landing-scope .shell .popular-badge {
     position: absolute;
     top: -13px;
     left: 50%;
@@ -403,7 +404,7 @@
     border-radius: 999px;
 }
 
-.landing-scope .plan-tag {
+.landing-scope .shell .plan-tag {
     font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -412,13 +413,13 @@
     margin-bottom: 6px;
 }
 
-.landing-scope .plan-card h3 {
+.landing-scope .shell .plan-card h3 {
     font-family: "DM Serif Display", Georgia, serif;
     font-size: 1.4rem;
     margin-bottom: 16px;
 }
 
-.landing-scope .plan-card ul {
+.landing-scope .shell .plan-card ul {
     padding-left: 0;
     display: grid;
     gap: 10px;
@@ -426,7 +427,7 @@
     flex: 1;
 }
 
-.landing-scope .plan-card li {
+.landing-scope .shell .plan-card li {
     font-size: 0.9rem;
     color: var(--ink-muted);
     padding-left: 22px;
@@ -434,7 +435,7 @@
     line-height: 1.5;
 }
 
-.landing-scope .plan-card li::before {
+.landing-scope .shell .plan-card li::before {
     content: "\2713";
     position: absolute;
     left: 0;
@@ -443,8 +444,8 @@
     font-size: 0.85rem;
 }
 
-.landing-scope .plan-card .btn-primary,
-.landing-scope .plan-card .btn-outline {
+.landing-scope .shell .plan-card .btn-primary,
+.landing-scope .shell .plan-card .btn-outline {
     width: 100%;
     justify-content: center;
     text-align: center;
@@ -453,13 +454,13 @@
 }
 
 /* ── Engine callout ── */
-.landing-scope .engine-callout {
+.landing-scope .shell .engine-callout {
     margin-top: 72px;
     position: relative;
     z-index: 1;
 }
 
-.landing-scope .engine-inner {
+.landing-scope .shell .engine-inner {
     max-width: 1100px;
     margin: 0 auto;
     background: linear-gradient(135deg, var(--brand) 0%, #1a4e74 60%, var(--teal) 100%);
@@ -471,7 +472,7 @@
     overflow: hidden;
 }
 
-.landing-scope .engine-inner::before {
+.landing-scope .shell .engine-inner::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -480,43 +481,43 @@
     pointer-events: none;
 }
 
-.landing-scope .engine-inner .eyebrow {
+.landing-scope .shell .engine-inner .eyebrow {
     color: rgba(255, 255, 255, 0.6);
 }
 
-.landing-scope .engine-inner h2 {
+.landing-scope .shell .engine-inner h2 {
     color: #fff;
     margin-bottom: 14px;
 }
 
-.landing-scope .engine-inner p {
+.landing-scope .shell .engine-inner p {
     color: rgba(255, 255, 255, 0.8);
     max-width: 52ch;
     margin: 0 auto 28px;
     font-size: 1.02rem;
 }
 
-.landing-scope .engine-inner .btn-primary {
+.landing-scope .shell .engine-inner .btn-primary {
     background: #fff;
     color: var(--brand);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.landing-scope .engine-inner .btn-primary:hover {
+.landing-scope .shell .engine-inner .btn-primary:hover {
     background: var(--surface-soft);
     transform: translateY(-2px);
     box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
 }
 
-/* ── FAQ ── */
-.landing-scope .faq-list {
+/* ── FAQ (home page version) ── */
+.landing-scope .shell .faq-list {
     max-width: 780px;
     margin: 0 auto;
     display: grid;
     gap: 10px;
 }
 
-.landing-scope .faq-list details {
+.landing-scope .shell .faq-list details {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -525,15 +526,15 @@
     transition: box-shadow 300ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .faq-list details:hover {
+.landing-scope .shell .faq-list details:hover {
     box-shadow: var(--shadow);
 }
 
-.landing-scope .faq-list details[open] {
+.landing-scope .shell .faq-list details[open] {
     border-color: rgba(17, 74, 114, 0.2);
 }
 
-.landing-scope .faq-list summary {
+.landing-scope .shell .faq-list summary {
     cursor: pointer;
     font-weight: 700;
     font-size: 0.98rem;
@@ -545,9 +546,9 @@
     gap: 16px;
 }
 
-.landing-scope .faq-list summary::-webkit-details-marker { display: none; }
+.landing-scope .shell .faq-list summary::-webkit-details-marker { display: none; }
 
-.landing-scope .faq-list summary::after {
+.landing-scope .shell .faq-list summary::after {
     content: "+";
     flex-shrink: 0;
     width: 28px;
@@ -563,7 +564,7 @@
     transition: transform 250ms cubic-bezier(.4, 0, .2, 1), background 250ms cubic-bezier(.4, 0, .2, 1);
 }
 
-.landing-scope .faq-list details[open] summary::after {
+.landing-scope .shell .faq-list details[open] summary::after {
     content: "\2212";
     transform: rotate(180deg);
     background: var(--brand);
@@ -571,15 +572,15 @@
     border-color: var(--brand);
 }
 
-.landing-scope .faq-list details p {
+.landing-scope .shell .faq-list details p {
     margin-top: 14px;
     color: var(--ink-muted);
     line-height: 1.7;
     font-size: 0.94rem;
 }
 
-/* ── Final CTA ── */
-.landing-scope .final-cta {
+/* ── Final CTA (home page version) ── */
+.landing-scope .shell .final-cta {
     margin-top: 72px;
     text-align: center;
     padding: 56px 32px;
@@ -592,7 +593,7 @@
     overflow: hidden;
 }
 
-.landing-scope .final-cta::before {
+.landing-scope .shell .final-cta::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -600,13 +601,13 @@
     pointer-events: none;
 }
 
-.landing-scope .final-cta h2 {
+.landing-scope .shell .final-cta h2 {
     max-width: 22ch;
     margin: 0 auto 16px;
     position: relative;
 }
 
-.landing-scope .final-cta p {
+.landing-scope .shell .final-cta p {
     max-width: 50ch;
     margin: 0 auto 28px;
     color: var(--ink-muted);
@@ -615,16 +616,8 @@
     line-height: 1.7;
 }
 
-.landing-scope .final-cta .btn-primary {
+.landing-scope .shell .final-cta .btn-primary {
     position: relative;
-}
-
-/* ── Footer override ── */
-.landing-scope .footer {
-    margin-top: 48px;
-    padding: 20px 0;
-    position: relative;
-    z-index: 1;
 }
 
 /* ── Entrance animations ── */
@@ -633,42 +626,40 @@
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.landing-scope .trust-band { animation: landingFadeIn 500ms 200ms cubic-bezier(.4, 0, .2, 1) both; }
+.landing-scope .shell .trust-band { animation: landingFadeIn 500ms 200ms cubic-bezier(.4, 0, .2, 1) both; }
 
-/* ── Responsive ── */
+/* ── Responsive (home page) ── */
 @media (max-width: 1024px) {
-    .landing-scope .hero { grid-template-columns: 1fr; gap: 20px; }
-    .landing-scope .hero-copy { padding: 24px 0 0; }
-    .landing-scope .cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .landing-scope .shell .hero { grid-template-columns: 1fr; gap: 20px; }
+    .landing-scope .shell .hero-copy { padding: 24px 0 0; }
+    .landing-scope .shell .cols-3 { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-    .landing-scope .hero-copy { padding: 12px 0 0; }
-    .landing-scope .lead { font-size: 1rem; }
-    .landing-scope .actions { flex-direction: column; align-items: stretch; }
-    .landing-scope .actions .btn-primary,
-    .landing-scope .actions .btn-ghost { text-align: center; }
+    .landing-scope .shell .hero-copy { padding: 12px 0 0; }
+    .landing-scope .shell .lead { font-size: 1rem; }
+    .landing-scope .shell .actions { flex-direction: column; align-items: stretch; }
+    .landing-scope .shell .actions .btn-primary,
+    .landing-scope .shell .actions .btn-ghost { text-align: center; }
 
-    .landing-scope .cols-3,
-    .landing-scope .cols-2 { grid-template-columns: 1fr; }
+    .landing-scope .shell .cols-3,
+    .landing-scope .shell .cols-2 { grid-template-columns: 1fr; }
 
-    .landing-scope .stat-grid { grid-template-columns: 1fr 1fr; }
+    .landing-scope .shell .stat-grid { grid-template-columns: 1fr 1fr; }
 
-    .landing-scope .step {
+    .landing-scope .shell .step {
         grid-template-columns: 44px 1fr;
         gap: 14px;
         padding: 18px;
     }
 
-    .landing-scope .step-num { width: 40px; height: 40px; font-size: 0.9rem; }
+    .landing-scope .shell .step-num { width: 40px; height: 40px; font-size: 0.9rem; }
 
-    .landing-scope .engine-inner {
-        padding: 36px 20px;
-    }
+    .landing-scope .shell .engine-inner { padding: 36px 20px; }
 
-    .landing-scope .section { margin-top: 56px; }
-    .landing-scope .engine-callout { margin-top: 56px; }
-    .landing-scope .final-cta { padding: 40px 20px; margin-top: 56px; }
+    .landing-scope .shell .section { margin-top: 56px; }
+    .landing-scope .shell .engine-callout { margin-top: 56px; }
+    .landing-scope .shell .final-cta { padding: 40px 20px; margin-top: 56px; }
 
-    .landing-scope .pricing-grid { max-width: 100%; }
+    .landing-scope .shell .pricing-grid { max-width: 100%; }
 }
