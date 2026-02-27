@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 4: Section Transitions -- COMPLETE
+**Current focus:** Phase 5: Hero Entrance Sequence
 
 ## Current Position
 
-Phase: 4 of 9 (Section Transitions) -- COMPLETE
-Plan: 1 of 1 in current phase (1 done)
-Status: Phase Complete
-Last activity: 2026-02-27 -- Completed 04-01-PLAN.md (gradient bleeds + dark section atmosphere)
+Phase: 5 of 9 (Hero Entrance Sequence)
+Plan: 0 of 2 in current phase
+Status: Ready to plan
+Last activity: 2026-02-27 -- Phases 1-4 complete. Phase 5 directory created, needs research + planning + execution.
 
 Progress: [███████░░░] 67%
 
@@ -95,5 +95,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 04-01-PLAN.md -- Phase 4 complete (1 of 1 plans done)
-Resume file: .planning/phases/04-section-transitions/04-01-SUMMARY.md
+Stopped at: Phases 1-4 complete. Phase 5 directory created but not yet researched/planned.
+Resume with: /gsd:plan-phase 5
+Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (5-9). Auto-approve visual checkpoints.
