@@ -76,10 +76,10 @@ Plans:
   1. Gradient bleeds between sections create seamless visual transitions -- no hard color boundaries between adjacent sections
   2. The dark outcomes section has an enveloping gradient, increased grain density, and animated glow elements that make it feel like entering a different environment
   3. The transition into the dark section is a deliberate atmospheric shift (gradient overlay at boundary), not just a background-color change
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01: Gradient bleeds between sections + dark outcomes section atmospheric upgrade (VISUAL-02, VISUAL-05)
 
 ### Phase 5: Hero Entrance Sequence
 **Goal**: The page load is a cinematic moment -- visitors experience an orchestrated entrance that communicates precision and craft before they read a word
