@@ -19,7 +19,6 @@ describe('User CRUD Integration', () => {
     const user = await testPrisma.user.create({
       data: {
         email: 'test@example.com',
-        password: 'hashed_password_here',
         name: 'Test User',
         role: 'STUDENT',
       },
@@ -39,7 +38,7 @@ describe('User CRUD Integration', () => {
     await testPrisma.user.create({
       data: {
         email: 'duplicate@example.com',
-        password: 'hash1',
+
         name: 'User 1',
         role: 'STUDENT',
       },
@@ -49,7 +48,7 @@ describe('User CRUD Integration', () => {
       testPrisma.user.create({
         data: {
           email: 'duplicate@example.com',
-          password: 'hash2',
+  
           name: 'User 2',
           role: 'STUDENT',
         },
@@ -61,7 +60,7 @@ describe('User CRUD Integration', () => {
     await testPrisma.user.create({
       data: {
         email: 'stu1@example.com',
-        password: 'hash1',
+
         name: 'Student 1',
         role: 'STUDENT',
         studentId: 'STU-001',
@@ -72,7 +71,7 @@ describe('User CRUD Integration', () => {
       testPrisma.user.create({
         data: {
           email: 'stu2@example.com',
-          password: 'hash2',
+  
           name: 'Student 2',
           role: 'STUDENT',
           studentId: 'STU-001',
@@ -85,7 +84,7 @@ describe('User CRUD Integration', () => {
     const counselor = await testPrisma.user.create({
       data: {
         email: 'counselor@example.com',
-        password: 'hash',
+
         name: 'Counselor',
         role: 'COUNSELOR',
         counselorId: 'COU-001',
@@ -95,7 +94,7 @@ describe('User CRUD Integration', () => {
     const student = await testPrisma.user.create({
       data: {
         email: 'student@example.com',
-        password: 'hash',
+
         name: 'Student',
         role: 'STUDENT',
         studentId: 'STU-001',
@@ -116,7 +115,7 @@ describe('User CRUD Integration', () => {
     const user = await testPrisma.user.create({
       data: {
         email: 'todelete@example.com',
-        password: 'hash',
+
         name: 'Delete Me',
         role: 'STUDENT',
       },
@@ -132,7 +131,7 @@ describe('User CRUD Integration', () => {
     const counselor = await testPrisma.user.create({
       data: {
         email: 'c@example.com',
-        password: 'hash',
+
         name: 'Counselor',
         role: 'COUNSELOR',
       },
@@ -141,7 +140,7 @@ describe('User CRUD Integration', () => {
     const student = await testPrisma.user.create({
       data: {
         email: 's@example.com',
-        password: 'hash',
+
         name: 'Student',
         role: 'STUDENT',
       },

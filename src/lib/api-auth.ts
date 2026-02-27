@@ -33,8 +33,7 @@ export async function requireAuth(allowedRoles?: Role[]) {
 }
 
 /** Type guard: true when requireAuth returned an error response instead of a session. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isAuthError(result: any): result is NextResponse {
+export function isAuthError(result: ReturnType<typeof NextResponse.json> | Record<string, unknown>): result is NextResponse {
   return result instanceof NextResponse;
 }
 

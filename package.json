@@ -1,5 +1,5 @@
 {
-  "name": "admission-atlas-production",
+  "name": "admission-atlas",
   "version": "1.0.0",
   "description": "University Admissions Full Process Integrated System",
   "scripts": {
@@ -51,8 +51,8 @@
     "@types/node": "^25.2.3",
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.24",
-    "eslint": "^9.39.2",
-    "eslint-config-next": "^16.1.6",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8.5.6",
     "prisma": "^5.22.0",
     "tailwindcss": "^3.4.19",
