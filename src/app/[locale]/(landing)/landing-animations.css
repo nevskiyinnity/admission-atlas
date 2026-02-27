@@ -1,0 +1,4 @@
+/* ── Animation Initial States ──
+   CSS initial states for elements that will animate in later phases.
+   These match GSAP from() values to prevent FOUC.
+   Populated in Plan 01-02. */

@@ -7,6 +7,7 @@ import {
 } from 'next/font/google';
 import './landing-atlas.css';
 import './landing-home.css';
+import './landing-animations.css';
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
