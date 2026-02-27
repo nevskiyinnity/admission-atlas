@@ -31,9 +31,9 @@ export default function SystemPage() {
   const [showAnnForm, setShowAnnForm] = useState(false);
 
   useEffect(() => {
-    fetch('/api/faq').then((r) => r.json()).then(setFaqs);
+    fetch('/api/faq').then((r) => r.json()).then((d) => setFaqs(d.faqs || []));
     fetch('/api/feedback-types').then((r) => r.json()).then(setFeedbackTypes);
-    fetch('/api/announcements').then((r) => r.json()).then(setAnnouncements);
+    fetch('/api/announcements').then((r) => r.json()).then((d) => setAnnouncements(d.announcements || []));
   }, []);
 
   const addFaq = async () => {
@@ -41,7 +41,7 @@ export default function SystemPage() {
     await fetch('/api/faq', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(faqForm) });
     setFaqForm({ question: '', answer: '', category: '' });
     setShowFaqForm(false);
-    const res = await fetch('/api/faq'); setFaqs(await res.json());
+    const res = await fetch('/api/faq'); setFaqs((await res.json()).faqs || []);
   };
 
   const deleteFaq = async (id: string) => {
@@ -66,7 +66,7 @@ export default function SystemPage() {
     await fetch('/api/announcements', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(annForm) });
     setAnnForm({ title: '', content: '', target: 'ALL' });
     setShowAnnForm(false);
-    const res = await fetch('/api/announcements'); setAnnouncements(await res.json());
+    const res = await fetch('/api/announcements'); setAnnouncements((await res.json()).announcements || []);
   };
 
   const deleteAnnouncement = async (id: string) => {

@@ -2,27 +2,36 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
+import { logger } from '@/lib/logger';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(['ADMIN']);
   if (isAuthError(auth)) return auth;
 
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('userId');
-  const search = searchParams.get('search');
+  try {
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get('userId');
+    const search = searchParams.get('search');
 
-  const where: Prisma.LoginLogWhereInput = {};
-  if (userId) where.userId = userId;
-  if (search) {
-    where.user = { name: { contains: search, mode: 'insensitive' } };
+    const where: Prisma.LoginLogWhereInput = {};
+    if (userId) where.userId = userId;
+    if (search) {
+      where.user = { name: { contains: search, mode: 'insensitive' } };
+    }
+
+    const logs = await prisma.loginLog.findMany({
+      where,
+      include: { user: { select: { id: true, name: true, email: true, role: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    });
+
+    return NextResponse.json(logs);
+  } catch (error) {
+    logger.error('GET /api/login-logs error', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch login logs' },
+      { status: 500 }
+    );
   }
-
-  const logs = await prisma.loginLog.findMany({
-    where,
-    include: { user: { select: { id: true, name: true, email: true, role: true } } },
-    orderBy: { createdAt: 'desc' },
-    take: 200,
-  });
-
-  return NextResponse.json(logs);
 }

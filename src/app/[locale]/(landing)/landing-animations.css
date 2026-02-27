@@ -1,0 +1,112 @@
+/* ── Animation Initial States ──
+   These match the GSAP from() values that will be set in later phases.
+   Elements start invisible; GSAP reveals them on scroll.
+   translateY(24px) MUST match GSAP from({ y: 24 }) used in later phases. */
+
+/* ── Compositor Property Exceptions (Phase 9 audit) ──
+   Two non-compositor properties are used and accepted:
+   1. background-position (breathing gradient meshes on ::before/::after pseudo-elements,
+      15-25s animation cycles, paint-only — no layout trigger, decorative only)
+   2. grid-template-rows (FAQ accordion transition, fires only on user click,
+      standard CSS-only height animation pattern — no scroll-linked usage)
+   All scroll-linked and entrance animations use transform/opacity/clip-path only. */
+
+/* Hero children — each child animates independently in Phase 5 */
+.landing-scope .shell .h-hero > * {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Hero orbs — scale in during hero entrance sequence */
+.landing-scope .shell .h-hero-orb {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Hero headline — visible at h1 level; SplitText words handle clip-path reveal */
+.landing-scope .shell .h-hero h1 {
+  opacity: 1;
+  transform: none;
+}
+
+/* Metrics section */
+.landing-scope .shell .h-metrics {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Standard sections (services, process, pricing, FAQ) */
+.landing-scope .shell .h-sect {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Dark section (outcomes) */
+.landing-scope .shell .h-dark-sect {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* AI callout section */
+.landing-scope .shell .h-callout {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Final CTA section */
+.landing-scope .shell .h-final {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* ── Reduced Motion ──
+   Users with prefers-reduced-motion see all content immediately.
+   !important overrides animation initial states. */
+@media (prefers-reduced-motion: reduce) {
+  .landing-scope .shell .h-hero > *,
+  .landing-scope .shell .h-hero-orb,
+  .landing-scope .shell .h-metrics,
+  .landing-scope .shell .h-sect,
+  .landing-scope .shell .h-dark-sect,
+  .landing-scope .shell .h-callout,
+  .landing-scope .shell .h-final {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Disable breathing gradient mesh animations */
+  .landing-scope .shell .h-hero::before,
+  .landing-scope .shell .h-callout-inner::after,
+  .landing-scope .shell .h-final::before {
+    animation: none !important;
+  }
+
+  /* Disable SVG accent animations */
+  .landing-scope .shell .h-accent {
+    animation: none !important;
+  }
+
+  /* Dark section glow animations */
+  .landing-scope .shell .h-dark-glow {
+    animation: none !important;
+  }
+
+  /* SplitText word wrappers -- ensure text visible if matchMedia edge case */
+  .landing-scope .shell h1 div,
+  .landing-scope .shell h2 div {
+    clip-path: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Scroll progress bar -- hidden for reduced-motion users */
+  .landing-scope .h-scroll-progress {
+    display: none !important;
+  }
+
+  /* Disable FAQ accordion transition */
+  .landing-scope .shell .h-faq-body {
+    transition: none !important;
+  }
+}

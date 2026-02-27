@@ -28,7 +28,7 @@ export default function StudentDashboardPage() {
     if (!userId) return;
     fetch(`/api/projects?studentId=${userId}`)
       .then((res) => res.json())
-      .then((data) => { setProjects(data); setLoading(false); });
+      .then((data) => { setProjects(data.projects || []); setLoading(false); });
   }, [userId]);
 
   if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;

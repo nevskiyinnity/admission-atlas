@@ -29,7 +29,7 @@ export default function AdminFeedbackPage() {
 
   const fetchFeedbacks = async () => {
     const res = await fetch('/api/feedback');
-    setFeedbacks(await res.json());
+    setFeedbacks((await res.json()).feedbacks || []);
     setLoading(false);
   };
 

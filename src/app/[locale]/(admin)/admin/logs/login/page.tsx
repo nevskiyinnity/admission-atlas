@@ -23,7 +23,8 @@ export default function LoginLogsPage() {
     const params = new URLSearchParams();
     if (search) params.set('search', search);
     const res = await fetch(`/api/login-logs?${params}`);
-    setLogs(await res.json());
+    const data = await res.json();
+    setLogs(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 

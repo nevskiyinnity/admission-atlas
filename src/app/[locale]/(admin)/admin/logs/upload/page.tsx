@@ -26,7 +26,8 @@ export default function UploadLogsPage() {
     const params = new URLSearchParams();
     if (search) params.set('search', search);
     const res = await fetch(`/api/upload-logs?${params}`);
-    setLogs(await res.json());
+    const data = await res.json();
+    setLogs(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 

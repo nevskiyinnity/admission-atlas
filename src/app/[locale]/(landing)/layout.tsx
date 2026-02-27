@@ -5,8 +5,11 @@ import {
   Instrument_Serif,
   Plus_Jakarta_Sans,
 } from 'next/font/google';
+import { LandingNav } from './_components/landing-nav';
+import { LandingFooter } from './_components/landing-footer';
 import './landing-atlas.css';
 import './landing-home.css';
+import './landing-animations.css';
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -50,7 +53,24 @@ export default function LandingLayout({
     <div
       className={`landing-scope ${dmSerif.variable} ${manrope.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable} ${jakartaSans.variable}`}
     >
+      <noscript>
+        <style>{`
+          .landing-scope .shell .h-hero > *,
+          .landing-scope .shell .h-hero-orb,
+          .landing-scope .shell .h-metrics,
+          .landing-scope .shell .h-sect,
+          .landing-scope .shell .h-dark-sect,
+          .landing-scope .shell .h-callout,
+          .landing-scope .shell .h-final {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        `}</style>
+      </noscript>
+      <div className="h-grain" />
+      <LandingNav />
       {children}
+      <LandingFooter />
     </div>
   );
 }

@@ -22,7 +22,7 @@ export default function CommunicationsPage() {
   useEffect(() => {
     fetch('/api/messages')
       .then((r) => r.json())
-      .then((d) => { setMessages(d); setLoading(false); });
+      .then((d) => { setMessages(Array.isArray(d) ? d : []); setLoading(false); });
   }, []);
 
   const filtered = messages.filter((m) =>

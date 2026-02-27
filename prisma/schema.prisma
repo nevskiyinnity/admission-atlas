@@ -177,6 +177,7 @@ model Project {
 
   @@index([studentId])
   @@index([counselorId])
+  @@index([status])
 }
 
 model Milestone {
@@ -216,6 +217,7 @@ model Task {
   updatedAt DateTime @updatedAt
 
   @@index([milestoneId])
+  @@index([status])
 }
 
 model Message {
@@ -277,7 +279,7 @@ model Notification {
 
   createdAt DateTime @default(now())
 
-  @@index([userId])
+  @@index([userId, type])
 }
 
 model LoginLog {
@@ -321,7 +323,7 @@ model Feedback {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
+  @@index([userId, status])
 }
 
 model FeedbackReply {

@@ -2,6 +2,7 @@ import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(req: Request) {
   // Verify webhook signature
@@ -35,30 +36,35 @@ export async function POST(req: Request) {
     return new Response('Invalid signature', { status: 400 });
   }
 
-  if (evt.type === 'user.created' || evt.type === 'user.updated') {
-    const { id, email_addresses, first_name, last_name, public_metadata } = evt.data;
-    const email = email_addresses?.[0]?.email_address;
-    const name = [first_name, last_name].filter(Boolean).join(' ');
-    const role = (public_metadata as Record<string, unknown>)?.role as string || 'STUDENT';
+  try {
+    if (evt.type === 'user.created' || evt.type === 'user.updated') {
+      const { id, email_addresses, first_name, last_name, public_metadata } = evt.data;
+      const email = email_addresses?.[0]?.email_address;
+      const name = [first_name, last_name].filter(Boolean).join(' ');
+      const role = (public_metadata as Record<string, unknown>)?.role as string || 'STUDENT';
 
-    await prisma.user.upsert({
-      where: { clerkId: id },
-      update: { email: email || undefined, name: name || undefined, role: role as any },
-      create: {
-        clerkId: id,
-        email: email || '',
-        name: name || 'User',
-        role: role as any,
-      },
-    });
-  }
-
-  if (evt.type === 'user.deleted') {
-    const { id } = evt.data;
-    if (id) {
-      await prisma.user.deleteMany({ where: { clerkId: id } });
+      await prisma.user.upsert({
+        where: { clerkId: id },
+        update: { email: email || undefined, name: name || undefined, role: role as any },
+        create: {
+          clerkId: id,
+          email: email || '',
+          name: name || 'User',
+          role: role as any,
+        },
+      });
     }
-  }
 
-  return new Response('OK', { status: 200 });
+    if (evt.type === 'user.deleted') {
+      const { id } = evt.data;
+      if (id) {
+        await prisma.user.deleteMany({ where: { clerkId: id } });
+      }
+    }
+
+    return new Response('OK', { status: 200 });
+  } catch (error) {
+    logger.error('POST /api/webhooks/clerk error', error);
+    return new Response('Webhook processing failed', { status: 500 });
+  }
 }

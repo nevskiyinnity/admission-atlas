@@ -23,7 +23,7 @@ export default function StudentFeedbackPage() {
   useEffect(() => {
     fetch('/api/feedback-types').then((r) => r.json()).then(setTypes);
     if (userId) {
-      fetch(`/api/feedback?userId=${userId}`).then((r) => r.json()).then(setFeedbacks);
+      fetch(`/api/feedback?userId=${userId}`).then((r) => r.json()).then((d) => setFeedbacks(d.feedbacks || []));
     }
   }, [userId]);
 
@@ -36,7 +36,7 @@ export default function StudentFeedbackPage() {
     });
     setForm({ type: '', description: '' });
     const res = await fetch(`/api/feedback?userId=${userId}`);
-    setFeedbacks(await res.json());
+    setFeedbacks((await res.json()).feedbacks || []);
   };
 
   const statusVariant = (s: string) => s === 'REPLIED' ? 'success' as const : s === 'CLOSED' ? 'secondary' as const : 'warning' as const;

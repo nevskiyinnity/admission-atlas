@@ -48,7 +48,8 @@ export default function AdminFilesPage() {
     if (typeFilter) params.set('fileType', typeFilter);
     if (finalOnly) params.set('finalOnly', 'true');
     const res = await fetch(`/api/files?${params}`);
-    setFiles(await res.json());
+    const data = await res.json();
+    setFiles(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 
