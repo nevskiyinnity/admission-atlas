@@ -137,6 +137,61 @@ export function AnimatedSection({ children, className }: AnimatedSectionProps) {
 
         // useGSAP context auto-reverts SplitText + kills ScrollTriggers on unmount
       });
+
+      // ── Parallax: decorative elements drift at scroll-linked speeds ──
+      // Gated behind desktop + no-reduced-motion (accents hidden < 768px, glows not useful on mobile)
+      mm.add('(prefers-reduced-motion: no-preference) and (min-width: 769px)', () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const section = container.querySelector('section');
+        if (!section) return;
+
+        // SVG geometry accents (diamonds, rings near section headings)
+        const accents = section.querySelectorAll('.h-accent');
+        accents.forEach((accent, i) => {
+          gsap.to(accent, {
+            y: i % 2 === 0 ? -25 : -18,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
+        });
+
+        // Dark section atmospheric glows
+        const glows = section.querySelectorAll('.h-dark-glow');
+        glows.forEach((glow, i) => {
+          gsap.to(glow, {
+            y: i === 0 ? -35 : -25,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
+        });
+
+        // Final CTA section glow
+        const finalGlow = section.querySelector('.h-final-glow');
+        if (finalGlow) {
+          gsap.to(finalGlow, {
+            y: -25,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
+        }
+      });
     },
     { scope: containerRef }
   );
