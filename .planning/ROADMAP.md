@@ -65,8 +65,8 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01: Gradient mesh backgrounds + SVG geometry accents (VISUAL-01, VISUAL-04)
+- [ ] 03-02: FAQ accordion rewrite + hover transition audit (MICRO-03, MICRO-04)
 
 ### Phase 4: Section Transitions & Dark Atmosphere
 **Goal**: Sections flow into each other as a continuous visual journey rather than stacked blocks -- the dark outcomes section feels like entering a different space with its own atmosphere
