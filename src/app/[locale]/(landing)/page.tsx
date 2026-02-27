@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SmoothScrollProvider } from './_components/smooth-scroll-provider';
 import { AnimatedSection } from './_components/animated-section';
+import { HeroEntrance } from './_components/hero-entrance';
 
 export const metadata: Metadata = {
   title: 'Admission Atlas | Strategic University Admissions Counseling',
@@ -42,7 +43,7 @@ export default function LandingHomePage() {
       <SmoothScrollProvider>
         <main className="shell">
           {/* ─── HERO ─── */}
-          <AnimatedSection>
+          <HeroEntrance>
             <section className="h-hero">
               <div className="h-hero-orb h-hero-orb--1" aria-hidden="true" />
               <div className="h-hero-orb h-hero-orb--2" aria-hidden="true" />
@@ -68,7 +69,7 @@ export default function LandingHomePage() {
                 </a>
               </div>
             </section>
-          </AnimatedSection>
+          </HeroEntrance>
 
           {/* ─── METRICS ─── */}
           <AnimatedSection>
