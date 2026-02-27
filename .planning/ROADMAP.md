@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Section Transitions & Dark Atmosphere** - Seamless section flow, dark outcomes section atmospheric upgrade, grain density tuning
 - [x] **Phase 5: Hero Entrance Sequence** - Cinematic orchestrated hero animation with SplitText reveals, the signature moment (completed 2026-02-27)
 - [x] **Phase 6: Scroll-Triggered Reveals** - All sections animate into view with staggered choreography, scroll-progress indicator (completed 2026-02-27)
-- [ ] **Phase 7: Parallax & Visual Depth** - Decorative elements move at different scroll speeds, spatial depth perception
+- [x] **Phase 7: Parallax & Visual Depth** - Decorative elements move at different scroll speeds, spatial depth perception (completed 2026-02-27)
 - [ ] **Phase 8: Micro-Interactions** - Magnetic buttons, card tilt effects, tactile hover responses
 - [ ] **Phase 9: Performance & Quality Hardening** - Lighthouse 90+, animation audit, memory leak testing, reduced-motion end-to-end verification
 
@@ -168,6 +168,6 @@ Note: Phases 2 and 3 depend only on Phase 1 and can execute in parallel. Phases 
 | 4. Section Transitions & Dark Atmosphere | 0/1 | Not started | - |
 | 5. Hero Entrance Sequence | 0/2 | Complete    | 2026-02-27 |
 | 6. Scroll-Triggered Reveals | 0/2 | Complete    | 2026-02-27 |
-| 7. Parallax & Visual Depth | 0/1 | Not started | - |
+| 7. Parallax & Visual Depth | 0/1 | Complete    | 2026-02-27 |
 | 8. Micro-Interactions | 0/1 | Not started | - |
 | 9. Performance & Quality Hardening | 0/2 | Not started | - |
