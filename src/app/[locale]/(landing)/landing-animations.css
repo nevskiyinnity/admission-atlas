@@ -1,4 +1,64 @@
 /* ── Animation Initial States ──
-   CSS initial states for elements that will animate in later phases.
-   These match GSAP from() values to prevent FOUC.
-   Populated in Plan 01-02. */
+   These match the GSAP from() values that will be set in later phases.
+   Elements start invisible; GSAP reveals them on scroll.
+   translateY(24px) MUST match GSAP from({ y: 24 }) used in later phases. */
+
+/* Hero children — each child animates independently in Phase 5 */
+.landing-scope .shell .h-hero > * {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Hero orbs — scale in during hero entrance sequence */
+.landing-scope .shell .h-hero-orb {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Metrics section */
+.landing-scope .shell .h-metrics {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Standard sections (services, process, pricing, FAQ) */
+.landing-scope .shell .h-sect {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Dark section (outcomes) */
+.landing-scope .shell .h-dark-sect {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* AI callout section */
+.landing-scope .shell .h-callout {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Final CTA section */
+.landing-scope .shell .h-final {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* ── Reduced Motion ──
+   Users with prefers-reduced-motion see all content immediately.
+   !important overrides animation initial states. */
+@media (prefers-reduced-motion: reduce) {
+  .landing-scope .shell .h-hero > *,
+  .landing-scope .shell .h-hero-orb,
+  .landing-scope .shell .h-metrics,
+  .landing-scope .shell .h-sect,
+  .landing-scope .shell .h-dark-sect,
+  .landing-scope .shell .h-callout,
+  .landing-scope .shell .h-final {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
