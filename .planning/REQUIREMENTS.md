@@ -83,32 +83,32 @@
 | FOUND-04 | Phase 1 | Pending |
 | FOUND-05 | Phase 1 | Pending |
 | FOUND-06 | Phase 1 | Pending |
-| SCROLL-01 | TBD | Pending |
-| SCROLL-02 | TBD | Pending |
-| SCROLL-03 | TBD | Pending |
-| SCROLL-04 | TBD | Pending |
-| VISUAL-01 | TBD | Pending |
-| VISUAL-02 | TBD | Pending |
-| VISUAL-03 | TBD | Pending |
-| VISUAL-04 | TBD | Pending |
-| VISUAL-05 | TBD | Pending |
-| MICRO-01 | TBD | Pending |
-| MICRO-02 | TBD | Pending |
-| MICRO-03 | TBD | Pending |
-| MICRO-04 | TBD | Pending |
-| TYPE-01 | TBD | Pending |
-| TYPE-02 | TBD | Pending |
-| TYPE-03 | TBD | Pending |
-| PERF-01 | TBD | Pending |
-| PERF-02 | TBD | Pending |
-| PERF-03 | TBD | Pending |
-| PERF-04 | TBD | Pending |
+| SCROLL-01 | Phase 6 | Pending |
+| SCROLL-02 | Phase 5 | Pending |
+| SCROLL-03 | Phase 6 | Pending |
+| SCROLL-04 | Phase 6 | Pending |
+| VISUAL-01 | Phase 3 | Pending |
+| VISUAL-02 | Phase 4 | Pending |
+| VISUAL-03 | Phase 7 | Pending |
+| VISUAL-04 | Phase 3 | Pending |
+| VISUAL-05 | Phase 4 | Pending |
+| MICRO-01 | Phase 8 | Pending |
+| MICRO-02 | Phase 8 | Pending |
+| MICRO-03 | Phase 3 | Pending |
+| MICRO-04 | Phase 3 | Pending |
+| TYPE-01 | Phase 2 | Pending |
+| TYPE-02 | Phase 2 | Pending |
+| TYPE-03 | Phase 5 | Pending |
+| PERF-01 | Phase 9 | Pending |
+| PERF-02 | Phase 9 | Pending |
+| PERF-03 | Phase 9 | Pending |
+| PERF-04 | Phase 9 | Pending |
 
 **Coverage:**
 - v1 requirements: 26 total
-- Mapped to phases: 6 (Foundation)
-- Unmapped: 20 ⚠️ (roadmapper will assign)
+- Mapped to phases: 26/26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-27*
-*Last updated: 2026-02-27 after initial definition*
+*Last updated: 2026-02-27 after roadmap creation*
