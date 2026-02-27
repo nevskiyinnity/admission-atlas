@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-02-27T11:33:19.604Z"
+status: in-progress
+last_updated: "2026-02-27T11:47:49Z"
 progress:
-  total_phases: 8
+  total_phases: 9
   completed_phases: 8
-  total_plans: 12
-  completed_plans: 12
+  total_plans: 14
+  completed_plans: 13
 ---
 
 # Project State
@@ -18,21 +18,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 8 COMPLETE. Magnetic buttons and tilt cards with light sheen. Phase 9 next.
+**Current focus:** Phase 9 in progress. CSS/GSAP redundancy cleanup complete. Lighthouse audit next.
 
 ## Current Position
 
-Phase: 8 of 9 (Micro-Interactions) -- COMPLETE
-Plan: 1 of 1 in current phase -- Phase 08 COMPLETE
-Status: Phase 8 complete. Magnetic CTA buttons and 3D tilt bento cards with gold light sheen. Phase 9 next.
-Last activity: 2026-02-27 -- Plan 08-01 complete (magnetic buttons & tilt cards).
+Phase: 9 of 9 (Performance & Quality Hardening) -- IN PROGRESS
+Plan: 1 of 2 in current phase -- Plan 09-01 COMPLETE
+Status: CSS/GSAP redundancy cleanup done. 5 redundant hm-fadeUp removed, compositor audit passed. Plan 09-02 (Lighthouse) next.
+Last activity: 2026-02-27 -- Plan 09-01 complete (CSS/GSAP cleanup & property audit).
 
-Progress: [██████████] 100% (Phases 1-8 complete)
+Progress: [█████████▓] 93% (13/14 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 3 min
 - Total execution time: 0.6 hours
 
@@ -48,9 +48,10 @@ Progress: [██████████] 100% (Phases 1-8 complete)
 | 06-scroll-triggered-reveals | 2 | 6 min | 3 min |
 | 07-parallax-visual-depth | 1 | 4 min | 4 min |
 | 08-micro-interactions | 1 | 2 min | 2 min |
+| 09-performance-quality-hardening | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (1 min), 06-01 (4 min), 06-02 (2 min), 07-01 (4 min), 08-01 (2 min)
+- Last 5 plans: 06-01 (4 min), 06-02 (2 min), 07-01 (4 min), 08-01 (2 min), 09-01 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -63,6 +64,7 @@ Progress: [██████████] 100% (Phases 1-8 complete)
 | Phase 06 P02 | 2min | 2 tasks | 4 files |
 | Phase 07 P01 | 4min | 2 tasks | 2 files |
 | Phase 08 P01 | 2min | 2 tasks | 4 files |
+| Phase 09 P01 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -113,6 +115,9 @@ Recent decisions affecting current work:
 - [08-01]: h-bento-wide class on TiltCard wrapper div for correct CSS grid child participation
 - [08-01]: GSAP owns all transforms on interactive elements -- CSS transform removed from h-btn-primary and h-bento-card :hover
 - [08-01]: transformPerspective on card element (not CSS perspective on wrapper) avoids AnimatedSection entrance transform conflicts
+- [09-01]: Removed @keyframes hm-fadeUp entirely -- zero selectors reference it after cleanup of 5 redundant declarations
+- [09-01]: Two compositor exceptions accepted: background-position (breathing meshes, paint-only) and grid-template-rows (FAQ, click-only)
+- [09-01]: All 6 client components verified for useGSAP/useEffect auto-cleanup with scope or explicit teardown
 
 ### Pending Todos
 
@@ -126,6 +131,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 08-01-PLAN.md (magnetic buttons & tilt cards). Phase 8 complete.
-Resume with: Plan Phase 9 or continue to next phase
+Stopped at: Completed 09-01-PLAN.md (CSS/GSAP redundancy cleanup & property audit). Plan 09-02 next.
+Resume with: Execute Plan 09-02 (Lighthouse & restraint review)
 Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases. Auto-approve visual checkpoints.
