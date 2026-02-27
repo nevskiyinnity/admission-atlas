@@ -46,26 +46,25 @@ export default function LandingHomePage() {
             <section className="h-hero">
               <div className="h-hero-orb h-hero-orb--1" aria-hidden="true" />
               <div className="h-hero-orb h-hero-orb--2" aria-hidden="true" />
-              <span className="h-badge">Strategy for ambitious families</span>
+              <span className="h-badge">Strategic admissions counsel</span>
               <h1>
-                Your university application
-                <br />
-                deserves a <em>real</em>&nbsp;strategy
+                Admissions strategy{' '}
+                built to <em>hold&nbsp;up</em>
               </h1>
               <p className="h-hero-desc">
-                We build defensible admissions plans — targeting the right schools,
-                in the right regions, at the right price — so every application is
-                positioned to win.
+                We architect school lists, position narratives, and manage
+                execution across regions and budgets — so nothing is left to
+                chance.
               </p>
               <div className="h-hero-actions">
                 <Link className="h-btn-primary" href="/contact">
-                  Start Your Strategy Session
+                  Start Your Strategy
                   <span className="h-btn-arrow" aria-hidden="true">
                     &rarr;
                   </span>
                 </Link>
                 <a className="h-btn-ghost" href="#services">
-                  See How It Works
+                  See the Process
                 </a>
               </div>
             </section>
@@ -76,11 +75,11 @@ export default function LandingHomePage() {
             <section className="h-metrics">
               <div className="h-metric">
                 <strong>4-Phase</strong>
-                <span>Framework</span>
+                <span>System</span>
               </div>
               <div className="h-metric">
                 <strong>1 : 1</strong>
-                <span>Advisor Feedback</span>
+                <span>Advisor Ratio</span>
               </div>
               <div className="h-metric">
                 <strong>30+</strong>
@@ -88,7 +87,7 @@ export default function LandingHomePage() {
               </div>
               <div className="h-metric">
                 <strong>100%</strong>
-                <span>Budget-Aware</span>
+                <span>Cost-Integrated</span>
               </div>
             </section>
           </AnimatedSection>
@@ -99,14 +98,12 @@ export default function LandingHomePage() {
               <div className="h-sect-head">
                 <span className="h-kicker">What We Do</span>
                 <h2>
-                  End-to-end admissions strategy
-                  <br />
-                  — not disconnected&nbsp;advice
+                  Full-spectrum strategy — not disconnected advice
                 </h2>
               </div>
               <p className="h-sect-sub">
-                Every engagement follows a structured system so nothing gets missed
-                and every dollar of tuition exposure is intentional.
+                Every engagement follows a structured system. Nothing gets
+                missed. Every dollar of tuition exposure is intentional.
               </p>
 
               {/* Bento grid — 2 wide + 4 narrow */}
@@ -115,45 +112,46 @@ export default function LandingHomePage() {
                   <span className="h-bento-num">01</span>
                   <h3>School List Architecture</h3>
                   <p>
-                    A portfolio designed around profile strength, acceptance risk,
-                    and what you can actually afford — across regions and
-                    competitiveness tiers.
+                    Balanced across regions, risk tiers, and what you can
+                    actually afford — not a top-heavy wish list.
                   </p>
                 </article>
                 <article className="h-bento-card h-bento-wide">
                   <span className="h-bento-num">02</span>
                   <h3>Major-Fit Positioning</h3>
                   <p>
-                    Translate your coursework, projects, and activities into the
-                    signals departments actually evaluate — not guesswork.
+                    We translate coursework, projects, and activities into the
+                    signals departments actually evaluate.
                   </p>
                 </article>
                 <article className="h-bento-card">
                   <span className="h-bento-num">03</span>
                   <h3>Narrative Strategy</h3>
                   <p>
-                    Essays that communicate direction and depth — not platitudes.
+                    Essays that demonstrate direction and depth — not platitudes.
                   </p>
                 </article>
                 <article className="h-bento-card">
                   <span className="h-bento-num">04</span>
                   <h3>Execution Management</h3>
                   <p>
-                    Deadlines, drafts, and polish on a single visible timeline.
+                    Deadlines, drafts, and revision cycles on a single visible
+                    timeline.
                   </p>
                 </article>
                 <article className="h-bento-card">
                   <span className="h-bento-num">05</span>
                   <h3>Budget &amp; Aid</h3>
                   <p>
-                    Compare tuition, aid probability, and scholarship odds upfront.
+                    Tuition, aid probability, and scholarship odds — compared
+                    upfront, not after you fall in love with a school.
                   </p>
                 </article>
                 <article className="h-bento-card">
                   <span className="h-bento-num">06</span>
                   <h3>Family Decisions</h3>
                   <p>
-                    Make trade-offs explicit so decisions stay grounded in reality.
+                    Trade-offs made explicit so decisions stay grounded in data.
                   </p>
                 </article>
               </div>
@@ -165,7 +163,7 @@ export default function LandingHomePage() {
             <section id="process" className="h-sect">
               <div className="h-sect-head">
                 <span className="h-kicker">How It Works</span>
-                <h2>From diagnostic to final&nbsp;submission</h2>
+                <h2>Diagnostic to submission</h2>
               </div>
               <div className="h-timeline">
                 <div className="h-timeline-track" aria-hidden="true" />
@@ -174,8 +172,8 @@ export default function LandingHomePage() {
                   <span className="h-tl-label">01</span>
                   <h3>Diagnostic Review</h3>
                   <p>
-                    Assess academics, activities, goals, and constraints to define
-                    your strategic baseline.
+                    Profile, goals, constraints, and strategic baseline — mapped
+                    in one session.
                   </p>
                 </article>
                 <article className="h-tl-step">
@@ -183,8 +181,8 @@ export default function LandingHomePage() {
                   <span className="h-tl-label">02</span>
                   <h3>Portfolio Design</h3>
                   <p>
-                    Build the school list and application strategy across regions and
-                    tiers.
+                    School list and application strategy built across regions,
+                    tiers, and budgets.
                   </p>
                 </article>
                 <article className="h-tl-step">
@@ -192,8 +190,8 @@ export default function LandingHomePage() {
                   <span className="h-tl-label">03</span>
                   <h3>Narrative &amp; Materials</h3>
                   <p>
-                    Draft and refine your personal narrative, essays, and
-                    supplemental responses.
+                    Personal narrative, essays, and supplementals — drafted,
+                    reviewed, and refined.
                   </p>
                 </article>
                 <article className="h-tl-step">
@@ -201,8 +199,8 @@ export default function LandingHomePage() {
                   <span className="h-tl-label">04</span>
                   <h3>Submission Control</h3>
                   <p>
-                    Pre-submit checks for coherence, fit signal, and quality under
-                    deadline pressure.
+                    Pre-submit checks for coherence, fit signal, and quality
+                    under deadline.
                   </p>
                 </article>
               </div>
@@ -214,9 +212,9 @@ export default function LandingHomePage() {
             <section id="outcomes" className="h-dark-sect">
               <div className="h-dark-inner">
                 <span className="h-kicker h-kicker--light">
-                  The Difference Structure Makes
+                  What Structure Changes
                 </span>
-                <h2>What improves when the process is&nbsp;rigorous</h2>
+                <h2>When the process is rigorous</h2>
                 <div className="h-outcomes">
                   <article className="h-outcome">
                     <span className="h-outcome-icon" aria-hidden="true">
@@ -224,8 +222,8 @@ export default function LandingHomePage() {
                     </span>
                     <h3>Sharper School Lists</h3>
                     <p>
-                      From top-heavy guesswork to balanced portfolios with realistic,
-                      high-value alternatives across regions.
+                      From top-heavy guesswork to balanced portfolios with
+                      realistic alternatives across regions.
                     </p>
                   </article>
                   <article className="h-outcome">
@@ -234,8 +232,8 @@ export default function LandingHomePage() {
                     </span>
                     <h3>Stronger Major-Fit Signal</h3>
                     <p>
-                      Tighter alignment between coursework, projects, goals, and
-                      target program expectations.
+                      Tighter alignment between your profile and what target
+                      programs actually evaluate.
                     </p>
                   </article>
                   <article className="h-outcome">
@@ -244,8 +242,8 @@ export default function LandingHomePage() {
                     </span>
                     <h3>Cleaner Execution</h3>
                     <p>
-                      Milestone-based workflows eliminate rushed drafts, missed
-                      deadlines, and avoidable errors.
+                      Milestone-based workflows eliminate rushed drafts and
+                      avoidable errors.
                     </p>
                   </article>
                   <article className="h-outcome">
@@ -255,7 +253,7 @@ export default function LandingHomePage() {
                     <h3>Higher Decision Confidence</h3>
                     <p>
                       Families choose with clearer trade-offs across selectivity,
-                      cost, location, and long-term outcomes.
+                      cost, and outcomes.
                     </p>
                   </article>
                 </div>
@@ -268,7 +266,7 @@ export default function LandingHomePage() {
             <section className="h-sect">
               <div className="h-sect-head">
                 <span className="h-kicker">Programs</span>
-                <h2>Pick the level that matches your&nbsp;timeline</h2>
+                <h2>Matched to your timeline</h2>
               </div>
               <div className="h-plans">
                 <article className="h-plan-card">
@@ -320,11 +318,11 @@ export default function LandingHomePage() {
             <section className="h-callout">
               <div className="h-callout-inner">
                 <span className="h-kicker h-kicker--light">Free Tool</span>
-                <h2>Try the Neural Match&nbsp;Engine</h2>
+                <h2>Neural Match Engine</h2>
                 <p>
-                  Input your profile, target school, and budget — our AI scores your
-                  fit and suggests alternatives worldwide. Instant, no sign-up
-                  required.
+                  Input your profile, target school, and budget. Our AI scores
+                  your fit and suggests alternatives worldwide — instant, no
+                  sign-up.
                 </p>
                 <a className="h-btn-light" href="/neural-engine">
                   Launch the Engine
@@ -341,7 +339,7 @@ export default function LandingHomePage() {
             <section className="h-sect">
               <div className="h-sect-head">
                 <span className="h-kicker">FAQ</span>
-                <h2>Common questions, straight&nbsp;answers</h2>
+                <h2>Common questions, direct answers</h2>
               </div>
               <div className="h-faq">
                 <details className="h-faq-item">
@@ -396,17 +394,13 @@ export default function LandingHomePage() {
           <AnimatedSection>
             <section className="h-final">
               <div className="h-final-glow" aria-hidden="true" />
-              <h2>
-                Ready to build a strategy
-                <br />
-                that actually holds&nbsp;up?
-              </h2>
+              <h2>Ready to build yours?</h2>
               <p>
-                Share your profile, target majors, and budget range. We&apos;ll map
-                the best path for your application cycle — no pressure, no fluff.
+                Share your profile, target majors, and budget range. We&apos;ll
+                map the strongest path for your application cycle.
               </p>
               <Link className="h-btn-primary h-btn-lg" href="/contact">
-                Book Your Free Consultation
+                Book a Consultation
                 <span className="h-btn-arrow" aria-hidden="true">
                   &rarr;
                 </span>
@@ -422,7 +416,7 @@ export default function LandingHomePage() {
           <div className="h-foot-left">
             <span className="h-foot-brand">Admission Atlas</span>
             <span className="h-foot-tag">
-              Strategic admissions guidance for high-stakes decisions.
+              Strategic admissions counsel.
             </span>
           </div>
           <nav className="h-foot-links">
