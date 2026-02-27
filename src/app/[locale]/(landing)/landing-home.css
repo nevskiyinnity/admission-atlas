@@ -197,12 +197,12 @@
 
 .landing-scope .shell .h-hero h1 {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(2.6rem, 5.8vw, 4.2rem);
+  font-size: clamp(2.75rem, 5vw + 1rem, 5.5rem);
   font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   color: var(--hm-ink);
-  margin: 0 0 32px;
+  margin: 0 0 36px;
   animation: hm-fadeUp 700ms var(--hm-ease) both;
   animation-delay: 200ms;
 }
@@ -391,10 +391,10 @@
 .landing-scope .shell .h-sect-head h2,
 .landing-scope .shell .h-final h2 {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.65rem, 3.8vw, 2.6rem);
+  font-size: clamp(1.5rem, 2.5vw + 0.75rem, 2.8rem);
   font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
   color: var(--hm-ink);
   max-width: 22ch;
   margin: 0 auto;
@@ -748,10 +748,10 @@
   max-width: 18ch;
   margin: 0 auto 16px;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(1.65rem, 3.8vw, 2.6rem);
+  font-size: clamp(1.5rem, 2.5vw + 0.75rem, 2.8rem);
   font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
 }
 
 .landing-scope .shell .h-callout-inner p {
@@ -991,9 +991,6 @@
   .landing-scope .shell .h-hero {
     padding: 150px 0 72px;
   }
-  .landing-scope .shell .h-hero h1 {
-    font-size: clamp(2.1rem, 8vw, 2.8rem);
-  }
   .landing-scope .shell .h-hero-desc { font-size: 1rem; }
   .landing-scope .shell .h-hero-actions {
     flex-direction: column;
@@ -1008,11 +1005,6 @@
   .landing-scope .shell .h-sect,
   .landing-scope .shell .h-dark-sect,
   .landing-scope .shell .h-callout { margin-top: 96px; }
-
-  .landing-scope .shell .h-sect-head h2,
-  .landing-scope .shell .h-final h2 {
-    font-size: clamp(1.5rem, 6vw, 2rem);
-  }
 
   .landing-scope .shell .h-bento {
     grid-template-columns: 1fr;
