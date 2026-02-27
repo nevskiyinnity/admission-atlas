@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T08:04:42.202Z"
+last_updated: "2026-02-27T08:27:43Z"
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 4
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -23,16 +23,16 @@ See: .planning/PROJECT.md (updated 2026-02-27)
 ## Current Position
 
 Phase: 5 of 9 (Hero Entrance Sequence)
-Plan: 0 of 2 in current phase
-Status: Research complete, ready to plan
-Last activity: 2026-02-27 -- Phase 5 research written (SplitText API, timeline choreography, architecture).
+Plan: 1 of 2 in current phase
+Status: Executing Phase 5
+Last activity: 2026-02-27 -- Plan 05-01 complete (hero entrance component with SplitText clip-path reveal).
 
-Progress: [███████░░░] 67%
+Progress: [████████░░] 78%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 4 min
 - Total execution time: 0.4 hours
 
@@ -44,15 +44,17 @@ Progress: [███████░░░] 67%
 | 02-typography-copy | 1 | 5 min | 5 min |
 | 03-css-visual-polish | 2 | 6 min | 3 min |
 | 04-section-transitions | 1 | 3 min | 3 min |
+| 05-hero-entrance | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (4 min), 02-01 (5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (3 min)
+- Last 5 plans: 02-01 (5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (3 min), 05-01 (2 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
 | Phase 03 P01 | 3min | 2 tasks | 3 files |
 | Phase 03 P02 | 3min | 2 tasks | 3 files |
 | Phase 04 P01 | 3 | 2 tasks | 3 files |
+| Phase 05 P01 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -82,6 +84,9 @@ Recent decisions affecting current work:
 - [Phase 04]: Gradient bleeds use ::before pseudo-elements with warm rgba tone in inter-section gaps
 - [Phase 04]: Dark section atmosphere: z-index 0 bleeds, 1 grain/glows, 2 content layering
 - [Phase 04]: Glow durations 18s/22s continue desynchronized pattern from Phase 3
+- [05-01]: h1 opacity override so word-level clip-path (not h1-level opacity) controls headline visibility
+- [05-01]: useGSAP scope auto-cleanup for SplitText revert -- no manual cleanup needed
+- [05-01]: Absolute timeline offsets (0, 0.15, 0.3, 0.7, 0.9) for deterministic choreography
 
 ### Pending Todos
 
@@ -90,11 +95,11 @@ None yet.
 ### Blockers/Concerns
 
 - [RESOLVED in 01-01]: Lenis integration pattern resolved -- manual new Lenis() chosen for direct ticker control
-- [Research gap]: SplitText 3.13+ masking API shape -- verify before Phase 5
+- [RESOLVED in 05-01]: SplitText.create() API verified and working with clip-path masking in GSAP 3.14.2
 
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Phase 5 research complete. Needs planning (planner + checker) then execution.
-Resume with: /gsd:plan-phase 5 --skip-research
+Stopped at: Completed 05-01-PLAN.md (hero entrance component). Plan 05-02 next.
+Resume with: /gsd:execute-phase 5
 Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (5-9). Auto-approve visual checkpoints.

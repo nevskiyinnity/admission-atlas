@@ -93,8 +93,8 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01: HeroEntrance Client Component with orchestrated GSAP timeline (SCROLL-02)
+- [ ] 05-02: Scroll-triggered SplitText heading reveals on all section h2s (TYPE-03)
 
 ### Phase 6: Scroll-Triggered Reveals
 **Goal**: Content materializes as the user scrolls -- every section has choreographed reveal animations that make the page feel responsive to the visitor's presence
