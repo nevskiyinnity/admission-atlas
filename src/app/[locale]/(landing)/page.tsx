@@ -21,6 +21,7 @@ export default function LandingHomePage() {
           <a href="#approach">How It Works</a>
           <a href="#outcomes">Results</a>
           <Link href="/team">Team</Link>
+          <Link href="/login" className="login-link">Log In</Link>
           <Link className="cta-nav" href="/contact">
             Book a Call
           </Link>

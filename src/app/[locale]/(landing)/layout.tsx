@@ -1,6 +1,6 @@
 import { DM_Serif_Display, Manrope, Space_Grotesk } from 'next/font/google';
-import './landing-home.css';
 import './landing-atlas.css';
+import './landing-home.css';
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
