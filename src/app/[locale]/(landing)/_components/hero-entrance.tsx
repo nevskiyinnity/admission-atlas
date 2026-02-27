@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, SplitText } from './gsap-registration';
+import { gsap, ScrollTrigger, SplitText } from './gsap-registration';
 
 interface HeroEntranceProps {
   children: React.ReactNode;
@@ -80,6 +80,43 @@ export function HeroEntrance({ children }: HeroEntranceProps) {
         }
 
         // useGSAP context auto-reverts SplitText + kills timeline on unmount
+      });
+
+      // ── Parallax: hero orbs drift upward at differential speeds ──
+      // Gated behind desktop + no-reduced-motion (orbs are display:none < 768px)
+      mm.add('(prefers-reduced-motion: no-preference) and (min-width: 769px)', () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const orbs = container.querySelectorAll('.h-hero-orb');
+        const heroSection = container.querySelector('.h-hero');
+        if (!heroSection || !orbs.length) return;
+
+        // Orb 1 (gold, larger): slower drift = deeper layer
+        gsap.to(orbs[0], {
+          y: -50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroSection,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.5,
+          },
+        });
+
+        // Orb 2 (teal, smaller): faster drift = closer layer
+        if (orbs[1]) {
+          gsap.to(orbs[1], {
+            y: -80,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroSection,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.5,
+            },
+          });
+        }
       });
     },
     { scope: containerRef }
