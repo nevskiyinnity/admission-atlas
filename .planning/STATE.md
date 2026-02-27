@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T08:27:43Z"
+last_updated: "2026-02-27T08:31:37Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -18,22 +18,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 5: Hero Entrance Sequence
+**Current focus:** Phase 5 complete. Phase 6 next: Scroll Reveals
 
 ## Current Position
 
-Phase: 5 of 9 (Hero Entrance Sequence)
-Plan: 1 of 2 in current phase
-Status: Executing Phase 5
-Last activity: 2026-02-27 -- Plan 05-01 complete (hero entrance component with SplitText clip-path reveal).
+Phase: 5 of 9 (Hero Entrance Sequence) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
+Status: Phase 5 complete. Ready for Phase 6.
+Last activity: 2026-02-27 -- Plan 05-02 complete (scroll-triggered SplitText heading reveals on all section h2s).
 
-Progress: [████████░░] 78%
+Progress: [█████████░] 89%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 4 min
+- Total plans completed: 8
+- Average duration: 3 min
 - Total execution time: 0.4 hours
 
 **By Phase:**
@@ -44,17 +44,18 @@ Progress: [████████░░] 78%
 | 02-typography-copy | 1 | 5 min | 5 min |
 | 03-css-visual-polish | 2 | 6 min | 3 min |
 | 04-section-transitions | 1 | 3 min | 3 min |
-| 05-hero-entrance | 1 | 2 min | 2 min |
+| 05-hero-entrance | 2 | 3 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (3 min), 05-01 (2 min)
-- Trend: Consistent
+- Last 5 plans: 03-01 (3 min), 03-02 (3 min), 04-01 (3 min), 05-01 (2 min), 05-02 (1 min)
+- Trend: Accelerating
 
 *Updated after each plan completion*
 | Phase 03 P01 | 3min | 2 tasks | 3 files |
 | Phase 03 P02 | 3min | 2 tasks | 3 files |
 | Phase 04 P01 | 3 | 2 tasks | 3 files |
 | Phase 05 P01 | 2min | 2 tasks | 3 files |
+| Phase 05 P02 | 1min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,8 @@ Recent decisions affecting current work:
 - [05-01]: h1 opacity override so word-level clip-path (not h1-level opacity) controls headline visibility
 - [05-01]: useGSAP scope auto-cleanup for SplitText revert -- no manual cleanup needed
 - [05-01]: Absolute timeline offsets (0, 0.15, 0.3, 0.7, 0.9) for deterministic choreography
+- [05-02]: 0.04s stagger for section h2 reveals (vs 0.05s hero) -- shorter headings need snappier cascade
+- [05-02]: Defensive clip-path:none CSS override for SplitText wrappers in reduced-motion block
 
 ### Pending Todos
 
@@ -100,6 +103,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 05-01-PLAN.md (hero entrance component). Plan 05-02 next.
-Resume with: /gsd:execute-phase 5
-Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (5-9). Auto-approve visual checkpoints.
+Stopped at: Completed 05-02-PLAN.md (scroll-triggered heading reveals). Phase 5 complete. Phase 6 next.
+Resume with: /gsd:execute-phase 6
+Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (6-9). Auto-approve visual checkpoints.

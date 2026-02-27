@@ -40,7 +40,7 @@
 
 - [x] **TYPE-01**: Typography drama — increase display-to-body size ratio to 4:1+, hero heading at 4.5-6rem desktop, refined `clamp()` fluid scaling
 - [x] **TYPE-02**: Copy restructuring — tighter, more confident headlines; fewer words, more impact; copy that matches the quietly authoritative design direction
-- [ ] **TYPE-03**: Text reveal animations on section headings — SplitText word-by-word clip-path reveals triggered on scroll
+- [x] **TYPE-03**: Text reveal animations on section headings — SplitText word-by-word clip-path reveals triggered on scroll
 
 ### Performance & Quality
 
@@ -98,7 +98,7 @@
 | MICRO-04 | Phase 3 | Complete |
 | TYPE-01 | Phase 2 | Complete |
 | TYPE-02 | Phase 2 | Complete |
-| TYPE-03 | Phase 5 | Pending |
+| TYPE-03 | Phase 5 | Complete |
 | PERF-01 | Phase 9 | Pending |
 | PERF-02 | Phase 9 | Pending |
 | PERF-03 | Phase 9 | Pending |
