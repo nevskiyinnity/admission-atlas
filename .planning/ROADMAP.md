@@ -132,10 +132,10 @@ Plans:
   1. Primary CTA buttons subtly pull toward the cursor within approximately 50px radius with lerped tracking and eased reset on mouseleave
   2. Bento grid cards respond to hover with subtle 3D rotation (max 4-5 degrees) and a radial gradient light sheen that follows the cursor
   3. Magnetic and tilt effects are disabled on touch devices (gated by @media (hover: hover)) -- mobile users get standard hover states
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 08-01: TBD
+- [ ] 08-01: Magnetic CTA buttons + 3D tilt bento cards (MICRO-01, MICRO-02)
 
 ### Phase 9: Performance & Quality Hardening
 **Goal**: The animation layer ships at production quality -- fast, accessible, leak-free, and audited for restraint
