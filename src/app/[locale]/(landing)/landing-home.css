@@ -838,11 +838,15 @@
   box-shadow: 0 2px 12px rgba(15,25,35,0.04);
 }
 
-.landing-scope .shell .h-faq-item[open] {
+.landing-scope .shell .h-faq-item:has(.h-faq-toggle[open]) {
   border-color: var(--hm-border-bold);
 }
 
-.landing-scope .shell .h-faq-item summary {
+.landing-scope .shell .h-faq-toggle {
+  /* Reset details element defaults */
+}
+
+.landing-scope .shell .h-faq-toggle summary {
   cursor: pointer;
   font-weight: 700; font-size: 0.95rem;
   color: var(--hm-ink);
@@ -854,7 +858,7 @@
   line-height: 1.4;
 }
 
-.landing-scope .shell .h-faq-item summary::-webkit-details-marker { display: none; }
+.landing-scope .shell .h-faq-toggle summary::-webkit-details-marker { display: none; }
 
 .landing-scope .shell .h-faq-chevron {
   flex-shrink: 0;
@@ -874,15 +878,31 @@
   transition: border-color 200ms;
 }
 
-.landing-scope .shell .h-faq-item[open] .h-faq-chevron {
+.landing-scope .shell .h-faq-toggle[open] .h-faq-chevron {
   transform: rotate(180deg);
 }
 
-.landing-scope .shell .h-faq-item[open] .h-faq-chevron::before {
+.landing-scope .shell .h-faq-toggle[open] .h-faq-chevron::before {
   border-color: var(--hm-navy);
 }
 
-.landing-scope .shell .h-faq-item p {
+/* Accordion body -- grid-template-rows animation */
+.landing-scope .shell .h-faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--hm-ease);
+}
+
+.landing-scope .shell .h-faq-body-inner {
+  overflow: hidden;
+}
+
+/* When sibling details is open, expand */
+.landing-scope .shell .h-faq-toggle[open] + .h-faq-body {
+  grid-template-rows: 1fr;
+}
+
+.landing-scope .shell .h-faq-body-inner p {
   margin-top: 14px;
   color: var(--hm-ink-2);
   line-height: 1.75;

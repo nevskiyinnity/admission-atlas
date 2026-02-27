@@ -73,4 +73,9 @@
   .landing-scope .shell .h-accent {
     animation: none !important;
   }
+
+  /* Disable FAQ accordion transition */
+  .landing-scope .shell .h-faq-body {
+    transition: none !important;
+  }
 }

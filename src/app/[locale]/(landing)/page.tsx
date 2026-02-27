@@ -357,50 +357,74 @@ export default function LandingHomePage() {
                 </svg>
               </div>
               <div className="h-faq">
-                <details className="h-faq-item">
-                  <summary>
-                    Do you support students applying outside the US?
-                    <span className="h-faq-chevron" aria-hidden="true" />
-                  </summary>
-                  <p>
-                    Yes. We support applications to the US, UK, Canada, Europe,
-                    Singapore, Australia, and more. Cross-region strategies are one
-                    of our strongest areas.
-                  </p>
-                </details>
-                <details className="h-faq-item">
-                  <summary>
-                    When is the best time to start?
-                    <span className="h-faq-chevron" aria-hidden="true" />
-                  </summary>
-                  <p>
-                    Earlier is better. Starting in sophomore or junior year means
-                    activities, rigor, and narrative can compound over time — but we
-                    regularly work with seniors on tight timelines too.
-                  </p>
-                </details>
-                <details className="h-faq-item">
-                  <summary>
-                    Is affordability factored into your recommendations?
-                    <span className="h-faq-chevron" aria-hidden="true" />
-                  </summary>
-                  <p>
-                    Always. Budget and aid constraints are built into strategy from
-                    Day 1, not bolted on as an afterthought. We won&apos;t recommend
-                    schools you can&apos;t realistically attend.
-                  </p>
-                </details>
-                <details className="h-faq-item">
-                  <summary>
-                    What makes this different from other college counselors?
-                    <span className="h-faq-chevron" aria-hidden="true" />
-                  </summary>
-                  <p>
-                    We use a structured, milestone-based system — not vague pep
-                    talks. Every engagement has clear deliverables, timelines, and
-                    quality gates.
-                  </p>
-                </details>
+                <div className="h-faq-item">
+                  <details className="h-faq-toggle">
+                    <summary aria-controls="faq-answer-1">
+                      Do you support students applying outside the US?
+                      <span className="h-faq-chevron" aria-hidden="true" />
+                    </summary>
+                  </details>
+                  <div className="h-faq-body" id="faq-answer-1" aria-hidden="true">
+                    <div className="h-faq-body-inner">
+                      <p>
+                        Yes. We support applications to the US, UK, Canada, Europe,
+                        Singapore, Australia, and more. Cross-region strategies are one
+                        of our strongest areas.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-faq-item">
+                  <details className="h-faq-toggle">
+                    <summary aria-controls="faq-answer-2">
+                      When is the best time to start?
+                      <span className="h-faq-chevron" aria-hidden="true" />
+                    </summary>
+                  </details>
+                  <div className="h-faq-body" id="faq-answer-2" aria-hidden="true">
+                    <div className="h-faq-body-inner">
+                      <p>
+                        Earlier is better. Starting in sophomore or junior year means
+                        activities, rigor, and narrative can compound over time — but we
+                        regularly work with seniors on tight timelines too.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-faq-item">
+                  <details className="h-faq-toggle">
+                    <summary aria-controls="faq-answer-3">
+                      Is affordability factored into your recommendations?
+                      <span className="h-faq-chevron" aria-hidden="true" />
+                    </summary>
+                  </details>
+                  <div className="h-faq-body" id="faq-answer-3" aria-hidden="true">
+                    <div className="h-faq-body-inner">
+                      <p>
+                        Always. Budget and aid constraints are built into strategy from
+                        Day 1, not bolted on as an afterthought. We won&apos;t recommend
+                        schools you can&apos;t realistically attend.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-faq-item">
+                  <details className="h-faq-toggle">
+                    <summary aria-controls="faq-answer-4">
+                      What makes this different from other college counselors?
+                      <span className="h-faq-chevron" aria-hidden="true" />
+                    </summary>
+                  </details>
+                  <div className="h-faq-body" id="faq-answer-4" aria-hidden="true">
+                    <div className="h-faq-body-inner">
+                      <p>
+                        We use a structured, milestone-based system — not vague pep
+                        talks. Every engagement has clear deliverables, timelines, and
+                        quality gates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </AnimatedSection>
