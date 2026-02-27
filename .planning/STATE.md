@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-02-27T08:36:15.187Z"
+status: in-progress
+last_updated: "2026-02-27T09:01:15Z"
 progress:
-  total_phases: 5
+  total_phases: 6
   completed_phases: 5
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 10
+  completed_plans: 9
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 5 complete. Phase 6 next: Scroll Reveals
+**Current focus:** Phase 6 in progress. Plan 06-01 complete, Plan 06-02 next.
 
 ## Current Position
 
-Phase: 5 of 9 (Hero Entrance Sequence) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
-Status: Phase 5 complete. Ready for Phase 6.
-Last activity: 2026-02-27 -- Plan 05-02 complete (scroll-triggered SplitText heading reveals on all section h2s).
+Phase: 6 of 9 (Scroll-Triggered Reveals) -- IN PROGRESS
+Plan: 1 of 2 in current phase -- Plan 06-01 COMPLETE
+Status: Plan 06-01 complete. Per-section choreographed scroll reveals implemented. Plan 06-02 next.
+Last activity: 2026-02-27 -- Plan 06-01 complete (per-section choreographed scroll reveal timelines).
 
-Progress: [█████████░] 89%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 3 min
-- Total execution time: 0.4 hours
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
@@ -45,10 +45,11 @@ Progress: [█████████░] 89%
 | 03-css-visual-polish | 2 | 6 min | 3 min |
 | 04-section-transitions | 1 | 3 min | 3 min |
 | 05-hero-entrance | 2 | 3 min | 1.5 min |
+| 06-scroll-triggered-reveals | 1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (3 min), 03-02 (3 min), 04-01 (3 min), 05-01 (2 min), 05-02 (1 min)
-- Trend: Accelerating
+- Last 5 plans: 03-02 (3 min), 04-01 (3 min), 05-01 (2 min), 05-02 (1 min), 06-01 (4 min)
+- Trend: Stable
 
 *Updated after each plan completion*
 | Phase 03 P01 | 3min | 2 tasks | 3 files |
@@ -56,6 +57,7 @@ Progress: [█████████░] 89%
 | Phase 04 P01 | 3 | 2 tasks | 3 files |
 | Phase 05 P01 | 2min | 2 tasks | 3 files |
 | Phase 05 P02 | 1min | 2 tasks | 2 files |
+| Phase 06 P01 | 4min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -90,6 +92,10 @@ Recent decisions affecting current work:
 - [05-01]: Absolute timeline offsets (0, 0.15, 0.3, 0.7, 0.9) for deterministic choreography
 - [05-02]: 0.04s stagger for section h2 reveals (vs 0.05s hero) -- shorter headings need snappier cascade
 - [05-02]: Defensive clip-path:none CSS override for SplitText wrappers in reduced-motion block
+- [06-01]: gsap.set() instantly clears section CSS initial states so children animate individually
+- [06-01]: Single timeline per section with positional offsets for reading-order choreography
+- [06-01]: h2 SplitText integrated into section timeline (replaces standalone Phase 5 code)
+- [06-01]: Metrics section uses simple gsap.from stagger -- no timeline for sections without kicker/heading
 
 ### Pending Todos
 
@@ -103,6 +109,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 05-02-PLAN.md (scroll-triggered heading reveals). Phase 5 complete. Phase 6 next.
-Resume with: /gsd:execute-phase 6
+Stopped at: Completed 06-01-PLAN.md (per-section choreographed scroll reveal timelines). Plan 06-02 next.
+Resume with: Continue Phase 6, Plan 06-02
 Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (6-9). Auto-approve visual checkpoints.

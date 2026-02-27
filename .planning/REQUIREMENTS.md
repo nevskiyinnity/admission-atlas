@@ -16,9 +16,9 @@
 
 ### Scroll Animation
 
-- [ ] **SCROLL-01**: Scroll-triggered reveal animations on all major sections — elements animate in with opacity + transform, staggered timing per section
+- [x] **SCROLL-01**: Scroll-triggered reveal animations on all major sections — elements animate in with opacity + transform, staggered timing per section
 - [x] **SCROLL-02**: Orchestrated hero entrance sequence — cinematic choreography: orbs scale in, headline reveals word-by-word via SplitText clip-path, description fades, CTAs arrive with spring
-- [ ] **SCROLL-03**: Staggered section choreography — each section has its own reveal timeline (kicker → heading → description → content elements)
+- [x] **SCROLL-03**: Staggered section choreography — each section has its own reveal timeline (kicker → heading → description → content elements)
 - [ ] **SCROLL-04**: Scroll-progress indicator — thin gold bar under nav showing page scroll position
 
 ### Visual Depth
@@ -83,9 +83,9 @@
 | FOUND-04 | Phase 1 | Complete |
 | FOUND-05 | Phase 1 | Complete |
 | FOUND-06 | Phase 1 | Complete |
-| SCROLL-01 | Phase 6 | Pending |
+| SCROLL-01 | Phase 6 | Complete |
 | SCROLL-02 | Phase 5 | Complete |
-| SCROLL-03 | Phase 6 | Pending |
+| SCROLL-03 | Phase 6 | Complete |
 | SCROLL-04 | Phase 6 | Pending |
 | VISUAL-01 | Phase 3 | Complete |
 | VISUAL-02 | Phase 4 | Complete |
