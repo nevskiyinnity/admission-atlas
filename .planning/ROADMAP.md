@@ -51,7 +51,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01: Typography scale update (clamp() values) + copy restructuring (quiet authority voice)
 
 ### Phase 3: CSS Visual Polish
 **Goal**: The page feels premium and alive through CSS-only effects -- gradient backgrounds breathe, geometry accents add sophistication, hover states feel tactile, and the FAQ opens smoothly
@@ -163,7 +163,7 @@ Note: Phases 2 and 3 depend only on Phase 1 and can execute in parallel. Phases 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Motion Foundation | 2/2 | Complete | 2026-02-27 |
-| 2. Typography & Copy | 0/1 | Not started | - |
+| 2. Typography & Copy | 0/1 | Planned | - |
 | 3. CSS Visual Polish | 0/2 | Not started | - |
 | 4. Section Transitions & Dark Atmosphere | 0/1 | Not started | - |
 | 5. Hero Entrance Sequence | 0/2 | Not started | - |
