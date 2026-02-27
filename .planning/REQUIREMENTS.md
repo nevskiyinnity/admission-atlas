@@ -31,8 +31,8 @@
 
 ### Micro-interactions
 
-- [ ] **MICRO-01**: Magnetic button effect on primary CTAs — buttons subtly pull toward cursor within ~50px radius, lerped tracking, eased reset on mouseleave
-- [ ] **MICRO-02**: Card tilt/perspective on bento grid cards — subtle 3D rotation (max 4-5°) with radial gradient light sheen following cursor
+- [x] **MICRO-01**: Magnetic button effect on primary CTAs — buttons subtly pull toward cursor within ~50px radius, lerped tracking, eased reset on mouseleave
+- [x] **MICRO-02**: Card tilt/perspective on bento grid cards — subtle 3D rotation (max 4-5°) with radial gradient light sheen following cursor
 - [x] **MICRO-03**: Smooth FAQ accordion — animated open/close via CSS grid-template-rows (no JS needed), replacing native details snap
 - [x] **MICRO-04**: Enhanced hover transitions on all interactive elements — consistent easing, subtle scale/shadow responses across nav links, buttons, cards, footer links
 
@@ -92,8 +92,8 @@
 | VISUAL-03 | Phase 7 | Complete |
 | VISUAL-04 | Phase 3 | Complete |
 | VISUAL-05 | Phase 4 | Complete |
-| MICRO-01 | Phase 8 | Pending |
-| MICRO-02 | Phase 8 | Pending |
+| MICRO-01 | Phase 8 | Complete |
+| MICRO-02 | Phase 8 | Complete |
 | MICRO-03 | Phase 3 | Complete |
 | MICRO-04 | Phase 3 | Complete |
 | TYPE-01 | Phase 2 | Complete |

@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-02-27T11:11:41.882Z"
+status: executing
+last_updated: "2026-02-27T11:27:10Z"
 progress:
-  total_phases: 7
-  completed_phases: 7
-  total_plans: 11
-  completed_plans: 11
+  total_phases: 8
+  completed_phases: 8
+  total_plans: 12
+  completed_plans: 12
 ---
 
 # Project State
@@ -18,21 +18,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-27)
 
 **Core value:** The landing page must make visitors feel they've found the most competent people in the room -- through design craft alone.
-**Current focus:** Phase 7 COMPLETE. Parallax visual depth on all decorative elements. Phase 8 next.
+**Current focus:** Phase 8 COMPLETE. Magnetic buttons and tilt cards with light sheen. Phase 9 next.
 
 ## Current Position
 
-Phase: 7 of 9 (Parallax Visual Depth) -- COMPLETE
-Plan: 1 of 1 in current phase -- Phase 07 COMPLETE
-Status: Phase 7 complete. Scroll-linked parallax on hero orbs, SVG accents, and atmospheric glows. Phase 8 next.
-Last activity: 2026-02-27 -- Plan 07-01 complete (parallax visual depth).
+Phase: 8 of 9 (Micro-Interactions) -- COMPLETE
+Plan: 1 of 1 in current phase -- Phase 08 COMPLETE
+Status: Phase 8 complete. Magnetic CTA buttons and 3D tilt bento cards with gold light sheen. Phase 9 next.
+Last activity: 2026-02-27 -- Plan 08-01 complete (magnetic buttons & tilt cards).
 
-Progress: [██████████] 100% (Phases 1-7 complete)
+Progress: [██████████] 100% (Phases 1-8 complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
+- Total plans completed: 12
 - Average duration: 3 min
 - Total execution time: 0.6 hours
 
@@ -47,9 +47,10 @@ Progress: [██████████] 100% (Phases 1-7 complete)
 | 05-hero-entrance | 2 | 3 min | 1.5 min |
 | 06-scroll-triggered-reveals | 2 | 6 min | 3 min |
 | 07-parallax-visual-depth | 1 | 4 min | 4 min |
+| 08-micro-interactions | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (2 min), 05-02 (1 min), 06-01 (4 min), 06-02 (2 min), 07-01 (4 min)
+- Last 5 plans: 05-02 (1 min), 06-01 (4 min), 06-02 (2 min), 07-01 (4 min), 08-01 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -61,6 +62,7 @@ Progress: [██████████] 100% (Phases 1-7 complete)
 | Phase 06 P01 | 4min | 2 tasks | 1 files |
 | Phase 06 P02 | 2min | 2 tasks | 4 files |
 | Phase 07 P01 | 4min | 2 tasks | 2 files |
+| Phase 08 P01 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -107,6 +109,10 @@ Recent decisions affecting current work:
 - [07-01]: scrub:0.5 for parallax matches scroll progress bar smoothing from Phase 6
 - [07-01]: Hero parallax 'top top'/'bottom top' (above fold); section parallax 'top bottom'/'bottom top' (full traversal)
 - [07-01]: Alternating accent displacement (-25px/-18px) prevents mechanical lockstep
+- [08-01]: (hover: hover) matchMedia for touch gating -- magnetic/tilt are pointer-dependent, not motion-dependent
+- [08-01]: h-bento-wide class on TiltCard wrapper div for correct CSS grid child participation
+- [08-01]: GSAP owns all transforms on interactive elements -- CSS transform removed from h-btn-primary and h-bento-card :hover
+- [08-01]: transformPerspective on card element (not CSS perspective on wrapper) avoids AnimatedSection entrance transform conflicts
 
 ### Pending Todos
 
@@ -120,6 +126,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed 07-01-PLAN.md (parallax visual depth). Phase 7 complete.
-Resume with: Plan Phase 8 or continue to next phase
-Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases (8-9). Auto-approve visual checkpoints.
+Stopped at: Completed 08-01-PLAN.md (magnetic buttons & tilt cards). Phase 8 complete.
+Resume with: Plan Phase 9 or continue to next phase
+Note: User said "finish the job all the way, i trust your judgement" -- continue autonomously through all remaining phases. Auto-approve visual checkpoints.
