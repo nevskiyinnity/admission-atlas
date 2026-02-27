@@ -37,8 +37,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01: Install GSAP + Lenis, create registration singleton, SmoothScrollProvider, AnimatedSection
+- [ ] 01-02: CSS initial states, reduced-motion overrides, wrap page.tsx sections in Client Component islands
 
 ### Phase 2: Typography & Copy
 **Goal**: The page communicates quiet authority through typography alone -- display type dominates, copy is tighter and more confident, fluid scaling works across all breakpoints
