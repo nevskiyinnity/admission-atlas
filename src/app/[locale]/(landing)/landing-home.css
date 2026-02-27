@@ -386,6 +386,7 @@
    ══════════════════════════════════════ */
 .landing-scope .shell .h-sect {
   margin-top: 140px;
+  position: relative;
 }
 
 .landing-scope .shell .h-sect-head {
@@ -594,6 +595,10 @@
   margin-left: -28px;
   margin-right: -28px;
   padding: 0 28px;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(27, 58, 75, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 30%, rgba(15, 25, 35, 0.04) 0%, transparent 50%);
 }
 
 .landing-scope .shell .h-dark-inner {
@@ -612,6 +617,51 @@
     radial-gradient(ellipse at 20% 0%, rgba(158,124,56,0.15) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, rgba(26,107,90,0.12) 0%, transparent 50%);
   pointer-events: none;
+}
+
+/* ── Section gradient bleeds ── */
+.landing-scope .shell .h-sect::before,
+.landing-scope .shell .h-callout::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  left: -28px;
+  right: -28px;
+  height: 140px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(248, 246, 241, 0.5) 0%,
+    transparent 70%
+  );
+}
+
+/* ── Dark section atmospheric entry ── */
+.landing-scope .shell .h-dark-sect::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 200px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(27, 58, 75, 0.08) 0%,
+    rgba(15, 37, 51, 0.04) 40%,
+    transparent 70%
+  );
+}
+
+/* Content above atmospheric layers */
+.landing-scope .shell .h-dark-inner .h-kicker,
+.landing-scope .shell .h-dark-inner h2,
+.landing-scope .shell .h-dark-inner .h-outcomes {
+  position: relative;
+  z-index: 2;
 }
 
 .landing-scope .shell .h-kicker--light {
@@ -765,6 +815,7 @@
    ══════════════════════════════════════ */
 .landing-scope .shell .h-callout {
   margin-top: 140px;
+  position: relative;
 }
 
 .landing-scope .shell .h-callout-inner {
