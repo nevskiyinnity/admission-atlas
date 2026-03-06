@@ -101,6 +101,8 @@ async function main() {
     { student: students[6], counselor: counselor3, uni: 'University of Toronto', major: 'Mechanical Engineering', deadline: '2026-03-01' },
     { student: students[7], counselor: counselor3, uni: 'McGill University', major: 'Biology', deadline: '2026-02-20' },
     { student: students[8], counselor: counselor3, uni: 'University of British Columbia', major: 'Physics', deadline: '2026-03-15' },
+    { student: students[9], counselor: counselor1, uni: 'University of Edinburgh', major: 'Artificial Intelligence', deadline: '2026-03-15' },
+    { student: students[9], counselor: counselor1, uni: "King's College London", major: 'Data Science', deadline: '2026-04-01' },
   ];
 
   for (let i = 0; i < projectData.length; i++) {
