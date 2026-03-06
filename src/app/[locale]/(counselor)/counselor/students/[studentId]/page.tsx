@@ -52,7 +52,8 @@ export default function StudentDetailPage() {
       fetch(`/api/projects?studentId=${studentId}`),
     ]);
     setStudent(await userRes.json());
-    setProjects(await projRes.json());
+    const projData = await projRes.json();
+    setProjects(projData.projects || projData);
     setLoading(false);
   };
 

@@ -10,7 +10,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const auth = await requireAuth(['ADMIN']);
+  const auth = await requireAuth(['ADMIN', 'COUNSELOR']);
   if (isAuthError(auth)) return auth;
 
   try {
@@ -31,6 +31,17 @@ export async function GET(
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Counselors can only view their own students
+    if (auth.user.role === 'COUNSELOR') {
+      const counselor = await prisma.user.findUnique({
+        where: { clerkId: auth.user.id },
+        select: { id: true },
+      });
+      if (user.role !== 'STUDENT' || user.assignedCounselorId !== counselor?.id) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
     }
 
     const sanitizedUser = sanitizeUser(user);
