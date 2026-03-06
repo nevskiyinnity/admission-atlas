@@ -32,14 +32,7 @@ export async function GET(request: NextRequest) {
 
     // Filter to students assigned to the requesting counselor
     if (myStudents) {
-      const counselor = await prisma.user.findUnique({
-        where: { clerkId: auth.user.id },
-        select: { id: true },
-      });
-      if (!counselor) {
-        return NextResponse.json({ error: 'Counselor not found' }, { status: 404 });
-      }
-      where.assignedCounselorId = counselor.id;
+      where.assignedCounselorId = auth.user.id;
       where.role = 'STUDENT';
     }
 

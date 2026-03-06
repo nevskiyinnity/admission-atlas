@@ -1,26 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 
 export default function CounselorSettingsPage() {
   const t = useTranslations('settings');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [settings, setSettings] = useState({ webNotifications: true, smsNotifications: true, emailNotifications: true });
 
   useEffect(() => {
-    if (userId) {
-      fetch(`/api/users/${userId}`).then((r) => r.json()).then((u) => {
+    if (dbUser?.id) {
+      fetch(`/api/users/${dbUser.id}`).then((r) => r.json()).then((u) => {
         setSettings({ webNotifications: u.webNotifications, smsNotifications: u.smsNotifications, emailNotifications: u.emailNotifications });
       });
     }
-  }, [userId]);
+  }, [dbUser?.id]);
 
   const toggle = async (key: keyof typeof settings) => {
     const updated = { ...settings, [key]: !settings[key] };
     setSettings(updated);
-    await fetch(`/api/users/${userId}/settings`, {
+    await fetch(`/api/users/${dbUser?.id}/settings`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updated),

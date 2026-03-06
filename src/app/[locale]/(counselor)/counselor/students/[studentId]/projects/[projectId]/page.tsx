@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -38,7 +38,8 @@ interface Message {
 export default function ProjectTaskPage() {
   const t = useTranslations('counselor.task');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
+  const userId = dbUser?.id;
   const params = useParams();
   const projectId = params.projectId as string;
 

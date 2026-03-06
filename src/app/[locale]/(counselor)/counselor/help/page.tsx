@@ -13,7 +13,7 @@ export default function CounselorHelpPage() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/faq').then((r) => r.json()).then(setFaqs);
+    fetch('/api/faq').then((r) => r.json()).then((data) => setFaqs(data.faqs || data));
   }, []);
 
   const categories = Array.from(new Set(faqs.map((f) => f.category)));

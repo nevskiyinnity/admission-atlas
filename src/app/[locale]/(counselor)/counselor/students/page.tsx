@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Input } from '@/components/ui/input';
@@ -22,13 +22,13 @@ interface Student {
 export default function CounselorStudentsPage() {
   const t = useTranslations('counselor.students');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [students, setStudents] = useState<Student[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!dbUser?.id) return;
     const timer = setTimeout(async () => {
       setLoading(true);
       const params = new URLSearchParams({ myStudents: 'true', limit: '100' });
@@ -39,7 +39,7 @@ export default function CounselorStudentsPage() {
       setLoading(false);
     }, 300);
     return () => clearTimeout(timer);
-  }, [userId, search]);
+  }, [dbUser?.id, search]);
 
   return (
     <div>

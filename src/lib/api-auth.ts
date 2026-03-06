@@ -1,19 +1,18 @@
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 type Role = 'STUDENT' | 'COUNSELOR' | 'ADMIN';
 
 /**
  * Require authentication (and optionally specific roles) for an API route.
- * Returns a user object on success, or a NextResponse error on failure.
- *
- * The return shape preserves `{ user: { id, role, email } }` to keep
- * all existing API route code working without changes.
+ * Resolves the Clerk ID to the Prisma User ID so all downstream code
+ * works with database IDs consistently.
  */
 export async function requireAuth(allowedRoles?: Role[]) {
-  const { userId, sessionClaims } = await auth();
+  const { userId: clerkId, sessionClaims } = await auth();
 
-  if (!userId) {
+  if (!clerkId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -23,11 +22,22 @@ export async function requireAuth(allowedRoles?: Role[]) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
+  // Resolve Clerk ID → Prisma User ID
+  const dbUser = await prisma.user.findUnique({
+    where: { clerkId },
+    select: { id: true, email: true },
+  });
+
+  if (!dbUser) {
+    return NextResponse.json({ error: 'User not found in database' }, { status: 404 });
+  }
+
   return {
     user: {
-      id: userId,
+      id: dbUser.id,
+      clerkId,
       role: role || ('STUDENT' as Role),
-      email: (sessionClaims as Record<string, unknown>)?.email as string | undefined,
+      email: dbUser.email || (sessionClaims as Record<string, unknown>)?.email as string | undefined,
     },
   };
 }

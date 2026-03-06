@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -35,7 +35,7 @@ interface StudentInfo {
 export default function StudentDetailPage() {
   const t = useTranslations('counselor.project');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const params = useParams();
   const studentId = params.studentId as string;
 
@@ -67,7 +67,7 @@ export default function StudentDetailPage() {
       body: JSON.stringify({
         ...form,
         studentId,
-        counselorId: userId,
+        counselorId: dbUser?.id,
       }),
     });
     setShowCreateModal(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,7 @@ const tabKeys = ['info', 'password', 'loginHistory'] as const;
 export default function CounselorAccountPage() {
   const t = useTranslations('account');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [activeTab, setActiveTab] = useState<string>('info');
   const [user, setUser] = useState<any>(null);
   const [loginLogs, setLoginLogs] = useState<LoginLogEntry[]>([]);
@@ -28,16 +28,16 @@ export default function CounselorAccountPage() {
   const [codeSent, setCodeSent] = useState(false);
 
   useEffect(() => {
-    if (userId) {
-      fetch(`/api/users/${userId}`).then((r) => r.json()).then(setUser);
-      fetch(`/api/login-logs?userId=${userId}`).then((r) => r.json()).then(setLoginLogs);
+    if (dbUser?.id) {
+      fetch(`/api/users/${dbUser.id}`).then((r) => r.json()).then(setUser);
+      fetch(`/api/login-logs?userId=${dbUser.id}`).then((r) => r.json()).then((data) => setLoginLogs(data.logs || data));
     }
-  }, [userId]);
+  }, [dbUser?.id]);
 
   const sendCode = () => setCodeSent(true);
   const changePassword = async () => {
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) return;
-    await fetch(`/api/users/${userId}`, {
+    if (!dbUser?.id || passwordForm.newPassword !== passwordForm.confirmPassword) return;
+    await fetch(`/api/users/${dbUser.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: passwordForm.newPassword }),

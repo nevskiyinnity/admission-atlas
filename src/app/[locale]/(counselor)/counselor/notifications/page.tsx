@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useDbUser } from '@/hooks/use-db-user';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,28 +23,28 @@ const tabs = ['ALL', 'ANNOUNCEMENT', 'MESSAGE', 'FEEDBACK'] as const;
 export default function CounselorNotificationsPage() {
   const t = useTranslations('notifications');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [activeTab, setActiveTab] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    if (!userId) return;
-    const params = new URLSearchParams({ userId: userId });
+    if (!dbUser?.id) return;
+    const params = new URLSearchParams({ userId: dbUser.id });
     if (activeTab !== 'ALL') params.set('type', activeTab);
     const res = await fetch(`/api/notifications?${params}`);
     setNotifications(await res.json());
     setLoading(false);
   };
 
-  useEffect(() => { fetchNotifications(); }, [userId, activeTab]);
+  useEffect(() => { fetchNotifications(); }, [dbUser?.id, activeTab]);
 
   const markAllRead = async () => {
-    if (!userId) return;
+    if (!dbUser?.id) return;
     await fetch('/api/notifications/mark-all-read', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: userId }),
+      body: JSON.stringify({ userId: dbUser.id }),
     });
     fetchNotifications();
   };

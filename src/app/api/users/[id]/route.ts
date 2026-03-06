@@ -35,11 +35,7 @@ export async function GET(
 
     // Counselors can only view their own students
     if (auth.user.role === 'COUNSELOR') {
-      const counselor = await prisma.user.findUnique({
-        where: { clerkId: auth.user.id },
-        select: { id: true },
-      });
-      if (user.role !== 'STUDENT' || user.assignedCounselorId !== counselor?.id) {
+      if (user.role !== 'STUDENT' || user.assignedCounselorId !== auth.user.id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     }
