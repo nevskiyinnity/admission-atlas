@@ -9,11 +9,14 @@ import { logger } from '@/lib/logger';
 
 // GET /api/users - List users with optional filters, search, and pagination
 export async function GET(request: NextRequest) {
-  const auth = await requireAuth(['ADMIN']);
+  const { searchParams } = new URL(request.url);
+  const myStudents = searchParams.get('myStudents') === 'true';
+
+  // Counselors can fetch their own students; everything else requires ADMIN
+  const auth = await requireAuth(myStudents ? ['COUNSELOR', 'ADMIN'] : ['ADMIN']);
   if (isAuthError(auth)) return auth;
 
   try {
-    const { searchParams } = new URL(request.url);
     const role = searchParams.get('role');
     const search = searchParams.get('search')?.slice(0, 200) || null;
     const page = parseInt(searchParams.get('page') || '1', 10);
@@ -25,6 +28,19 @@ export async function GET(request: NextRequest) {
 
     if (role) {
       where.role = role as Prisma.UserWhereInput["role"];
+    }
+
+    // Filter to students assigned to the requesting counselor
+    if (myStudents) {
+      const counselor = await prisma.user.findUnique({
+        where: { clerkId: auth.user.id },
+        select: { id: true },
+      });
+      if (!counselor) {
+        return NextResponse.json({ error: 'Counselor not found' }, { status: 404 });
+      }
+      where.assignedCounselorId = counselor.id;
+      where.role = 'STUDENT';
     }
 
     if (search) {

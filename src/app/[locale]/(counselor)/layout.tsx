@@ -20,7 +20,7 @@ export default function CounselorLayout({
 
   const sidebarItems = [
     {
-      label: t('students'),
+      label: t('studentManagement'),
       href: '/counselor/students',
       icon: <Users className="h-4 w-4" />,
     },

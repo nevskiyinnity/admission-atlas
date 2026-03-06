@@ -31,15 +31,11 @@ export default function CounselorStudentsPage() {
     if (!userId) return;
     const timer = setTimeout(async () => {
       setLoading(true);
-      const params = new URLSearchParams({ role: 'STUDENT', limit: '100' });
+      const params = new URLSearchParams({ myStudents: 'true', limit: '100' });
       if (search) params.set('search', search);
       const res = await fetch(`/api/users?${params}`);
       const data = await res.json();
-      // Filter to only students assigned to this counselor
-      const myStudents = (data.users || []).filter(
-        (u: any) => u.assignedCounselorId === userId
-      );
-      setStudents(myStudents);
+      setStudents(data.users || []);
       setLoading(false);
     }, 300);
     return () => clearTimeout(timer);

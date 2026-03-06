@@ -114,50 +114,128 @@ async function main() {
       },
     });
 
-    // Create milestones
+    // Create milestones with varied progress
     const milestoneNames = ['Document Preparation', 'Application Submission', 'Interview Preparation', 'Final Review'];
     for (let j = 0; j < milestoneNames.length; j++) {
+      let milestoneStatus: 'COMPLETED' | 'IN_PROGRESS' | 'PENDING' = 'PENDING';
+      if (i === 2) milestoneStatus = 'COMPLETED';
+      else if (j === 0) milestoneStatus = i < 5 ? 'COMPLETED' : 'IN_PROGRESS';
+      else if (j === 1) milestoneStatus = i < 3 ? 'IN_PROGRESS' : 'PENDING';
+
       const milestone = await prisma.milestone.create({
         data: {
           name: milestoneNames[j], projectId: project.id, order: j,
-          status: i === 2 ? 'COMPLETED' : j === 0 ? 'IN_PROGRESS' : j === 1 && i < 3 ? 'IN_PROGRESS' : 'PENDING',
+          status: milestoneStatus,
         },
       });
 
-      // Create 2 tasks per milestone
       const taskNames = [
         [`Prepare ${milestoneNames[j]} - Part A`, `Review ${milestoneNames[j]} - Part B`],
       ][0];
 
       for (let k = 0; k < taskNames.length; k++) {
+        let taskStatus: 'COMPLETED' | 'IN_PROGRESS' | 'PENDING' = 'PENDING';
+        if (milestoneStatus === 'COMPLETED') taskStatus = 'COMPLETED';
+        else if (milestoneStatus === 'IN_PROGRESS' && k === 0) taskStatus = i % 2 === 0 ? 'COMPLETED' : 'IN_PROGRESS';
+        else if (milestoneStatus === 'IN_PROGRESS' && k === 1) taskStatus = 'IN_PROGRESS';
+
         const task = await prisma.task.create({
           data: {
             name: taskNames[k], milestoneId: milestone.id,
             description: `Complete ${taskNames[k].toLowerCase()} for ${pd.uni}`,
             deadline: new Date(pd.deadline),
-            status: i === 2 ? 'COMPLETED' : j === 0 && k === 0 ? 'IN_PROGRESS' : 'PENDING',
+            status: taskStatus,
             assignedTo: k === 0 ? 'STUDENT' : 'COUNSELOR',
           },
         });
 
-        // Add messages to first task of first milestone
-        if (j === 0 && k === 0) {
-          await prisma.message.create({
+        // Add chat messages to active tasks
+        if (j < 2 && milestoneStatus !== 'PENDING') {
+          const conversations = [
+            [
+              { content: `Hi ${pd.student.name}, please start working on ${taskNames[k]} for ${pd.uni}. Let me know if you have questions!`, sender: pd.counselor },
+              { content: `Thank you! I'll start right away. Do I need to prepare any specific documents?`, sender: pd.student },
+              { content: `Yes, please prepare your personal statement and transcripts first. I've attached a template.`, sender: pd.counselor },
+            ],
+            [
+              { content: `I've uploaded my first draft. Could you take a look when you have time?`, sender: pd.student },
+              { content: `Great work! I'll review it today and send feedback by tomorrow.`, sender: pd.counselor },
+            ],
+            [
+              { content: `I made the revisions you suggested. The updated version is attached.`, sender: pd.student },
+              { content: `Much better! A few minor points: check paragraph 3 and the conclusion. Otherwise it's solid.`, sender: pd.counselor },
+              { content: `Got it, I'll fix those tonight. Thanks for the quick feedback!`, sender: pd.student },
+              { content: `No problem. We're on track for the deadline.`, sender: pd.counselor },
+            ],
+          ];
+          const convo = conversations[(i + j + k) % conversations.length];
+          for (const msg of convo) {
+            await prisma.message.create({
+              data: { content: msg.content, senderId: msg.sender.id, taskId: task.id },
+            });
+          }
+        }
+
+        // Add file records
+        if (j === 0 && k === 0 && milestoneStatus !== 'PENDING') {
+          await prisma.file.create({
             data: {
-              content: `Hi ${pd.student.name}, please start working on ${taskNames[k]} for ${pd.uni}. Let me know if you have questions!`,
-              senderId: pd.counselor.id, taskId: task.id,
+              filename: `personal-statement-${pd.student.name.toLowerCase().replace(' ', '-')}.pdf`,
+              originalName: `Personal Statement - ${pd.uni}.pdf`,
+              path: `/uploads/personal-statement-${i}.pdf`,
+              size: 245000 + i * 10000,
+              mimeType: 'application/pdf',
+              fileType: 'PDF',
+              uploaderId: pd.student.id,
+              projectId: project.id,
+              milestoneId: milestone.id,
+              taskId: task.id,
             },
           });
-          await prisma.message.create({
+          await prisma.file.create({
             data: {
-              content: `Thank you! I'll start right away. Do I need to prepare any specific documents?`,
-              senderId: pd.student.id, taskId: task.id,
+              filename: `transcript-${pd.student.name.toLowerCase().replace(' ', '-')}.pdf`,
+              originalName: `Academic Transcript.pdf`,
+              path: `/uploads/transcript-${i}.pdf`,
+              size: 180000 + i * 5000,
+              mimeType: 'application/pdf',
+              fileType: 'PDF',
+              uploaderId: pd.student.id,
+              projectId: project.id,
+              milestoneId: milestone.id,
+              taskId: task.id,
             },
           });
-          await prisma.message.create({
+        }
+        if (j === 0 && k === 1 && milestoneStatus === 'COMPLETED') {
+          await prisma.file.create({
             data: {
-              content: `Yes, please prepare your personal statement and transcripts first. I've attached a template.`,
-              senderId: pd.counselor.id, taskId: task.id,
+              filename: `review-notes-${i}.docx`,
+              originalName: `Counselor Review Notes.docx`,
+              path: `/uploads/review-notes-${i}.docx`,
+              size: 52000,
+              mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+              fileType: 'WORD',
+              uploaderId: pd.counselor.id,
+              projectId: project.id,
+              milestoneId: milestone.id,
+              taskId: task.id,
+            },
+          });
+        }
+        if (j === 1 && k === 0 && milestoneStatus === 'IN_PROGRESS') {
+          await prisma.file.create({
+            data: {
+              filename: `application-form-${i}.pdf`,
+              originalName: `${pd.uni} Application Form.pdf`,
+              path: `/uploads/application-form-${i}.pdf`,
+              size: 320000,
+              mimeType: 'application/pdf',
+              fileType: 'PDF',
+              uploaderId: pd.student.id,
+              projectId: project.id,
+              milestoneId: milestone.id,
+              taskId: task.id,
             },
           });
         }
