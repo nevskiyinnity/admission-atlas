@@ -8,6 +8,8 @@ import {
 import './landing-atlas.css';
 import './landing-home.css';
 import './landing-animations.css';
+import { LandingHeader } from './_components/landing-header';
+import { LandingFooter } from './_components/landing-footer';
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -53,19 +55,17 @@ export default function LandingLayout({
     >
       <noscript>
         <style>{`
-          .landing-scope .shell .h-hero > *,
-          .landing-scope .shell .h-hero-orb,
-          .landing-scope .shell .h-metrics,
-          .landing-scope .shell .h-sect,
-          .landing-scope .shell .h-dark-sect,
-          .landing-scope .shell .h-callout,
-          .landing-scope .shell .h-final {
+          .landing-scope .shell > *,
+          .landing-scope [class*="sect"],
+          .landing-scope [class*="hero"] > * {
             opacity: 1 !important;
             transform: none !important;
           }
         `}</style>
       </noscript>
+      <LandingHeader />
       {children}
+      <LandingFooter />
     </div>
   );
 }

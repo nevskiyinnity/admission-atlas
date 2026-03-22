@@ -393,6 +393,27 @@
     "contactEmail": "Email",
     "contactWeChat": "WeChat"
   },
+  "landing": {
+    "nav": {
+      "aboutUs": "About Us",
+      "collegeAdmissions": "College Admissions",
+      "counselors": "Counselors",
+      "results": "Results",
+      "contact": "Contact",
+      "portal": "SAJU Portal",
+      "engine": "SAJU Engine",
+      "bookCall": "Book a Call",
+      "login": "Log in"
+    },
+    "footer": {
+      "tagline": "Strategic admissions counsel.",
+      "contact": "Contact",
+      "followUs": "Follow Us"
+    },
+    "langSwitch": {
+      "label": "Switch language"
+    }
+  },
   "files": {
     "filterBySender": "Sender",
     "filterByType": "File Type",

@@ -10,25 +10,6 @@ export const metadata: Metadata = {
 export default function ResultsPage() {
   return (
     <>
-      <div className="grain" />
-      <div className="orb orb-left" />
-      <div className="orb orb-right" />
-
-      <header className="site-nav">
-        <div className="brand">Admission Atlas</div>
-        <nav className="nav-links">
-          <Link href="/">Home</Link>
-          <Link href="/team">Team</Link>
-          <Link className="active" href="/results">
-            Results
-          </Link>
-          <Link href="/contact">Contact</Link>
-          <Link className="nav-cta" href="/login">
-            Login
-          </Link>
-        </nav>
-      </header>
-
       <main className="page">
         <section className="hero-wrap">
           <article className="hero">
@@ -223,11 +204,6 @@ export default function ResultsPage() {
           </a>
         </section>
       </main>
-
-      <footer className="footer">
-        <span>Admission Atlas Results</span>
-        <span>Focus on measurable improvements, not vague promises.</span>
-      </footer>
     </>
   );
 }
