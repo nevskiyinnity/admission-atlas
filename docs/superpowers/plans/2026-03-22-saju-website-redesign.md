@@ -42,6 +42,8 @@ src/app/api/
 │   └── route.ts                    # Public Neural Engine API (ported from Express)
 ├── inquiries/
 │   └── route.ts                    # Public contact form submission API
+├── upload/
+│   └── route.ts                    # Public Vercel Blob file upload handler
 src/lib/
 ├── neural-engine-rate-limit.ts     # Dedicated 10 req/min limiter for Neural Engine
 ├── inquiry-schema.ts               # Zod schema for contact form validation
@@ -90,7 +92,7 @@ Add `authOnlyPages` after `publicPages`:
 const authOnlyPages = ['/login', '/forgot-password'];
 ```
 
-Replace the authenticated-user redirect block (lines 117-121):
+Replace **ONLY** the `if (isPublicPage && userId)` block (lines 117-121). **Keep the `if (!isPublicPage && !userId)` block (lines 123-127) unchanged** — that is the unauthenticated user guard and must remain:
 
 ```typescript
 // Authenticated user on auth-only page (login, forgot-password) → redirect to dashboard
@@ -102,6 +104,9 @@ if (isAuthOnlyPage && userId) {
   const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
   return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
 }
+
+// KEEP THIS BLOCK UNCHANGED — unauthenticated user on protected page → redirect to login
+// if (!isPublicPage && !userId) { ... }
 ```
 
 - [ ] **Step 3: Update isPublicRoute matcher**
@@ -131,12 +136,11 @@ if (pathnameWithoutLocale === '/team' || pathnameWithoutLocale.startsWith('/team
 }
 ```
 
-Wait — the `/team` redirect must happen before intlMiddleware is applied. Move it right after the bare root redirect (line 98) and before `const intlResponse = intlMiddleware(req)` (line 101). Also, this logic uses `pathnameWithoutLocale` which isn't computed until line 104. So compute the locale-stripped path earlier:
+Place this redirect **after** `const pathnameWithoutLocale` is computed (line 104), but **before** the `isPublicPage` check (line 107). This ensures the variable is available and the redirect happens before any auth logic:
 
 ```typescript
-// After the bare root redirect block, before intlMiddleware:
-const pathNoLocale = pathname.replace(/^\/(en|zh)/, '') || '/';
-if (pathNoLocale === '/team' || pathNoLocale.startsWith('/team/')) {
+// 301 redirect /team → /counselors (placed after pathnameWithoutLocale is computed at line 104)
+if (pathnameWithoutLocale === '/team' || pathnameWithoutLocale.startsWith('/team/')) {
   const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
   return applySecurityHeaders(
     NextResponse.redirect(new URL(`/${locale}/counselors`, req.url), 301)
@@ -463,12 +467,17 @@ export function MobileMenu() {
 
 - [ ] **Step 3: Create landing-header.tsx**
 
+This is an **async server component** that uses `getTranslations` (not the `useTranslations` hook — hooks are for client components only):
+
 ```typescript
 import { Link } from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
 import { LanguageSwitcher } from './language-switcher';
 import { MobileMenu } from './mobile-menu';
 
-export function LandingHeader() {
+export async function LandingHeader() {
+  const t = await getTranslations('landing');
+
   return (
     <header className="l-header">
       <div className="l-header-inner">
@@ -476,20 +485,20 @@ export function LandingHeader() {
           双岸教育
         </Link>
         <nav className="l-nav-links">
-          <Link href="/about">About Us</Link>
-          <Link href="/college-admissions">College Admissions</Link>
-          <Link href="/counselors">Counselors</Link>
-          <Link href="/results">Results</Link>
-          <Link href="/contact">Contact</Link>
-          <Link href="/login">SAJU Portal</Link>
+          <Link href="/about">{t('nav.aboutUs')}</Link>
+          <Link href="/college-admissions">{t('nav.collegeAdmissions')}</Link>
+          <Link href="/counselors">{t('nav.counselors')}</Link>
+          <Link href="/results">{t('nav.results')}</Link>
+          <Link href="/contact">{t('nav.contact')}</Link>
+          <Link href="/login">{t('nav.portal')}</Link>
         </nav>
         <div className="l-nav-right">
           <LanguageSwitcher />
           <Link href="/neural-engine" className="l-btn-ghost">
-            SAJU Engine
+            {t('nav.engine')}
           </Link>
           <Link href="/contact" className="l-btn-primary">
-            Book a Call
+            {t('nav.bookCall')}
           </Link>
         </div>
         <MobileMenu />
@@ -499,12 +508,19 @@ export function LandingHeader() {
 }
 ```
 
+- [ ] **Step 3b: Add landing namespace to en.json and zh.json NOW (not in Task 13)**
+
+This must happen before Step 3 works — the `getTranslations('landing')` call requires the namespace to exist. Add the `"landing"` key from Task 13 Steps 1-2 into both message files now. Task 13 becomes "update header/footer to use translations" → already done, so Task 13 is reduced to a verification step only.
+
 - [ ] **Step 4: Create landing-footer.tsx**
+
+Async server component with `getTranslations`:
 
 ```typescript
 import { Link } from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
 
-export function LandingFooter() {
+export async function LandingFooter() {
   return (
     <footer className="l-footer">
       <div className="l-footer-inner">
@@ -585,12 +601,12 @@ In `src/app/[locale]/(landing)/page.tsx`, remove:
 
 These are now in the shared layout.
 
-- [ ] **Step 7: Remove inline headers from other pages**
+- [ ] **Step 7: Remove inline headers and ambient elements from other pages**
 
-Remove the inline `<header>` blocks from:
-- `src/app/[locale]/(landing)/contact/page.tsx` (lines 17-30)
-- `src/app/[locale]/(landing)/results/page.tsx` (lines 16-30)
-- `src/app/[locale]/(landing)/team/page.tsx` (lines 15-30)
+Remove the inline `<header>` blocks AND page-specific ambient elements (grain/orb divs that use different class names from the Home page) from:
+- `src/app/[locale]/(landing)/contact/page.tsx` — remove header (lines 17-30) AND `<div className="grain" />`, `<div className="orb orb-left" />`, `<div className="orb orb-right" />` (lines 13-15)
+- `src/app/[locale]/(landing)/results/page.tsx` — remove header (lines 16-30) AND grain/orb divs (lines 13-15)
+- `src/app/[locale]/(landing)/team/page.tsx` — remove header (lines 15-30) AND `<div className="noise" />` (line 14)
 
 - [ ] **Step 8: Add CSS for shared header/footer**
 
@@ -674,7 +690,9 @@ export function WhyUsAccordion({ traits, variant = 'detailed' }: WhyUsAccordionP
 
 - [ ] **Step 2: Create pricing-cards.tsx**
 
-Server component (no interactivity needed):
+**Note:** The existing Home page wraps the popular tier's CTA in `<MagneticButton>` (GSAP client component). The new PricingCards component is a server component and cannot use MagneticButton directly. The popular tier CTA will use a regular link with CSS hover effects instead. This is an intentional simplification — MagneticButton can be re-added later by wrapping PricingCards in a client component if desired.
+
+Server component:
 
 ```typescript
 import { Link } from '@/i18n/routing';
@@ -903,6 +921,10 @@ Replace the two CTA buttons:
 
 Update badge text: "Strategic admissions counsel" stays.
 
+- [ ] **Step 2b: Update Services bento grid**
+
+In the Services section (`#services`), add services noted in feedback. The existing 6 cards cover School List Architecture, Major-Fit Positioning, Narrative Strategy, Execution Management, Budget & Aid, Family Decisions. Per spec §2.3, add coverage for **CV preparation, essays, and interview prep**. These can be added as additional detail to existing cards (e.g., expand "Narrative Strategy" to mention CV and essays, expand "Execution Management" to mention interview prep) rather than adding new cards — keeping the 6-card bento layout.
+
 - [ ] **Step 3: Add Who We Are section after metrics**
 
 Insert new section after `{/* ─── METRICS ─── */}`:
@@ -1103,17 +1125,17 @@ Import `COUNSELORS`, `OPERATING_PRINCIPLES`, `GLOBAL_REGIONS` from `@/lib/landin
 
 - [ ] **Step 2: Convert team/page.tsx to redirect**
 
-Replace entire `team/page.tsx` with:
+Replace entire `team/page.tsx` with a locale-aware redirect:
 
 ```typescript
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/routing';
 
 export default function TeamRedirect() {
   redirect('/counselors');
 }
 ```
 
-Note: The middleware 301 redirect handles the primary case. This Next.js redirect is a fallback for any edge case where middleware doesn't catch it.
+Note: Use `redirect` from `@/i18n/routing` (not `next/navigation`) to preserve the locale prefix. The middleware 301 redirect handles the primary case; this is a fallback.
 
 - [ ] **Step 3: Verify and commit**
 
@@ -1222,7 +1244,7 @@ export const inquirySchema = z.object({
   targetCountries: z.string().max(500).optional().default(''),
   budgetRange: z.string().max(100).optional().default(''),
   supportNeeded: z.string().max(100).optional().default(''),
-  neuralEngineReport: z.string().url().optional().or(z.literal('')).default(''),
+  neuralEngineReport: z.string().max(2000).optional().default(''), // Vercel Blob URL or empty
   notes: z.string().max(2000).optional().default(''),
   honeypot: z.string().max(0, 'Bot detected').optional().default(''),
 });
@@ -1327,7 +1349,37 @@ Create `src/app/[locale]/(landing)/contact/_components/contact-form.tsx` — han
 
 - [ ] **Step 3: Add file upload route for Vercel Blob**
 
-Create `src/app/api/upload/route.ts` using `@vercel/blob`'s `handleUpload` for client uploads. This is a thin wrapper that generates upload tokens.
+Create `src/app/api/upload/route.ts`. This is a public route (no auth) that handles client-side uploads. Requires `BLOB_READ_WRITE_TOKEN` in `.env.local` (run `vercel env pull` if missing):
+
+```typescript
+// src/app/api/upload/route.ts
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request): Promise<NextResponse> {
+  const body = (await request.json()) as HandleUploadBody;
+
+  try {
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: ['application/pdf', 'image/png', 'image/jpeg'],
+        maximumSizeInBytes: 10 * 1024 * 1024, // 10MB max
+      }),
+      onUploadCompleted: async () => {
+        // No-op — the URL is returned to the client which submits it with the form
+      },
+    });
+    return NextResponse.json(jsonResponse);
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 400 },
+    );
+  }
+}
+```
 
 - [ ] **Step 4: Update metadata**
 
@@ -1417,6 +1469,7 @@ Port the Express `/analyze` endpoint to `src/app/api/neural-engine/route.ts`:
 - Copy prompt logic from `admission-atlas-landing/lib/prompts.js`
 - Use OpenAI GPT-4o-mini
 - Return JSON with match %, scores, alternatives, next steps
+- **Add mock fallback**: If `OPENAI_API_KEY` is not set, return a mock response (copy `buildMockResponse` from `admission-atlas-landing/lib/utils.js`) with a `mock: true` flag in the response. This matches the existing pattern in `app/api/analyze/route.ts` and allows dev testing without an API key.
 
 - [ ] **Step 3: Create Neural Engine page**
 
@@ -1442,89 +1495,23 @@ git commit -m "feat: port Neural Engine — public API with dedicated rate limit
 
 ---
 
-## Task 13: i18n — Landing Namespace
+## Task 13: i18n — Verification
 
-**Files:**
-- Modify: `messages/en.json`
-- Modify: `messages/zh.json`
+**Note:** The landing namespace in `messages/en.json` and `messages/zh.json` was already added in Task 3 Step 3b. The `LandingHeader` and `LandingFooter` already use `getTranslations('landing')` from Task 3. This task is verification only.
 
-- [ ] **Step 1: Add landing namespace to en.json**
+- [ ] **Step 1: Verify language switching works**
 
-Add a `"landing"` key to `messages/en.json` with all strings used in shared components (header nav labels, footer text, common button labels). Page-specific strings remain hardcoded for now — this is the Phase 1 incremental approach.
+Visit `/en`, click language switcher → should navigate to `/zh` with Chinese nav/footer text (关于我们, 顾问团队, etc.).
 
-```json
-{
-  "landing": {
-    "nav": {
-      "aboutUs": "About Us",
-      "collegeAdmissions": "College Admissions",
-      "counselors": "Counselors",
-      "results": "Results",
-      "contact": "Contact",
-      "portal": "SAJU Portal",
-      "engine": "SAJU Engine",
-      "bookCall": "Book a Call",
-      "login": "Log in"
-    },
-    "footer": {
-      "tagline": "Strategic admissions counsel.",
-      "contact": "Contact",
-      "followUs": "Follow Us"
-    },
-    "langSwitch": {
-      "label": "Switch language"
-    }
-  }
-}
-```
+- [ ] **Step 2: Verify ZH locale on all pages**
 
-- [ ] **Step 2: Add empty landing namespace to zh.json**
+Check `/zh`, `/zh/about`, `/zh/college-admissions`, `/zh/counselors`, `/zh/results`, `/zh/contact`, `/zh/neural-engine` — all should load with Chinese header/footer.
 
-Same structure with Chinese translations:
-
-```json
-{
-  "landing": {
-    "nav": {
-      "aboutUs": "关于我们",
-      "collegeAdmissions": "大学申请",
-      "counselors": "顾问团队",
-      "results": "成果展示",
-      "contact": "联系我们",
-      "portal": "SAJU门户",
-      "engine": "SAJU引擎",
-      "bookCall": "预约咨询",
-      "login": "登录"
-    },
-    "footer": {
-      "tagline": "专业升学战略咨询。",
-      "contact": "联系方式",
-      "followUs": "关注我们"
-    },
-    "langSwitch": {
-      "label": "切换语言"
-    }
-  }
-}
-```
-
-- [ ] **Step 3: Update LandingHeader and LandingFooter to use translations**
-
-In `landing-header.tsx`, add `useTranslations('landing')` and replace hardcoded nav labels with `t('nav.aboutUs')`, etc.
-
-In `landing-footer.tsx`, use `getTranslations('landing')` (server component) for footer text.
-
-- [ ] **Step 4: Verify language switching works**
-
-Visit `/en`, click language switcher → should navigate to `/zh` with Chinese nav/footer text.
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Commit (if any fixes needed)**
 
 ```bash
-git add messages/en.json messages/zh.json \
-       "src/app/[locale]/(landing)/_components/landing-header.tsx" \
-       "src/app/[locale]/(landing)/_components/landing-footer.tsx"
-git commit -m "feat: add i18n landing namespace — EN/ZH header and footer translations"
+git add messages/en.json messages/zh.json
+git commit -m "fix: i18n landing namespace corrections"
 ```
 
 ---
