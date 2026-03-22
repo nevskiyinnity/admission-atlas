@@ -42,6 +42,11 @@ Update `src/middleware.ts`:
 - Replace `/team` with `/counselors` in `publicPages`
 - Update Clerk `isPublicRoute` matcher regex to include new routes: `'/(en|zh)/(about|college-admissions|counselors|results|contact|neural-engine)(.*)'`
 - Add permanent redirect: `/[locale]/team` → `/[locale]/counselors` (301)
+- **Fix authenticated-user redirect:** The current middleware redirects ALL authenticated users on ANY `publicPages` route to their dashboard. This must be scoped to auth-only pages. Introduce a separate `authOnlyPages` list (`['/login', '/forgot-password']`) for the redirect-if-authenticated logic. Authenticated users must be able to visit landing pages (`/about`, `/counselors`, `/neural-engine`, etc.) without being bounced to their dashboard.
+
+### Layout Updates (`(landing)/layout.tsx`)
+
+- The `noscript` fallback block (lines ~55-65) hardcodes CSS class names (`.h-hero`, `.h-hero-orb`, `.h-metrics`, `.h-sect`, `.h-dark-sect`, `.h-callout`, `.h-final`). When sections are reordered or new sections are added, this block must be kept in sync with the updated class names.
 
 ### i18n
 
@@ -303,7 +308,7 @@ Port the Neural Match Engine from the `admission-atlas-landing` repo into this N
   - **No `requireAuth()`** — this is a free tool, no sign-up required
   - The existing `app/api/analyze/route.ts` (authenticated) remains unchanged for portal use
 - Keep the OpenAI GPT-4o-mini integration for analysis
-- **Rate limiting:** Apply route-level rate limiting of 10 req/min per IP (in addition to the global middleware's 20 POST/min cap). Use a simple in-memory rate limiter or the existing rate-limit utility.
+- **Rate limiting:** The existing `isRateLimited` utility ignores the `maxRequests` parameter when Upstash Redis is configured (hardcoded `slidingWindow(100, "60 s")`). Create a separate named Upstash limiter instance keyed as `neural-engine:<ip>` with `slidingWindow(10, "60 s")` for the 10 req/min limit. Fallback to in-memory limiter in dev.
 - Keep the existing form fields: student profile, grades, major, location, budget, target school
 - Output: match %, category scores, strengths/concerns, alternatives, next steps
 - CSRF: The existing middleware enforces origin validation on POST to `/api/*` — the new route inherits this automatically
@@ -344,6 +349,7 @@ model InquirySubmission {
 - Path: `app/api/inquiries/route.ts`
 - Method: `POST` (public — no `requireAuth()`)
 - Validation: Zod schema validating all 14 fields (studentFullName and parentEmail required, rest optional)
+- **Spam protection:** Add a honeypot field (hidden input, reject if filled) since the endpoint is public with no auth and CSRF bypasses non-browser requests. The global 20 POST/min rate limit provides additional protection.
 - File upload: Client-side upload to Vercel Blob using `@vercel/blob` client upload pattern, then submit the returned URL with the form data. Requires `BLOB_READ_WRITE_TOKEN` env var.
 - CSRF: Inherits origin validation from existing middleware
 - Response: `{ success: true, message: "..." }` on success
