@@ -1424,3 +1424,648 @@
         margin-top: 40px;
     }
 }
+
+/* ═══════════════════════════════════════════════
+   SHARED UI COMPONENTS
+   WhyUsAccordion, PricingCards, ReviewsCarousel,
+   CounselorCard, FAQSection, CaseStudyCard
+   ═══════════════════════════════════════════════ */
+
+/* ─── WHY US ACCORDION ─── */
+.landing-scope .why-us-accordion {
+    display: grid;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.landing-scope .why-us-accordion--detailed {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+    max-width: 1100px;
+}
+
+.landing-scope .why-us-accordion--compact {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+}
+
+.landing-scope .why-us-item {
+    border-bottom: 1px solid var(--border);
+}
+
+.landing-scope .why-us-trigger {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 20px 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color var(--transition);
+}
+
+.landing-scope .why-us-trigger:hover {
+    color: var(--brand);
+}
+
+.landing-scope .why-us-num {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    min-width: 28px;
+    flex-shrink: 0;
+}
+
+.landing-scope .why-us-title {
+    flex: 1;
+}
+
+.landing-scope .why-us-chevron {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--ink-muted);
+    border-bottom: 2px solid var(--ink-muted);
+    transform: rotate(45deg);
+    transition: transform 220ms var(--transition);
+    flex-shrink: 0;
+}
+
+.landing-scope .why-us-item--open .why-us-chevron {
+    transform: rotate(-135deg);
+}
+
+.landing-scope .why-us-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                padding 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0 4px 0 44px;
+}
+
+.landing-scope .why-us-body--open {
+    max-height: 200px;
+    padding: 0 4px 20px 44px;
+}
+
+.landing-scope .why-us-body p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+/* ─── PRICING CARDS ─── */
+.landing-scope .pricing-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.landing-scope .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.landing-scope .pricing-card--popular {
+    border-color: var(--brand);
+    border-width: 2px;
+    box-shadow: var(--shadow);
+    transform: scale(1.03);
+}
+
+.landing-scope .pricing-card--popular:hover {
+    transform: scale(1.03) translateY(-4px);
+}
+
+.landing-scope .pricing-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brand);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 5px 16px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.landing-scope .pricing-tier {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+}
+
+.landing-scope .pricing-card h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.35rem;
+    margin: 0;
+    color: var(--ink);
+}
+
+.landing-scope .pricing-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.landing-scope .pricing-card li {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.landing-scope .pricing-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--brand);
+    font-weight: 700;
+}
+
+.landing-scope .pricing-btn-primary {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 12px 24px;
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: auto;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .pricing-btn-primary:hover {
+    background: var(--brand-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(11, 53, 83, 0.2);
+}
+
+.landing-scope .pricing-btn-outline {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 11px 24px;
+    background: transparent;
+    color: var(--brand);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    margin-top: auto;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.landing-scope .pricing-btn-outline:hover {
+    background: var(--surface-soft);
+    border-color: var(--brand);
+    color: var(--brand-deep);
+}
+
+/* ─── REVIEWS CAROUSEL ─── */
+.landing-scope .reviews-carousel {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 0 24px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.landing-scope .reviews-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+
+.landing-scope .reviews-carousel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.landing-scope .reviews-carousel::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.landing-scope .review-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.landing-scope .review-stars {
+    color: #D4A843;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.landing-scope .review-text {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink);
+    flex: 1;
+}
+
+.landing-scope .review-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+}
+
+.landing-scope .review-meta strong {
+    color: var(--ink);
+}
+
+.landing-scope .review-meta span {
+    color: var(--ink-muted);
+}
+
+/* ─── COUNSELOR CARD ─── */
+.landing-scope .counselor-card {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: box-shadow var(--transition);
+}
+
+.landing-scope .counselor-card:hover {
+    box-shadow: var(--shadow);
+}
+
+.landing-scope .counselor-media {
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--surface-soft);
+}
+
+.landing-scope .counselor-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.landing-scope .counselor-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.landing-scope .counselor-video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(15, 25, 35, 0.55);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: default;
+}
+
+.landing-scope .play-icon {
+    font-size: 2rem;
+    opacity: 0.85;
+}
+
+.landing-scope .counselor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+.landing-scope .counselor-info h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--ink);
+}
+
+.landing-scope .counselor-title {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0;
+}
+
+.landing-scope .counselor-desc {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink-muted);
+    margin: 0;
+}
+
+.landing-scope .counselor-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.landing-scope .counselor-tag {
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+/* ─── FAQ SECTION ─── */
+.landing-scope .faq-section {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.landing-scope .faq-section h2 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 0 0 32px;
+    color: var(--ink);
+}
+
+.landing-scope .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.landing-scope .faq-item {
+    border-bottom: 1px solid var(--border);
+}
+
+.landing-scope .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--transition);
+}
+
+.landing-scope .faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.landing-scope .faq-item summary::after {
+    content: '+';
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+    margin-left: 16px;
+    transition: transform 200ms ease;
+}
+
+.landing-scope .faq-item[open] summary::after {
+    content: '−';
+}
+
+.landing-scope .faq-item summary:hover {
+    color: var(--brand);
+}
+
+.landing-scope .faq-answer {
+    padding: 0 4px 20px;
+}
+
+.landing-scope .faq-answer p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--ink-muted);
+}
+
+/* ─── CASE STUDY CARD ─── */
+.landing-scope .case-study-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .case-study-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.landing-scope .case-study-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.landing-scope .case-study-profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.landing-scope .case-study-profile img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.landing-scope .case-study-profile h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.15rem;
+    margin: 0;
+    color: var(--ink);
+}
+
+.landing-scope .case-study-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.landing-scope .badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.landing-scope .badge--challenges {
+    background: rgba(178, 107, 47, 0.1);
+    color: var(--accent);
+}
+
+.landing-scope .badge--result {
+    background: rgba(17, 74, 114, 0.1);
+    color: var(--brand);
+}
+
+.landing-scope .case-study-challenges {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.landing-scope .case-study-challenges li {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.landing-scope .case-study-challenges li::before {
+    content: '•';
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.landing-scope .case-study-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--ink);
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.landing-scope .case-study-details strong {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.landing-scope .case-study-outcome {
+    margin-top: 6px;
+    padding: 12px 16px;
+    background: rgba(17, 74, 114, 0.06);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    color: var(--brand-deep);
+}
+
+/* ─── SHARED COMPONENT RESPONSIVE ─── */
+@media (max-width: 900px) {
+    .landing-scope .why-us-accordion--detailed {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .pricing-cards {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
+
+    .landing-scope .pricing-card--popular {
+        transform: none;
+    }
+
+    .landing-scope .pricing-card--popular:hover {
+        transform: translateY(-4px);
+    }
+
+    .landing-scope .counselor-card {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-scope .counselor-media {
+        aspect-ratio: 16 / 9;
+        max-height: 280px;
+    }
+
+    .landing-scope .review-card {
+        flex: 0 0 280px;
+    }
+
+    .landing-scope .case-study-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
