@@ -2295,3 +2295,133 @@
         align-items: flex-start;
     }
 }
+
+/* ─────────────────────────────────────────
+   ABOUT PAGE
+   ───────────────────────────────────────── */
+
+/* ── Hero (image-only) ── */
+.landing-scope .about-hero {
+    width: 100%;
+    min-height: 400px;
+    background: url('/images/about/hero.jpg') center / cover no-repeat;
+    background-color: var(--surface-soft);
+    border-bottom: 1px solid var(--border);
+}
+
+/* ── Origin Story (two-column) ── */
+.landing-scope .about-story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+}
+
+.landing-scope .about-story-text h2 {
+    font-family: var(--font-display, 'Instrument Serif', Georgia, serif);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    line-height: 1.2;
+    margin: 8px 0 24px;
+    color: var(--ink);
+}
+
+.landing-scope .about-story-text p {
+    color: var(--ink-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+    margin: 0 0 16px;
+}
+
+.landing-scope .about-story-text p:last-child {
+    margin-bottom: 0;
+}
+
+.landing-scope .about-story-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    background: url('/images/about/story.jpg') center / cover no-repeat;
+    background-color: var(--surface-soft);
+    border: 1px solid var(--border);
+}
+
+/* ── Leadership ── */
+.landing-scope .section-subtitle {
+    max-width: 640px;
+    margin: 12px auto 0;
+    color: var(--ink-muted);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    text-align: center;
+}
+
+.landing-scope .about-leadership-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+}
+
+.landing-scope .about-leader-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.landing-scope .about-leader-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.landing-scope .about-leader-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: var(--surface-soft);
+    background-size: cover;
+    background-position: center;
+}
+
+.landing-scope .about-leader-info {
+    padding: 20px 24px;
+    text-align: center;
+}
+
+.landing-scope .about-leader-info h3 {
+    font-family: var(--font-display, 'Instrument Serif', Georgia, serif);
+    font-size: 1.2rem;
+    margin: 0 0 4px;
+    color: var(--ink);
+}
+
+.landing-scope .about-leader-role {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    margin: 0;
+}
+
+/* ── About Page — Responsive ── */
+@media (max-width: 768px) {
+    .landing-scope .about-hero {
+        min-height: 260px;
+    }
+
+    .landing-scope .about-story {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .landing-scope .about-story-placeholder {
+        aspect-ratio: 16 / 9;
+    }
+
+    .landing-scope .about-leadership-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
