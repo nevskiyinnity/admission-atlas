@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { SmoothScrollProvider } from './_components/smooth-scroll-provider';
 import { AnimatedSection } from './_components/animated-section';
 import { HeroEntrance } from './_components/hero-entrance';
 import { ScrollProgressBar } from './_components/scroll-progress-bar';
 import { MagneticButton } from './_components/magnetic-button';
 import { TiltCard } from './_components/tilt-card';
+import { ReviewsCarousel } from './_components/reviews-carousel';
+import { PricingCards } from './_components/pricing-cards';
+import { FAQSection } from './_components/faq-section';
+import { REVIEWS, PRICING_TIERS, HOME_FAQ } from '@/lib/landing-data';
 
 export const metadata: Metadata = {
-  title: 'Admission Atlas | Strategic University Admissions Counseling',
+  title: 'SAJU 双岸教育 | Strategic University Admissions Counseling',
   description:
-    'Admission Atlas helps students and families build a defensible admissions strategy — school list architecture, major-fit positioning, essay direction, and budget-aware execution from start to submission.',
+    'SAJU helps students and families build a defensible admissions strategy — school list architecture, major-fit positioning, essay direction, and budget-aware execution.',
 };
 
 export default function LandingHomePage() {
@@ -40,15 +44,15 @@ export default function LandingHomePage() {
               <div className="h-hero-actions">
                 <MagneticButton>
                   <Link className="h-btn-primary" href="/contact">
-                    Start Your Strategy
+                    Talk to an Expert
                     <span className="h-btn-arrow" aria-hidden="true">
                       &rarr;
                     </span>
                   </Link>
                 </MagneticButton>
-                <a className="h-btn-ghost" href="#services">
-                  See the Process
-                </a>
+                <Link className="h-btn-ghost" href="/neural-engine">
+                  University Match Engine
+                </Link>
               </div>
             </section>
           </HeroEntrance>
@@ -72,6 +76,23 @@ export default function LandingHomePage() {
                 <strong>100%</strong>
                 <span>Cost-Integrated</span>
               </div>
+            </section>
+          </AnimatedSection>
+
+          {/* ─── WHO WE ARE ─── */}
+          <AnimatedSection>
+            <section className="h-sect h-who-we-are">
+              <div className="h-sect-head">
+                <span className="h-kicker">Who We Are</span>
+                <h2>The World&apos;s Premier College Consultants</h2>
+              </div>
+              <p className="h-sect-sub">
+                SAJU combines admissions strategists, essay specialists, and student-success
+                advisors who deliver structured, data-driven guidance from start to submission.
+              </p>
+              <Link className="h-btn-outline" href="/counselors">
+                Meet Our Counselors
+              </Link>
             </section>
           </AnimatedSection>
 
@@ -122,7 +143,8 @@ export default function LandingHomePage() {
                     <span className="h-bento-num">03</span>
                     <h3>Narrative Strategy</h3>
                     <p>
-                      Essays that demonstrate direction and depth — not platitudes.
+                      CV preparation, personal statements, and supplemental essays
+                      that demonstrate direction and depth — not platitudes.
                     </p>
                   </article>
                 </TiltCard>
@@ -131,8 +153,8 @@ export default function LandingHomePage() {
                     <span className="h-bento-num">04</span>
                     <h3>Execution Management</h3>
                     <p>
-                      Deadlines, drafts, and revision cycles on a single visible
-                      timeline.
+                      Deadlines, drafts, revision cycles, and interview preparation
+                      on a single visible timeline.
                     </p>
                   </article>
                 </TiltCard>
@@ -207,21 +229,59 @@ export default function LandingHomePage() {
                     under deadline.
                   </p>
                 </article>
+                <article className="h-tl-step">
+                  <div className="h-tl-dot" />
+                  <span className="h-tl-label">05</span>
+                  <h3>Phases &amp; Initial Consultation</h3>
+                  <p>
+                    Begin with Neural Engine assessment and initial consultation to map your
+                    personalized phase-by-phase plan.
+                  </p>
+                </article>
+              </div>
+              <div className="h-timeline-cta">
+                <Link className="h-btn-outline" href="/college-admissions">
+                  Learn More
+                </Link>
               </div>
             </section>
           </AnimatedSection>
 
-          {/* ─── OUTCOMES (alternating dark) ─── */}
+          {/* ─── AI ENGINE CALLOUT ─── */}
           <AnimatedSection>
-            <section id="outcomes" className="h-dark-sect">
+            <section className="h-callout">
+              <div className="h-callout-inner">
+                <span className="h-kicker h-kicker--light">Free Tool</span>
+                <h2>Neural Match Engine</h2>
+                <p>
+                  Input your profile, target school, and budget. Our AI scores
+                  your fit and suggests alternatives worldwide — instant, no
+                  sign-up.
+                </p>
+                <Link className="h-btn-light" href="/neural-engine">
+                  Launch the Engine
+                  <span className="h-btn-arrow" aria-hidden="true">
+                    &rarr;
+                  </span>
+                </Link>
+              </div>
+            </section>
+          </AnimatedSection>
+
+          {/* ─── OUTCOMES (teal/green dark) ─── */}
+          <AnimatedSection>
+            <section id="outcomes" className="h-dark-sect h-dark-sect--teal">
               <div className="h-dark-inner">
                 <div className="h-dark-grain" aria-hidden="true" />
                 <div className="h-dark-glow h-dark-glow--1" aria-hidden="true" />
                 <div className="h-dark-glow h-dark-glow--2" aria-hidden="true" />
                 <span className="h-kicker h-kicker--light">
-                  What Structure Changes
+                  Our Impact
                 </span>
                 <h2>When the process is rigorous</h2>
+                <p className="h-dark-sub">
+                  Main student improvements compared to applying by themselves
+                </p>
                 <div className="h-outcomes">
                   <article className="h-outcome">
                     <span className="h-outcome-icon" aria-hidden="true">
@@ -268,6 +328,22 @@ export default function LandingHomePage() {
             </section>
           </AnimatedSection>
 
+          {/* ─── REVIEWS ─── */}
+          <AnimatedSection>
+            <section className="h-sect h-reviews-sect">
+              <div className="h-sect-head">
+                <span className="h-kicker">Testimonials</span>
+                <h2>Our students are at the heart of everything we do.</h2>
+              </div>
+              <ReviewsCarousel reviews={REVIEWS} />
+              <div className="h-reviews-cta">
+                <Link className="h-btn-outline" href="/results">
+                  More Details
+                </Link>
+              </div>
+            </section>
+          </AnimatedSection>
+
           {/* ─── PRICING ─── */}
           <AnimatedSection>
             <section className="h-sect">
@@ -278,71 +354,7 @@ export default function LandingHomePage() {
                   <rect x="6" y="6" width="12" height="12" transform="rotate(45 12 12)" fill="none" stroke="currentColor" strokeWidth="1"/>
                 </svg>
               </div>
-              <div className="h-plans">
-                <article className="h-plan-card">
-                  <span className="h-plan-tier">Foundation</span>
-                  <h3>Strategy Build</h3>
-                  <ul>
-                    <li>Initial profile diagnostic</li>
-                    <li>School list architecture</li>
-                    <li>Budget-fit planning</li>
-                    <li>Strategy roadmap</li>
-                  </ul>
-                  <Link className="h-btn-outline" href="/contact">
-                    Request Details
-                  </Link>
-                </article>
-                <article className="h-plan-card h-plan-card--pop">
-                  <div className="h-plan-badge">Most Popular</div>
-                  <span className="h-plan-tier">Comprehensive</span>
-                  <h3>Full Guidance</h3>
-                  <ul>
-                    <li>Everything in Foundation</li>
-                    <li>Essay &amp; narrative direction</li>
-                    <li>Application review cycles</li>
-                    <li>Submission quality control</li>
-                  </ul>
-                  <MagneticButton>
-                    <Link className="h-btn-primary" href="/contact">
-                      Book Consultation
-                    </Link>
-                  </MagneticButton>
-                </article>
-                <article className="h-plan-card">
-                  <span className="h-plan-tier">Intensive</span>
-                  <h3>Premium Mentorship</h3>
-                  <ul>
-                    <li>Everything in Full Guidance</li>
-                    <li>High-frequency advisor sessions</li>
-                    <li>Advanced scholarship strategy</li>
-                    <li>Interview prep &amp; final polish</li>
-                  </ul>
-                  <Link className="h-btn-outline" href="/contact">
-                    Request Details
-                  </Link>
-                </article>
-              </div>
-            </section>
-          </AnimatedSection>
-
-          {/* ─── AI ENGINE CALLOUT ─── */}
-          <AnimatedSection>
-            <section className="h-callout">
-              <div className="h-callout-inner">
-                <span className="h-kicker h-kicker--light">Free Tool</span>
-                <h2>Neural Match Engine</h2>
-                <p>
-                  Input your profile, target school, and budget. Our AI scores
-                  your fit and suggests alternatives worldwide — instant, no
-                  sign-up.
-                </p>
-                <a className="h-btn-light" href="/neural-engine">
-                  Launch the Engine
-                  <span className="h-btn-arrow" aria-hidden="true">
-                    &rarr;
-                  </span>
-                </a>
-              </div>
+              <PricingCards tiers={PRICING_TIERS} />
             </section>
           </AnimatedSection>
 
@@ -351,81 +363,8 @@ export default function LandingHomePage() {
             <section className="h-sect">
               <div className="h-sect-head">
                 <span className="h-kicker">FAQ</span>
-                <h2>Common questions, direct answers</h2>
-                <svg className="h-accent h-accent--ring h-accent--br" viewBox="0 0 32 32" aria-hidden="true">
-                  <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="1"/>
-                </svg>
               </div>
-              <div className="h-faq">
-                <div className="h-faq-item">
-                  <details className="h-faq-toggle">
-                    <summary aria-controls="faq-answer-1">
-                      Do you support students applying outside the US?
-                      <span className="h-faq-chevron" aria-hidden="true" />
-                    </summary>
-                  </details>
-                  <div className="h-faq-body" id="faq-answer-1" aria-hidden="true">
-                    <div className="h-faq-body-inner">
-                      <p>
-                        Yes. We support applications to the US, UK, Canada, Europe,
-                        Singapore, Australia, and more. Cross-region strategies are one
-                        of our strongest areas.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-faq-item">
-                  <details className="h-faq-toggle">
-                    <summary aria-controls="faq-answer-2">
-                      When is the best time to start?
-                      <span className="h-faq-chevron" aria-hidden="true" />
-                    </summary>
-                  </details>
-                  <div className="h-faq-body" id="faq-answer-2" aria-hidden="true">
-                    <div className="h-faq-body-inner">
-                      <p>
-                        Earlier is better. Starting in sophomore or junior year means
-                        activities, rigor, and narrative can compound over time — but we
-                        regularly work with seniors on tight timelines too.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-faq-item">
-                  <details className="h-faq-toggle">
-                    <summary aria-controls="faq-answer-3">
-                      Is affordability factored into your recommendations?
-                      <span className="h-faq-chevron" aria-hidden="true" />
-                    </summary>
-                  </details>
-                  <div className="h-faq-body" id="faq-answer-3" aria-hidden="true">
-                    <div className="h-faq-body-inner">
-                      <p>
-                        Always. Budget and aid constraints are built into strategy from
-                        Day 1, not bolted on as an afterthought. We won&apos;t recommend
-                        schools you can&apos;t realistically attend.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-faq-item">
-                  <details className="h-faq-toggle">
-                    <summary aria-controls="faq-answer-4">
-                      What makes this different from other college counselors?
-                      <span className="h-faq-chevron" aria-hidden="true" />
-                    </summary>
-                  </details>
-                  <div className="h-faq-body" id="faq-answer-4" aria-hidden="true">
-                    <div className="h-faq-body-inner">
-                      <p>
-                        We use a structured, milestone-based system — not vague pep
-                        talks. Every engagement has clear deliverables, timelines, and
-                        quality gates.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <FAQSection heading="Common questions, direct answers" items={HOME_FAQ} />
             </section>
           </AnimatedSection>
 
@@ -433,9 +372,9 @@ export default function LandingHomePage() {
           <AnimatedSection>
             <section className="h-final">
               <div className="h-final-glow" aria-hidden="true" />
-              <h2>Ready to build yours?</h2>
+              <h2>Ready to build your strategy?</h2>
               <p>
-                Share your profile, target majors, and budget range. We&apos;ll
+                Share your profile, target majors, and budget range. SAJU will
                 map the strongest path for your application cycle.
               </p>
               <MagneticButton>
