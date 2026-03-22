@@ -22,9 +22,9 @@ Extract header and footer from `page.tsx` into dedicated components used across 
 ### Header (`LandingHeader`)
 
 - Logo: 双岸教育 (links to `/`)
-- Nav links: About Us (`/about`), College Admissions (`/college-admissions`), Counselors (`/counselors`), Results (`/results`), Contact (`/contact`), SAJU Portal (links to `/login` or dashboard)
+- Nav links: About Us (`/about`), College Admissions (`/college-admissions`), Counselors (`/counselors`), Results (`/results`), Contact (`/contact`), SAJU Portal (static link to `/login` — Clerk middleware already redirects authenticated users to their dashboard)
 - Right side: "SAJU Engine" button (ghost/light → `/neural-engine`) + "Book a Call" button (filled/dark → `/contact`)
-- Language switcher: EN/ZH toggle (uses existing `next-intl`)
+- Language switcher: EN/ZH toggle using `useRouter` and `usePathname` from `@/i18n/routing` (next-intl's locale-aware navigation)
 - Mobile: hamburger menu
 
 ### Footer (`LandingFooter`)
@@ -32,12 +32,23 @@ Extract header and footer from `page.tsx` into dedicated components used across 
 - Brand: 双岸教育
 - Contact info: email (info@shuanganjiayu.com), tel, WeChat Official Account ID, XiaoHongShu ID, address (No.6 Haidian Zhongjie, Haidian District, Beijing 100080 PRC), hours (Mon–Fri 9am–6pm ET)
 - Social links: **WeChat + XiaoHongShu only**
-- Nav links: Team, Results, Contact, Login
+- Nav links: Counselors, Results, Contact, Login
+- **Note:** Tel, WeChat ID, and XiaoHongShu ID are placeholders (`XXXXXXXXX`) — to be provided before launch
+
+### Middleware Updates
+
+Update `src/middleware.ts`:
+- Add new routes to `publicPages`: `/about`, `/college-admissions`, `/counselors`, `/neural-engine`
+- Replace `/team` with `/counselors` in `publicPages`
+- Update Clerk `isPublicRoute` matcher regex to include new routes: `'/(en|zh)/(about|college-admissions|counselors|results|contact|neural-engine)(.*)'`
+- Add permanent redirect: `/[locale]/team` → `/[locale]/counselors` (301)
 
 ### i18n
 
-- All hardcoded English strings move to `messages/en.json` and `messages/zh.json`
-- Language switcher component toggles locale in URL path (`/en/...` ↔ `/zh/...`)
+- Add a `landing` namespace to `messages/en.json` and `messages/zh.json`
+- Phase 1 (launch): All landing pages use `getTranslations('landing')` in server components and `useTranslations('landing')` in client components
+- Phase 1 delivers English copy with translation keys in place; Chinese translations populated post-launch
+- Language switcher uses `useRouter().replace()` with `{locale}` parameter from `@/i18n/routing`
 
 ### Pages
 
@@ -50,10 +61,13 @@ Extract header and footer from `page.tsx` into dedicated components used across 
 | `/results` | Major rework | Results / Case Stories |
 | `/contact` | Major rework | Contact + inquiry form |
 | `/neural-engine` | NEW (ported) | Neural Match Engine |
+| `/team` | REDIRECT | 301 redirect → `/counselors` |
 
 ---
 
 ## 2. Home Page (`/`)
+
+**CSS note:** The existing `landing-home.css` uses structural class names (`h-hero`, `h-sect`, `h-dark-sect`, `h-callout`, `h-final`). With sections reordered (Neural Engine moved up, new Who We Are section added), the CSS will need corresponding updates. Keep the class naming convention but update the styles per new section order.
 
 Sections in order:
 
@@ -152,15 +166,18 @@ Sections in order:
 ## 4. About Us Page (`/about`) — NEW
 
 ### 4.1 Hero
-- Normal image/background (NO video, NO logo)
+- Full-width background image (NO video, NO logo overlays)
+- No headline text or CTA — image-only hero section as a visual header
 
 ### 4.2 "What Makes the Difference?"
 - General intro + origin story from the perspective of someone who has been in the applicant position many times
 - Image alongside text
 
 ### 4.3 Why Us (variant)
-- Same 8 traits accordion as College Admissions page
-- **Different layout and slightly different copy** to avoid being identical
+- Same 8 traits as College Admissions page
+- **Layout difference:** single-column accordion (vs. two-column on College Admissions)
+- **Copy difference:** slightly reworded descriptions focused on company values rather than service specifics
+- Reuse same `WhyUsAccordion` component with a `variant` prop (`"detailed"` for College Admissions, `"compact"` for About Us)
 
 ### 4.4 Our Leadership
 - Mission statement: "At SAJU, our leadership team is united by the mission of..."
@@ -181,8 +198,9 @@ Sections in order:
 
 ### 5.2 Counselor Cards
 - Each counselor: embedded video + short description + tags (e.g., "Essays", "Story Design", "Supplements", "STEM Strategy", "US & Canada")
-- Video play button overlay on photo
+- Video: click-to-play with poster image overlay (NOT autoplay). Host on YouTube/Vimeo, embed via iframe. Use placeholder poster image until videos are provided.
 - Current counselors: James, Chris
+- Lazy-load video iframes (below fold) to protect LCP
 
 ### 5.3 Operating Principles
 - Heading: "Operating principles that shape every engagement"
@@ -281,11 +299,14 @@ Sections in order:
 Port the Neural Match Engine from the `admission-atlas-landing` repo into this Next.js app:
 
 - Rebuild the static HTML UI as a React component
-- Port the Express `/analyze` API endpoint as a Next.js Route Handler (`app/api/neural-engine/route.ts`)
+- Port the Express `/analyze` API endpoint as a **public** Next.js Route Handler (`app/api/neural-engine/route.ts`)
+  - **No `requireAuth()`** — this is a free tool, no sign-up required
+  - The existing `app/api/analyze/route.ts` (authenticated) remains unchanged for portal use
 - Keep the OpenAI GPT-4o-mini integration for analysis
-- Keep the rate limiting (10 req/min per IP)
+- **Rate limiting:** Apply route-level rate limiting of 10 req/min per IP (in addition to the global middleware's 20 POST/min cap). Use a simple in-memory rate limiter or the existing rate-limit utility.
 - Keep the existing form fields: student profile, grades, major, location, budget, target school
 - Output: match %, category scores, strengths/concerns, alternatives, next steps
+- CSRF: The existing middleware enforces origin validation on POST to `/api/*` — the new route inherits this automatically
 
 ---
 
@@ -313,8 +334,20 @@ model InquirySubmission {
   neuralEngineReport  String?  // Vercel Blob URL
   notes               String?
   createdAt           DateTime @default(now())
+
+  @@index([createdAt])
 }
 ```
+
+### Contact Form API Route
+
+- Path: `app/api/inquiries/route.ts`
+- Method: `POST` (public — no `requireAuth()`)
+- Validation: Zod schema validating all 14 fields (studentFullName and parentEmail required, rest optional)
+- File upload: Client-side upload to Vercel Blob using `@vercel/blob` client upload pattern, then submit the returned URL with the form data. Requires `BLOB_READ_WRITE_TOKEN` env var.
+- CSRF: Inherits origin validation from existing middleware
+- Response: `{ success: true, message: "..." }` on success
+- Admin access: Submissions visible in existing admin portal at `/(admin)/inquiries` (new admin page, out of scope for initial launch — admins can query DB directly for now)
 
 ### Reviews/Testimonials
 
