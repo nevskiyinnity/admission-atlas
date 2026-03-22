@@ -2425,3 +2425,44 @@
         margin-right: auto;
     }
 }
+
+/* ═══════════════════════════════════════════════
+   COUNSELORS PAGE
+   ═══════════════════════════════════════════════ */
+
+.landing-scope .counselors-hero-section {
+    text-align: center;
+}
+
+.landing-scope .counselors-intro {
+    max-width: 62ch;
+    margin: -8px auto 0;
+    color: var(--ink-muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    text-align: center;
+}
+
+.landing-scope .counselors-page-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.landing-scope .principles-grid-2col {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ─── COUNSELORS PAGE RESPONSIVE ─── */
+@media (max-width: 900px) {
+    .landing-scope .counselors-page-grid {
+        grid-template-columns: 1fr;
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .landing-scope .principles-grid-2col {
+        grid-template-columns: 1fr;
+    }
+}
