@@ -393,6 +393,27 @@
     "contactEmail": "邮箱",
     "contactWeChat": "微信"
   },
+  "landing": {
+    "nav": {
+      "aboutUs": "关于我们",
+      "collegeAdmissions": "大学申请",
+      "counselors": "顾问团队",
+      "results": "成果展示",
+      "contact": "联系我们",
+      "portal": "SAJU门户",
+      "engine": "SAJU引擎",
+      "bookCall": "预约咨询",
+      "login": "登录"
+    },
+    "footer": {
+      "tagline": "专业升学战略咨询。",
+      "contact": "联系方式",
+      "followUs": "关注我们"
+    },
+    "langSwitch": {
+      "label": "切换语言"
+    }
+  },
   "files": {
     "filterBySender": "发送者",
     "filterByType": "文件类型",

@@ -364,3 +364,24 @@ model Announcement {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model InquirySubmission {
+  id                  String   @id @default(cuid())
+  studentFullName     String
+  parentWeChatId      String?
+  parentPhone         String?
+  parentEmail         String
+  studentSchool       String?
+  studentGrade        String?
+  graduationYear      String?
+  grades              String?
+  intendedMajors      String?
+  targetCountries     String?
+  budgetRange         String?
+  supportNeeded       String?
+  neuralEngineReport  String?
+  notes               String?
+  createdAt           DateTime @default(now())
+
+  @@index([createdAt])
+}

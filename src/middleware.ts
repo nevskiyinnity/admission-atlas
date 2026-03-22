@@ -7,7 +7,9 @@ import { isRateLimited } from '@/lib/rate-limit';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const publicPages = ['/', '/team', '/results', '/contact', '/login', '/forgot-password'];
+const publicPages = ['/', '/about', '/college-admissions', '/counselors', '/results', '/contact', '/neural-engine', '/login', '/forgot-password'];
+
+const authOnlyPages = ['/login', '/forgot-password'];
 
 const roleRouteMap: Record<string, string[]> = {
   STUDENT: ['/student'],
@@ -39,7 +41,7 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
 
 const isPublicRoute = createRouteMatcher([
   '/(en|zh)',
-  '/(en|zh)/(team|results|contact)(.*)',
+  '/(en|zh)/(about|college-admissions|counselors|results|contact|neural-engine)(.*)',
   '/(en|zh)/login(.*)',
   '/(en|zh)/forgot-password(.*)',
   '/api/webhooks/(.*)',
@@ -103,6 +105,14 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   // Extract locale and path without locale
   const pathnameWithoutLocale = pathname.replace(/^\/(en|zh)/, '') || '/';
 
+  // Redirect legacy /team to /counselors
+  if (pathnameWithoutLocale === '/team' || pathnameWithoutLocale.startsWith('/team/')) {
+    const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
+    return applySecurityHeaders(
+      NextResponse.redirect(new URL(`/${locale}/counselors`, req.url), 301)
+    );
+  }
+
   // Check if public page (exact match for /, startsWith for others like /login/sso-callback)
   const isPublicPage = publicPages.some(
     (page) =>
@@ -113,8 +123,11 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { userId, sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as Record<string, unknown>)?.role as string | undefined;
 
-  // Authenticated user on public page (login, landing) → redirect to dashboard
-  if (isPublicPage && userId) {
+  // Authenticated user on auth-only page (login, forgot-password) → redirect to dashboard
+  const isAuthOnlyPage = authOnlyPages.some(
+    (page) => pathnameWithoutLocale === page || pathnameWithoutLocale.startsWith(page)
+  );
+  if (isAuthOnlyPage && userId) {
     const home = roleHomeMap[role || ''] || '/login';
     const locale = pathname.match(/^\/(en|zh)/)?.[1] || 'en';
     return NextResponse.redirect(new URL(`/${locale}${home}`, req.url));
