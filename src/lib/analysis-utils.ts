@@ -1,7 +1,7 @@
 // Utility functions for normalizing / mocking college analysis results.
-// Ported from admission-atlas-landing/lib/utils.js
 
 import type { AnalysisPayload } from '@/lib/prompts';
+import type { DeterministicAnalysis } from '@/lib/neural-engine/scoring';
 
 export interface CategoryScore {
   label: string;
@@ -34,121 +34,104 @@ export function clampPercent(value: unknown, fallback = 0): number {
   return Math.max(0, Math.min(100, Math.round(parsed)));
 }
 
-export function ensureStringArray(value: unknown, fallback: string[]): string[] {
-  if (!Array.isArray(value) || value.length === 0) return fallback;
-  return value
-    .map((item) => String(item || '').trim())
-    .filter(Boolean)
-    .slice(0, 6);
-}
+/**
+ * Build a mock narrative when OPENAI_API_KEY is not configured.
+ * Fully deterministic given the payload — no Math.random() anywhere.
+ */
+export function buildMockNarrative(
+  payload: AnalysisPayload,
+  det: DeterministicAnalysis,
+): {
+  strengths: string[];
+  concerns: string[];
+  nextSteps: string[];
+  alternatives: Alternative[];
+  categoryScores: CategoryScore[];
+  logs: string[];
+} {
+  const institution = det.resolvedUniversity?.name ?? payload.university;
 
-export function buildMockResponse(payload: AnalysisPayload): AnalysisResult {
-  const gpa = Number(payload.gpa || 0);
-  const majorBoost = /computer|engineering|data|science/i.test(payload.major || '') ? 3 : 0;
-  const hasGlobalExamSignals = Boolean(payload.internationalExams || payload.otherExams);
-  const base = gpa >= 3.8 ? 83 : gpa >= 3.5 ? 76 : hasGlobalExamSignals ? 74 : 68;
-  const variance = Math.floor(Math.random() * 10);
-  const targetMatchPercent = clampPercent(base + majorBoost + variance, 74);
+  // Deterministic category scores derived from deterministic inputs.
+  const base = det.targetMatchPercent;
+  const categoryScores: CategoryScore[] = [
+    { label: 'Academics',   score: clampPercent(det.academicStrength) },
+    { label: 'Activities',  score: clampPercent(det.differentiation === 'high' ? base + 8 : det.differentiation === 'medium' ? base : base - 8) },
+    { label: 'Major Fit',   score: clampPercent(base + 2) },
+    { label: 'Campus Fit',  score: clampPercent(base - 2) },
+    { label: 'Affordability', score: clampPercent(base - 6) },
+  ];
 
+  // Deterministic alternatives (European bias, no randomness).
   const alternatives: Alternative[] = [
-    { name: 'University of Toronto', country: 'Canada', matchPercent: clampPercent(targetMatchPercent + 5), why: 'Strong computing research, global employer pipeline, and broad program flexibility.' },
-    { name: 'University College London', country: 'United Kingdom', matchPercent: clampPercent(targetMatchPercent + 4), why: 'High academic rigor and strong outcomes in technology and quantitative disciplines.' },
-    { name: 'National University of Singapore', country: 'Singapore', matchPercent: clampPercent(targetMatchPercent + 3), why: 'Top-tier engineering and computing ecosystem with strong regional industry access.' },
-    { name: 'University of Melbourne', country: 'Australia', matchPercent: clampPercent(targetMatchPercent + 2), why: 'Well-rounded global degree structure with strong postgraduate pathways.' },
-    { name: 'Delft University of Technology', country: 'Netherlands', matchPercent: clampPercent(targetMatchPercent + 4), why: 'Applied STEM focus with excellent technical depth and international student support.' },
+    { name: 'University of Amsterdam', country: 'Netherlands', matchPercent: clampPercent(base + 3), why: `Strong research environment aligned with ${payload.major || 'your major'}; international-friendly academic culture.` },
+    { name: 'KU Leuven', country: 'Belgium', matchPercent: clampPercent(base + 2), why: 'Broad program catalog and notable research output — a balanced option across selectivity and cost.' },
+    { name: 'University of Edinburgh', country: 'United Kingdom', matchPercent: clampPercent(base + 1), why: 'Research-intensive environment with strong humanities–STEM integration.' },
+    { name: 'Trinity College Dublin', country: 'Ireland', matchPercent: clampPercent(base), why: 'Reputable across law, business, and technical fields; anglophone environment for international students.' },
+    { name: 'University of Bologna', country: 'Italy', matchPercent: clampPercent(base - 2), why: 'Strong Europe-wide reputation and lower cost of attendance than UK/Swiss counterparts.' },
   ];
 
   return {
-    institution: payload.university,
-    targetMatchPercent,
-    summary: `${payload.name} has a competitive profile for ${payload.major} with strongest leverage in academics and technical impact.`,
     strengths: [
-      'High-rigor coursework aligns with admissions expectations for competitive majors.',
-      'Activities demonstrate leadership plus execution, not just participation.',
-      'Narrative responses show clear career direction and outcome focus.',
+      `${payload.name}'s coursework aligns with expectations for ${payload.major || 'the intended major'}.`,
+      'Narrative responses show clear direction and career orientation.',
+      'Activities demonstrate execution alongside participation.',
     ],
     concerns: [
-      'Target institution remains highly selective even for strong applicants.',
-      'Application essays should connect accomplishments to specific campus resources and budget fit.',
+      `${institution} remains highly selective — admissions are non-linear even at this match percentage.`,
+      det.differentiation === 'low'
+        ? 'Current profile lacks differentiating signals (leadership depth, awards, initiatives).'
+        : 'Essay-specific positioning will determine how this profile is received.',
     ],
     nextSteps: [
-      'Finalize a balanced school list including reach, target, and likely options.',
-      'Tailor essays to program-specific labs, tracks, or faculty interests.',
-      'Quantify project outcomes in activities section with concrete metrics.',
-      'Prioritize scholarships and lower-cost pathways that align with budget targets.',
+      'Tailor essays to program-specific labs, faculty, or tracks.',
+      'Quantify extracurricular outcomes with concrete metrics.',
     ],
-    categoryScores: [
-      { label: 'Academics', score: clampPercent(targetMatchPercent + 2) },
-      { label: 'Activities', score: clampPercent(targetMatchPercent - 4) },
-      { label: 'Major Fit', score: clampPercent(targetMatchPercent + 3) },
-      { label: 'Campus Fit', score: clampPercent(targetMatchPercent - 2) },
-      { label: 'Affordability', score: clampPercent(targetMatchPercent - 6) },
-    ],
+    categoryScores,
     alternatives,
     logs: [
-      'Ingesting full applicant profile and narrative responses...',
-      'Scoring academic rigor against target-major expectations...',
-      'Converting SAT/ACT, A Levels, IB, and other exam formats into a normalized profile...',
-      'Applying annual budget and aid constraints to shortlist filtering...',
-      'Estimating admit competitiveness versus school selectivity...',
-      'Comparing preference signals with campus and region characteristics...',
-      'Building ranked worldwide university shortlist...',
+      `Ingesting ${payload.name}'s profile and narrative responses...`,
+      `Normalizing academic metrics (GPA, exams) into a 0–100 academic strength...`,
+      `Classifying differentiation level from activities, awards, and projects...`,
+      `Resolving target university "${payload.university}" → ${institution} (${det.targetTier})`,
+      `Applying academic cap (${det.targetTier}) and differentiation penalty...`,
+      `Computing target school match = ${det.targetMatchPercent}%`,
+      `Classifying risk (${det.risk.label}) and expectation gap (${det.expectation.case})...`,
+      'Generating fit breakdown, alternatives, and recommendations...',
     ],
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
+/**
+ * Merge LLM-generated next steps with the pinned items, de-duping by
+ * first-80-char fuzzy similarity so phrased-differently duplicates are filtered.
+ */
+export function mergeNextSteps(llmSteps: string[], pinned: string[]): string[] {
+  const norm = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
 
-export function normalizeResult(raw: unknown, payload: AnalysisPayload): AnalysisResult {
-  const obj = isRecord(raw) ? raw : {};
+  const seen = new Set<string>();
+  const result: string[] = [];
 
-  const categoryScores: unknown[] = Array.isArray(obj.categoryScores) ? obj.categoryScores : [];
-  const normalizedCategories = categoryScores
-    .map((item: unknown) => {
-      const rec = isRecord(item) ? item : {};
-      return {
-        label: String(rec.label || '').trim(),
-        score: clampPercent(rec.score, 70),
-      };
-    })
-    .filter((item) => item.label)
-    .slice(0, 6);
+  for (const step of llmSteps) {
+    const key = norm(step);
+    if (!key || seen.has(key)) continue;
+    // Skip LLM steps that clearly overlap with a pinned one.
+    const overlapsPinned = pinned.some((p) => {
+      const pKey = norm(p);
+      return key.includes(pKey.slice(0, 30)) || pKey.includes(key.slice(0, 30));
+    });
+    if (overlapsPinned) continue;
+    seen.add(key);
+    result.push(step);
+  }
 
-  const alternatives: Alternative[] = Array.isArray(obj.alternatives)
-    ? obj.alternatives
-        .map((item: unknown) => {
-          const rec = isRecord(item) ? item : {};
-          return {
-            name: String(rec.name || '').trim(),
-            country: String(rec.country || '').trim(),
-            matchPercent: clampPercent(rec.matchPercent, 70),
-            why: String(rec.why || '').trim(),
-          };
-        })
-        .filter((item: Alternative) => item.name)
-        .slice(0, 6)
-    : [];
+  for (const p of pinned) {
+    const key = norm(p);
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(p);
+    }
+  }
 
-  return {
-    institution: String(obj.institution || payload.university),
-    userTyped: String(obj.userTyped || payload.university),
-    targetMatchPercent: clampPercent(obj.targetMatchPercent ?? obj.compatibilityScore, 70),
-    summary: String(obj.summary || `${payload.name}'s profile has a moderate-to-strong fit for ${payload.university}.`),
-    strengths: ensureStringArray(obj.strengths, ['Competitive academics for the target major.']),
-    concerns: ensureStringArray(obj.concerns, ['Selective admissions uncertainty remains high.']),
-    nextSteps: ensureStringArray(obj.nextSteps, ['Strengthen application narrative with school-specific fit.']),
-    categoryScores: normalizedCategories.length
-      ? normalizedCategories
-      : [
-          { label: 'Academics', score: 78 },
-          { label: 'Activities', score: 74 },
-          { label: 'Major Fit', score: 77 },
-          { label: 'Campus Fit', score: 72 },
-          { label: 'Affordability', score: 69 },
-        ],
-    alternatives,
-    logs: ensureStringArray(obj.logs, ['Generating admissions analysis...']),
-  };
+  return result.slice(0, 6);
 }

@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createHash } from 'crypto';
 import { OpenAI } from 'openai';
 import { isNeuralEngineRateLimited } from '@/lib/neural-engine-rate-limit';
 import { analyzeProfileSchema, parseBody } from '@/lib/validations';
-import { SYSTEM_MESSAGE, buildAnalysisPrompt } from '@/lib/prompts';
-import { buildMockResponse, normalizeResult } from '@/lib/analysis-utils';
+import { buildNarrativePrompt, NARRATIVE_SYSTEM_MESSAGE } from '@/lib/prompts';
+import { analyzeDeterministic } from '@/lib/neural-engine/scoring';
+import { PINNED_NEXT_STEPS } from '@/lib/neural-engine/scoring';
+import type { AnalysisPayload } from '@/lib/prompts';
+import type { AnalysisResult, Alternative } from '@/lib/analysis-utils';
+import { buildMockNarrative, mergeNextSteps } from '@/lib/analysis-utils';
 import { logger } from '@/lib/logger';
 
 function getOpenAI() {
@@ -16,6 +21,18 @@ function getClientIp(req: NextRequest): string {
     req.headers.get('x-real-ip') ||
     '127.0.0.1'
   );
+}
+
+/**
+ * Deterministic seed derived from the canonical input. Same payload → same seed,
+ * which combined with `temperature: 0` gives OpenAI its strongest determinism
+ * guarantee short of caching.
+ */
+function deterministicSeed(payload: AnalysisPayload): number {
+  const keys = Object.keys(payload).sort();
+  const canonical = JSON.stringify(payload, keys);
+  const hash = createHash('sha256').update(canonical).digest();
+  return hash.readUInt32BE(0) & 0x7fffffff;
 }
 
 export async function POST(req: NextRequest) {
@@ -37,32 +54,71 @@ export async function POST(req: NextRequest) {
 
     const payload = parsed.data;
 
-    // Mock fallback when no real API key is configured
-    if (
-      !process.env.OPENAI_API_KEY ||
-      process.env.OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY_HERE'
-    ) {
-      return NextResponse.json({ ...buildMockResponse(payload), mock: true });
+    // 1. Deterministic engine: score, tiers, risk, expectation, summary, pinned steps
+    const deterministic = analyzeDeterministic(payload);
+
+    // 2. LLM narrative layer — generates only strengths, concerns, alternatives,
+    //    and ancillary next steps. The score + summary + risk are NOT AI outputs.
+    const hasRealKey =
+      process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'YOUR_OPENAI_API_KEY_HERE';
+
+    let narrative: {
+      strengths: string[];
+      concerns: string[];
+      nextSteps: string[];
+      alternatives: Alternative[];
+      categoryScores: { label: string; score: number }[];
+      logs: string[];
+    };
+
+    if (hasRealKey) {
+      const completion = await getOpenAI().chat.completions.create({
+        model: 'gpt-4o-mini',
+        temperature: 0,
+        seed: deterministicSeed(payload),
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: NARRATIVE_SYSTEM_MESSAGE },
+          { role: 'user', content: buildNarrativePrompt(payload, deterministic) },
+        ],
+      });
+      narrative = JSON.parse(completion.choices[0].message.content!);
+    } else {
+      narrative = buildMockNarrative(payload, deterministic);
     }
 
-    const completion = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: SYSTEM_MESSAGE },
-        { role: 'user', content: buildAnalysisPrompt(payload) },
-      ],
-    });
+    // 3. Merge: enforce pinned next steps (de-duped against LLM's list)
+    const mergedNextSteps = mergeNextSteps(narrative.nextSteps ?? [], PINNED_NEXT_STEPS);
 
-    const raw = JSON.parse(completion.choices[0].message.content!);
-    const normalized = normalizeResult(raw, payload);
+    const result: AnalysisResult & {
+      risk: { label: string; message: string };
+      expectation: { case: string; message: string };
+      disclaimer: string;
+      differentiation: string;
+      academicBand: string;
+      targetTier: string;
+      studentTier: string;
+    } = {
+      institution: deterministic.resolvedUniversity?.name ?? payload.university,
+      userTyped: payload.university,
+      targetMatchPercent: deterministic.targetMatchPercent,
+      summary: deterministic.summary,
+      strengths: Array.isArray(narrative.strengths) ? narrative.strengths.slice(0, 5) : [],
+      concerns: Array.isArray(narrative.concerns) ? narrative.concerns.slice(0, 4) : [],
+      nextSteps: mergedNextSteps,
+      categoryScores: Array.isArray(narrative.categoryScores) ? narrative.categoryScores : [],
+      alternatives: Array.isArray(narrative.alternatives) ? narrative.alternatives.slice(0, 6) : [],
+      logs: Array.isArray(narrative.logs) ? narrative.logs : [],
+      risk: deterministic.risk,
+      expectation: deterministic.expectation,
+      disclaimer: deterministic.disclaimer,
+      differentiation: deterministic.differentiation,
+      academicBand: deterministic.academicBand,
+      targetTier: deterministic.targetTier,
+      studentTier: deterministic.studentTier,
+    };
 
-    // Ensure at least mock alternatives if the AI returned none
-    if (!normalized.alternatives.length) {
-      normalized.alternatives = buildMockResponse(payload).alternatives;
-    }
-
-    return NextResponse.json(normalized);
+    return NextResponse.json({ ...result, mock: !hasRealKey });
   } catch (error) {
     logger.error('Neural engine analysis failed', error, {
       endpoint: '/api/neural-engine',

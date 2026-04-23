@@ -29,7 +29,26 @@ interface AnalysisResult {
   alternatives: Alternative[];
   logs: string[];
   mock?: boolean;
+  risk?: { label: 'safe' | 'balanced' | 'high-risk'; message: string };
+  expectation?: { case: 'below' | 'match' | 'above'; message: string };
+  disclaimer?: string;
+  differentiation?: 'low' | 'medium' | 'high';
+  academicBand?: 'low' | 'medium' | 'high';
+  targetTier?: 'top10' | 'top30' | 'top50' | 'broader';
+  studentTier?: 'top10' | 'top30' | 'top50' | 'broader';
 }
+
+const RISK_CLASS: Record<'safe' | 'balanced' | 'high-risk', string> = {
+  'safe': 'ne-risk-safe',
+  'balanced': 'ne-risk-balanced',
+  'high-risk': 'ne-risk-high',
+};
+
+const RISK_TITLE: Record<'safe' | 'balanced' | 'high-risk', string> = {
+  'safe': 'Safe option',
+  'balanced': 'Balanced option',
+  'high-risk': 'High-risk option',
+};
 
 /* ── Mock fill data ── */
 
@@ -383,9 +402,28 @@ export default function NeuralEnginePage() {
             </div>
           </div>
 
-          {/* Alternatives */}
+          {/* Risk label */}
+          {result.risk && (
+            <div className={`ne-panel ne-risk-panel ${RISK_CLASS[result.risk.label]}`}>
+              <h3>
+                <span className="ne-risk-dot" aria-hidden="true" />
+                {RISK_TITLE[result.risk.label]}
+              </h3>
+              <p>{result.risk.message}</p>
+            </div>
+          )}
+
+          {/* Expectation gap */}
+          {result.expectation && (
+            <div className="ne-panel">
+              <h3>Profile vs. Target University</h3>
+              <p>{result.expectation.message}</p>
+            </div>
+          )}
+
+          {/* Alternatives — renamed per spec §9 */}
           <div className="ne-panel">
-            <h3>Suggested Alternatives</h3>
+            <h3>Stronger Fits You May Be Overlooking</h3>
             <div className="ne-alternatives">
               {result.alternatives.map((alt) => (
                 <div key={alt.name} className="ne-alt-card">
@@ -403,6 +441,11 @@ export default function NeuralEnginePage() {
               ))}
             </div>
           </div>
+
+          {/* Disclaimer */}
+          {result.disclaimer && (
+            <p className="ne-disclaimer">{result.disclaimer}</p>
+          )}
         </section>
       )}
     </main>

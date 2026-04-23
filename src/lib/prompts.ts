@@ -1,5 +1,12 @@
 // Prompt builders for the college analysis endpoint.
-// Ported from admission-atlas-landing/lib/prompts.js
+//
+// After the deterministic scoring refactor, the LLM's job is limited to narrative
+// rendering: strengths, concerns, alternatives, category breakdown, and logs.
+// The targetMatchPercent, summary copy, risk label, and expectation-gap message
+// are all computed in code (see src/lib/neural-engine/scoring.ts) and passed to
+// the LLM as context so it can write around them coherently.
+
+import type { DeterministicAnalysis } from '@/lib/neural-engine/scoring';
 
 export interface AnalysisPayload {
   name: string;
@@ -27,82 +34,68 @@ export interface AnalysisPayload {
 
 /**
  * Sanitize a user-supplied string for safe embedding into an LLM prompt.
- * Truncates to maxLength, then JSON-escapes special characters (newlines,
- * quotes, backslashes) to prevent prompt injection.
  */
 export function sanitizeField(value: unknown, maxLength = 500): string {
   if (!value || typeof value !== 'string') return 'Not provided';
   const truncated = value.slice(0, maxLength);
-  // JSON.stringify escapes newlines, quotes, backslashes — prevents prompt injection
-  return JSON.stringify(truncated).slice(1, -1); // Remove outer quotes
+  return JSON.stringify(truncated).slice(1, -1);
 }
 
-export const SYSTEM_MESSAGE =
+export const NARRATIVE_SYSTEM_MESSAGE =
   'You are a precise JSON generator for a university admissions analysis engine. ' +
-  'You have expert-level knowledge of global universities, their acceptance rates, costs, program strengths, and admissions requirements. ' +
-  'Always resolve university names to their official form, even if the user makes typos or uses abbreviations. ' +
+  'You have expert-level knowledge of European universities, their acceptance rates, costs, program strengths, and admissions requirements. ' +
+  'The target-university match percentage, risk label, and summary sentence have already been computed deterministically — do not recalculate them. ' +
+  'Your only job is to render specific, grounded strengths, concerns, alternatives, and process logs around the numbers you are given. ' +
   'Return only valid JSON with no markdown formatting.';
 
-export function buildAnalysisPrompt(payload: AnalysisPayload): string {
+export function buildNarrativePrompt(payload: AnalysisPayload, det: DeterministicAnalysis): string {
+  const resolvedName = det.resolvedUniversity?.name ?? payload.university;
   return `
-You are an expert university admissions strategy analyst with deep knowledge of universities worldwide.
+You are an expert European university admissions strategy analyst.
 
-CRITICAL INSTRUCTIONS:
-1. FUZZY NAME RESOLUTION: The user may misspell or abbreviate the target university. You MUST infer the correct, official institution name. Examples:
-   - "stanfort" or "standford" -> "Stanford University"
-   - "MIT" -> "Massachusetts Institute of Technology"
-   - "UCL" -> "University College London"
-   - "UofM" or "umich" -> "University of Michigan"
-   - "oxbridge" -> treat as ambiguous, pick the closer match based on context
-   If you cannot confidently resolve the name, use the closest reasonable match and note the ambiguity in your summary.
+The deterministic scoring pipeline has ALREADY computed:
+- Target institution (resolved from user input): ${sanitizeField(resolvedName)}
+- Target school match: ${det.targetMatchPercent}% (do NOT change this number)
+- Target tier: ${det.targetTier}
+- Student profile tier: ${det.studentTier}
+- Academic band: ${det.academicBand}
+- Differentiation level: ${det.differentiation}
 
-2. Return a single valid JSON object (no markdown, no code fences) using this exact shape:
+Return a single valid JSON object with this exact shape:
 {
-  "institution": string,          // The OFFICIAL, corrected full name of the target university
-  "userTyped": string,            // Exactly what the user typed (preserve original input)
-  "targetMatchPercent": integer 0-100,
-  "summary": string,              // 2-3 sentences. Reference the student by name. Be specific about WHY they are or aren't a strong fit.
-  "strengths": string[],          // 3-5 items. Each must reference specific details from the student's profile.
-  "concerns": string[],           // 2-4 items. Be honest and specific. Reference actual gaps or risks.
-  "nextSteps": string[],          // 3-5 items. Concrete, actionable advice tied to this student's situation.
+  "strengths": string[],            // 3-5 items, each referencing specific profile details
+  "concerns": string[],             // 2-4 items, honest and specific
+  "nextSteps": string[],            // 2-4 additional steps — DO NOT duplicate these pinned items: "${det.pinnedNextSteps.join(' | ')}"
   "categoryScores": [{"label": string, "score": integer 0-100}],
   "alternatives": [{"name": string, "country": string, "matchPercent": integer 0-100, "why": string}],
-  "logs": string[]                // 8-12 detailed processing log entries (see below)
+  "logs": string[]
 }
 
-3. CATEGORY SCORES: Use these exact labels: Academics, Activities, Major Fit, Campus Fit, Affordability.
-   - Scores MUST be meaningfully differentiated (not all clustered around 75). A weak area should score below 60; a strong area can score above 90.
-   - Affordability must be grounded in the student's stated budget vs. the university's actual cost of attendance.
+RULES:
+1. CATEGORY SCORES: Use exactly these labels — Academics, Activities, Major Fit, Campus Fit, Affordability.
+   Differentiate meaningfully (not clustered at 75). Affordability must reflect the student's stated budget.
 
-4. ALTERNATIVES: Include 5-6 alternatives. They must NOT include the target institution.
-   - If preferredRegions is specified, weight alternatives toward those regions but include 1-2 outside.
-   - If no preferredRegions, return globally diverse alternatives from at least 3 different countries.
-   - Each alternative's "why" must explain the specific fit for THIS student (major, budget, campus preferences).
-   - matchPercent should be realistic and varied (not all within 5 points of each other).
+2. ALTERNATIVES: Suggest 5-6 European universities with match % REALISTIC vs the target (${det.targetMatchPercent}%).
+   Focus on European institutions since SAJU specializes in European admissions.
+   If preferredRegions names specific European countries, weight toward those.
+   Each "why" must explain fit for THIS specific student (budget, major, constraints).
+   Do NOT include the target institution itself.
 
-5. LOG ENTRIES: Generate 8-12 log entries that simulate a real analytical engine processing the profile. They should:
-   - Reference the student's actual name, scores, target school, and major
-   - Show progressive analysis steps (ingesting data -> normalizing scores -> evaluating fit -> comparing alternatives)
-   - Feel technical and specific, like real system output
-   - Example: "Parsing ${sanitizeField(payload.name)}'s academic profile: GPA ${sanitizeField(payload.gpa)}, standardized tests detected..."
+3. LOGS: Generate 8-12 processing log entries referencing the student's specific data — name, scores, target, major.
 
-6. ANALYSIS QUALITY:
-   - Be brutally honest. A student with a 3.2 GPA targeting Stanford should get a low match score.
-   - Consider the ACTUAL selectivity, acceptance rates, and academic standards of the target university.
-   - Budget constraints should meaningfully affect Affordability scores and alternative selection.
-   - If the student's profile has gaps (missing test scores, few activities), note this honestly.
+4. HONESTY: Concerns should reflect real gaps. Don't soften. If the student is below the bar, say so specifically.
 
 Applicant profile:
 - Name: ${sanitizeField(payload.name)}
 - Residency: ${sanitizeField(payload.residency)}
 - GPA (4.0 scale): ${sanitizeField(payload.gpa)}
 - SAT/ACT/standardized tests: ${sanitizeField(payload.sat)}
-- A Levels/IB/AP/national qualifications: ${sanitizeField(payload.internationalExams)}
+- A Levels / IB / AP / national qualifications: ${sanitizeField(payload.internationalExams)}
 - Other exam systems: ${sanitizeField(payload.otherExams)}
 - Advanced coursework: ${sanitizeField(payload.coursework)}
 - Activities & leadership: ${sanitizeField(payload.activities)}
 - Awards & honors: ${sanitizeField(payload.awards)}
-- Target university (user-typed, may contain typos): ${sanitizeField(payload.university)}
+- Target university (user-typed): ${sanitizeField(payload.university)}
 - Intended major: ${sanitizeField(payload.major)}
 - Preferred countries/regions: ${sanitizeField(payload.preferredRegions)}
 
