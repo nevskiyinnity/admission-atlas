@@ -4,12 +4,14 @@ import { Prisma } from '@prisma/client';
 import { requireAuth, isAuthError } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
-  const auth = await requireAuth(['ADMIN', 'COUNSELOR']);
+  const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
 
   const { searchParams } = new URL(req.url);
-  // Counselors can only see their own login logs
-  const userId = auth.user.role === 'COUNSELOR' ? auth.user.id : searchParams.get('userId');
+  // Students and counselors can only see their own login logs
+  const userId = auth.user.role === 'ADMIN'
+    ? (searchParams.get('userId') || undefined)
+    : auth.user.id;
   const search = searchParams.get('search');
 
   const where: Prisma.LoginLogWhereInput = {};

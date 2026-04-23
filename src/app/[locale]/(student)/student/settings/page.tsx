@@ -1,27 +1,31 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
+import { useDbUser } from '@/hooks/use-db-user';
 
 export default function StudentSettingsPage() {
   const t = useTranslations('settings');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [settings, setSettings] = useState({ webNotifications: true, smsNotifications: true, emailNotifications: true });
 
   useEffect(() => {
-    if (userId) {
-      fetch(`/api/users/${userId}`).then((r) => r.json()).then((u) => {
-        setSettings({ webNotifications: u.webNotifications, smsNotifications: u.smsNotifications, emailNotifications: u.emailNotifications });
-      });
+    if (dbUser?.id) {
+      fetch(`/api/users/${dbUser.id}`)
+        .then((r) => r.ok ? r.json() : null)
+        .then((u) => {
+          if (u) setSettings({ webNotifications: u.webNotifications, smsNotifications: u.smsNotifications, emailNotifications: u.emailNotifications });
+        })
+        .catch(() => {});
     }
-  }, [userId]);
+  }, [dbUser?.id]);
 
   const toggle = async (key: keyof typeof settings) => {
+    if (!dbUser?.id) return;
     const updated = { ...settings, [key]: !settings[key] };
     setSettings(updated);
-    await fetch(`/api/users/${userId}/settings`, {
+    await fetch(`/api/users/${dbUser.id}/settings`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updated),

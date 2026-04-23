@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Bell, Megaphone, MessageSquare, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useDbUser } from '@/hooks/use-db-user';
 
 interface Notification {
   id: string;
@@ -23,28 +23,39 @@ const tabs = ['ALL', 'ANNOUNCEMENT', 'MESSAGE', 'FEEDBACK'] as const;
 export default function StudentNotificationsPage() {
   const t = useTranslations('notifications');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const dbUser = useDbUser();
+  const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
   const [activeTab, setActiveTab] = useState<string>('ALL');
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    if (!userId) return;
-    const params = new URLSearchParams({ userId: userId });
-    if (activeTab !== 'ALL') params.set('type', activeTab);
-    const res = await fetch(`/api/notifications?${params}`);
-    setNotifications(await res.json());
+    if (!dbUser?.id) return;
+    const res = await fetch(`/api/notifications?userId=${dbUser.id}`);
+    if (res.ok) {
+      setAllNotifications(await res.json());
+    }
     setLoading(false);
   };
 
-  useEffect(() => { fetchNotifications(); }, [userId, activeTab]);
+  useEffect(() => { fetchNotifications(); }, [dbUser?.id]);
+
+  const notifications = activeTab === 'ALL'
+    ? allNotifications
+    : allNotifications.filter((n) => n.type === activeTab);
+
+  const unreadCounts = {
+    ALL: allNotifications.filter((n) => !n.isRead).length,
+    ANNOUNCEMENT: allNotifications.filter((n) => !n.isRead && n.type === 'ANNOUNCEMENT').length,
+    MESSAGE: allNotifications.filter((n) => !n.isRead && n.type === 'MESSAGE').length,
+    FEEDBACK: allNotifications.filter((n) => !n.isRead && n.type === 'FEEDBACK').length,
+  };
 
   const markAllRead = async () => {
-    if (!userId) return;
+    if (!dbUser?.id) return;
     await fetch('/api/notifications/mark-all-read', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: userId }),
+      body: JSON.stringify({ userId: dbUser.id }),
     });
     fetchNotifications();
   };
@@ -73,15 +84,18 @@ export default function StudentNotificationsPage() {
       </div>
 
       <div className="flex gap-2 border-b pb-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            className={cn('px-3 py-1.5 rounded-md text-sm font-medium', activeTab === tab ? 'bg-primary text-primary-foreground' : 'hover:bg-muted')}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tabLabels[tab]}
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const count = unreadCounts[tab];
+          return (
+            <button
+              key={tab}
+              className={cn('px-3 py-1.5 rounded-md text-sm font-medium', activeTab === tab ? 'bg-primary text-primary-foreground' : 'hover:bg-muted')}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tabLabels[tab]}{count > 0 ? ` (${count})` : ''}
+            </button>
+          );
+        })}
       </div>
 
       <div className="space-y-2">

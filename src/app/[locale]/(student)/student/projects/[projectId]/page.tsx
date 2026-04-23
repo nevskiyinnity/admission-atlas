@@ -1,21 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { CheckCircle, Circle, Clock, Send } from 'lucide-react';
+import { CheckCircle, Circle, Clock, Send, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FileHistoryPanel } from '@/components/shared/file-history-panel';
 import { FileUpload } from '@/components/shared/file-upload';
+import { useDbUser } from '@/hooks/use-db-user';
 
 interface Task {
   id: string; name: string; description: string | null; deadline: string | null;
-  status: string; assignedTo: string;
+  status: string; assignedTo: string; updatedAt: string;
 }
 
 interface Milestone {
@@ -35,7 +35,7 @@ interface Message {
 export default function StudentProjectPage() {
   const t = useTranslations('student.task');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const params = useParams();
   const projectId = params.projectId as string;
 
@@ -45,10 +45,14 @@ export default function StudentProjectPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/projects/${projectId}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to load project (${res.status})`);
+        return res.json();
+      })
       .then((data) => {
         setProject(data);
         if (data.milestones?.length > 0) {
@@ -56,14 +60,19 @@ export default function StudentProjectPage() {
           if (data.milestones[0].tasks?.length > 0) setSelectedTask(data.milestones[0].tasks[0].id);
         }
         setLoading(false);
-      });
+      })
+      .catch((err) => { setError(err.message); setLoading(false); });
   }, [projectId]);
 
   useEffect(() => {
     if (selectedTask) {
       fetch(`/api/messages?taskId=${selectedTask}`)
-        .then((res) => res.json())
-        .then(setMessages);
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to load messages');
+          return res.json();
+        })
+        .then(setMessages)
+        .catch(() => setMessages([]));
     }
   }, [selectedTask]);
 
@@ -71,23 +80,37 @@ export default function StudentProjectPage() {
   const currentTask = currentMilestone?.tasks.find((t) => t.id === selectedTask);
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedTask || !userId) return;
-    await fetch('/api/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: newMessage.trim(), senderId: userId, taskId: selectedTask }),
-    });
-    setNewMessage('');
-    const res = await fetch(`/api/messages?taskId=${selectedTask}`);
-    setMessages(await res.json());
+    if (!newMessage.trim() || !selectedTask || !dbUser?.id) return;
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: newMessage.trim(), senderId: dbUser.id, taskId: selectedTask }),
+      });
+      if (!res.ok) throw new Error('Failed to send message');
+      setNewMessage('');
+      const msgRes = await fetch(`/api/messages?taskId=${selectedTask}`);
+      if (msgRes.ok) setMessages(await msgRes.json());
+    } catch {
+      // silently fail — message stays in input for retry
+    }
   };
 
   if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;
+  if (error) return <p className="text-destructive">{error}</p>;
   if (!project) return <p className="text-muted-foreground">Not found</p>;
 
-  const statusIcon = (status: string) => {
-    if (status === 'COMPLETED') return <CheckCircle className="h-4 w-4 text-green-500" />;
-    if (status === 'IN_PROGRESS') return <Clock className="h-4 w-4 text-orange-500" />;
+  const statusIcon = (status: string, deadline?: string | null, completedAt?: string | null) => {
+    if (status === 'COMPLETED') {
+      if (deadline && completedAt && new Date(completedAt) > new Date(deadline)) {
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      }
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    }
+    if (deadline && new Date(deadline) < new Date()) {
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    }
+    if (status === 'IN_PROGRESS') return <Clock className="h-4 w-4 text-blue-500" />;
     return <Circle className="h-4 w-4 text-muted-foreground" />;
   };
 
@@ -110,7 +133,7 @@ export default function StudentProjectPage() {
                 else setSelectedTask(null);
               }}
             >
-              {statusIcon(milestone.status)}
+              {statusIcon(milestone.status, null, null)}
               <span className="truncate">{milestone.name}</span>
             </button>
           ))}
@@ -125,7 +148,7 @@ export default function StudentProjectPage() {
               <div className="flex gap-1 p-2 border-b overflow-x-auto">
                 {currentMilestone.tasks.map((task) => (
                   <button key={task.id} className={cn('px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap', selectedTask === task.id ? 'bg-primary text-primary-foreground' : 'hover:bg-muted')} onClick={() => setSelectedTask(task.id)}>
-                    {statusIcon(task.status)}<span className="ml-1">{task.name}</span>
+                    {statusIcon(task.status, task.deadline, task.status === 'COMPLETED' ? task.updatedAt : null)}<span className="ml-1">{task.name}</span>
                   </button>
                 ))}
               </div>
@@ -140,7 +163,7 @@ export default function StudentProjectPage() {
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((msg) => {
-                const isMe = msg.sender.id === userId;
+                const isMe = msg.sender.id === dbUser?.id;
                 const initials = msg.sender.name.split(' ').map((n) => n[0]).join('').toUpperCase();
                 return (
                   <div key={msg.id} className={cn('flex gap-2', isMe && 'flex-row-reverse')}>
@@ -154,9 +177,9 @@ export default function StudentProjectPage() {
               })}
             </div>
             <div className="p-3 border-t space-y-2">
-              {userId && selectedTask && (
+              {dbUser?.id && selectedTask && (
                 <FileUpload
-                  uploaderId={userId}
+                  uploaderId={dbUser.id}
                   taskId={selectedTask}
                   projectId={projectId}
                   milestoneId={selectedMilestone || undefined}

@@ -23,7 +23,13 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/projects').then((r) => r.json()).then((d) => { setProjects(d); setLoading(false); });
+    fetch('/api/projects')
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load (${r.status})`);
+        return r.json();
+      })
+      .then((data) => { setProjects(data.projects ?? []); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
   const filtered = projects.filter((p) =>

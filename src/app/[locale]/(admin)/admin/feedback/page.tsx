@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useDbUser } from '@/hooks/use-db-user';
 
 interface FeedbackReply { id: string; content: string; createdAt: string; user: { name: string; role: string }; }
 interface FeedbackItem {
@@ -21,7 +21,7 @@ interface FeedbackItem {
 export default function AdminFeedbackPage() {
   const t = useTranslations('admin.feedback');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState<Record<string, string>>({});
@@ -29,7 +29,10 @@ export default function AdminFeedbackPage() {
 
   const fetchFeedbacks = async () => {
     const res = await fetch('/api/feedback');
-    setFeedbacks(await res.json());
+    if (res.ok) {
+      const data = await res.json();
+      setFeedbacks(data.feedbacks ?? []);
+    }
     setLoading(false);
   };
 
@@ -37,11 +40,11 @@ export default function AdminFeedbackPage() {
 
   const sendReply = async (feedbackId: string) => {
     const text = replyText[feedbackId]?.trim();
-    if (!text || !userId) return;
+    if (!text || !dbUser?.id) return;
     await fetch(`/api/feedback/${feedbackId}/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: text, userId }),
+      body: JSON.stringify({ content: text }),
     });
     setReplyText({ ...replyText, [feedbackId]: '' });
     fetchFeedbacks();

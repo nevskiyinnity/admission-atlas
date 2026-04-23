@@ -92,8 +92,14 @@ export default function StudentsPage() {
     setShowModal(true);
   };
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    setSubmitting(true);
+
     const body: any = { ...form, role: 'STUDENT' };
     if (!body.password && editingUser) delete body.password;
     if (!body.gender) delete body.gender;
@@ -103,9 +109,19 @@ export default function StudentsPage() {
     const url = editingUser ? `/api/users/${editingUser.id}` : '/api/users';
     const method = editingUser ? 'PUT' : 'POST';
 
-    await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    setShowModal(false);
-    fetchStudents();
+    try {
+      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      setShowModal(false);
+      fetchStudents();
+    } catch (err: any) {
+      setSubmitError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const toggleLock = async (id: string) => {
@@ -252,9 +268,10 @@ export default function StudentsPage() {
                   ))}
                 </select>
               </div>
+              {submitError && <p className="text-sm text-destructive">{submitError}</p>}
               <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={() => setShowModal(false)}>{tc('cancel')}</Button>
-                <Button type="submit">{tc('confirm')}</Button>
+                <Button type="submit" disabled={submitting}>{submitting ? tc('loading') : tc('confirm')}</Button>
               </div>
             </form>
           </div>

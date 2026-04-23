@@ -9,14 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Plus, X, CheckCircle, Circle, Clock, Send, ArrowLeftRight } from 'lucide-react';
+import { Plus, X, CheckCircle, Circle, Clock, Send, ArrowLeftRight, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FileHistoryPanel } from '@/components/shared/file-history-panel';
 import { FileUpload } from '@/components/shared/file-upload';
 
 interface Task {
   id: string; name: string; description: string | null; deadline: string | null;
-  status: string; assignedTo: string; createdAt: string;
+  status: string; assignedTo: string; createdAt: string; updatedAt: string;
 }
 
 interface Milestone {
@@ -131,9 +131,17 @@ export default function ProjectTaskPage() {
   if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;
   if (!project) return <p className="text-muted-foreground">Project not found</p>;
 
-  const statusIcon = (status: string) => {
-    if (status === 'COMPLETED') return <CheckCircle className="h-4 w-4 text-green-500" />;
-    if (status === 'IN_PROGRESS') return <Clock className="h-4 w-4 text-orange-500" />;
+  const statusIcon = (status: string, deadline?: string | null, completedAt?: string | null) => {
+    if (status === 'COMPLETED') {
+      if (deadline && completedAt && new Date(completedAt) > new Date(deadline)) {
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      }
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    }
+    if (deadline && new Date(deadline) < new Date()) {
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    }
+    if (status === 'IN_PROGRESS') return <Clock className="h-4 w-4 text-blue-500" />;
     return <Circle className="h-4 w-4 text-muted-foreground" />;
   };
 
@@ -160,7 +168,7 @@ export default function ProjectTaskPage() {
                 else setSelectedTask(null);
               }}
             >
-              {statusIcon(milestone.status)}
+              {statusIcon(milestone.status, null, null)}
               <span className="truncate">{milestone.name}</span>
             </button>
           ))}
@@ -193,7 +201,7 @@ export default function ProjectTaskPage() {
                     )}
                     onClick={() => setSelectedTask(task.id)}
                   >
-                    {statusIcon(task.status)}
+                    {statusIcon(task.status, task.deadline, task.status === 'COMPLETED' ? task.updatedAt : null)}
                     <span className="ml-1">{task.name}</span>
                   </button>
                 ))}

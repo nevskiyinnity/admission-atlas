@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { useDbUser } from '@/hooks/use-db-user';
 
 interface FeedbackType { id: string; name: string; }
 interface FeedbackReply { id: string; content: string; createdAt: string; user: { name: string; role: string }; }
@@ -14,29 +14,38 @@ interface FeedbackItem { id: string; type: string; description: string; status: 
 export default function StudentFeedbackPage() {
   const t = useTranslations('feedback');
   const tc = useTranslations('common');
-  const { userId } = useAuth();
+  const dbUser = useDbUser();
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [types, setTypes] = useState<FeedbackType[]>([]);
   const [form, setForm] = useState({ type: '', description: '' });
   const [showHistory, setShowHistory] = useState(false);
 
-  useEffect(() => {
-    fetch('/api/feedback-types').then((r) => r.json()).then(setTypes);
-    if (userId) {
-      fetch(`/api/feedback?userId=${userId}`).then((r) => r.json()).then(setFeedbacks);
+  const fetchFeedbacks = async (userId: string) => {
+    const res = await fetch(`/api/feedback?userId=${userId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setFeedbacks(data.feedbacks ?? []);
     }
-  }, [userId]);
+  };
+
+  useEffect(() => {
+    fetch('/api/feedback-types').then((r) => r.ok ? r.json() : []).then(setTypes).catch(() => {});
+    if (dbUser?.id) {
+      fetchFeedbacks(dbUser.id);
+    }
+  }, [dbUser?.id]);
 
   const submitFeedback = async () => {
-    if (!form.type || !form.description || !userId) return;
-    await fetch('/api/feedback', {
+    if (!form.type || !form.description || !dbUser?.id) return;
+    const res = await fetch('/api/feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, userId: userId }),
+      body: JSON.stringify({ type: form.type, description: form.description }),
     });
-    setForm({ type: '', description: '' });
-    const res = await fetch(`/api/feedback?userId=${userId}`);
-    setFeedbacks(await res.json());
+    if (res.ok) {
+      setForm({ type: '', description: '' });
+      fetchFeedbacks(dbUser.id);
+    }
   };
 
   const statusVariant = (s: string) => s === 'REPLIED' ? 'success' as const : s === 'CLOSED' ? 'secondary' as const : 'warning' as const;

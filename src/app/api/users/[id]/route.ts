@@ -10,7 +10,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const auth = await requireAuth(['ADMIN', 'COUNSELOR']);
+  const auth = await requireAuth();
   if (isAuthError(auth)) return auth;
 
   try {
@@ -33,9 +33,14 @@ export async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Students can only view their own profile
+    if (auth.user.role === 'STUDENT' && user.id !== auth.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     // Counselors can only view their own students
     if (auth.user.role === 'COUNSELOR') {
-      if (user.role !== 'STUDENT' || user.assignedCounselorId !== auth.user.id) {
+      if (user.id !== auth.user.id && (user.role !== 'STUDENT' || user.assignedCounselorId !== auth.user.id)) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     }

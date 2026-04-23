@@ -11,8 +11,11 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const taskId = searchParams.get('taskId');
 
-  const where: Prisma.MessageWhereInput = {};
-  if (taskId) where.taskId = taskId;
+  if (!taskId && auth.user.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'taskId is required' }, { status: 400 });
+  }
+
+  const where: Prisma.MessageWhereInput = taskId ? { taskId } : {};
 
   const messages = await prisma.message.findMany({
     where,
@@ -21,7 +24,7 @@ export async function GET(req: NextRequest) {
       task: { select: { id: true, name: true } },
       attachments: true,
     },
-    orderBy: { createdAt: taskId ? 'asc' : 'desc' },
+    orderBy: taskId ? { createdAt: 'asc' } : { createdAt: 'desc' },
     take: taskId ? undefined : 200,
   });
 
@@ -37,12 +40,12 @@ export async function POST(req: NextRequest) {
   if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
-  const { content, senderId, taskId } = parsed.data;
+  const { content, taskId } = parsed.data;
 
   const message = await prisma.message.create({
     data: {
       content,
-      senderId,
+      senderId: auth.user.id,
       taskId,
     },
     include: {

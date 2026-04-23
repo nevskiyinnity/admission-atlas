@@ -11,6 +11,7 @@ interface TaskRecord {
   status: string;
   assignedTo: string;
   deadline: string | null;
+  updatedAt: string;
   milestone: { name: string; project: { universityName: string } };
 }
 
@@ -23,8 +24,12 @@ export default function AdminTasksPage() {
 
   useEffect(() => {
     fetch('/api/projects')
-      .then((r) => r.json())
-      .then((projects: any[]) => {
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load (${r.status})`);
+        return r.json();
+      })
+      .then((data) => {
+        const projects = data.projects ?? [];
         const allTasks: TaskRecord[] = [];
         for (const p of projects) {
           for (const m of p.milestones || []) {
@@ -35,14 +40,29 @@ export default function AdminTasksPage() {
         }
         setTasks(allTasks);
         setLoading(false);
-      });
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const filtered = tasks.filter((task) =>
     !search || task.name.toLowerCase().includes(search.toLowerCase()) || task.milestone.project.universityName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const statusVariant = (s: string) => s === 'COMPLETED' ? 'success' as const : s === 'IN_PROGRESS' ? 'warning' as const : 'secondary' as const;
+  const getStatusInfo = (task: TaskRecord) => {
+    if (task.status === 'COMPLETED') {
+      if (task.deadline && new Date(task.updatedAt) > new Date(task.deadline)) {
+        return { variant: 'warning' as const, label: 'Completed Late' };
+      }
+      return { variant: 'success' as const, label: 'Completed' };
+    }
+    if (task.deadline && new Date(task.deadline) < new Date()) {
+      return { variant: 'destructive' as const, label: 'Overdue' };
+    }
+    if (task.status === 'IN_PROGRESS') {
+      return { variant: 'default' as const, label: 'In Progress' };
+    }
+    return { variant: 'secondary' as const, label: task.status };
+  };
 
   if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;
 
@@ -74,7 +94,7 @@ export default function AdminTasksPage() {
                   <td className="p-3">{task.milestone.name}</td>
                   <td className="p-3">{task.assignedTo}</td>
                   <td className="p-3">{task.deadline ? new Date(task.deadline).toLocaleDateString() : '-'}</td>
-                  <td className="p-3"><Badge variant={statusVariant(task.status)}>{task.status}</Badge></td>
+                  <td className="p-3"><Badge variant={getStatusInfo(task).variant}>{getStatusInfo(task).label}</Badge></td>
                 </tr>
               ))}
             </tbody>

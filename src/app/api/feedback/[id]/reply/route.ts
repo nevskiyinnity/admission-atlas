@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (!parsed.ok) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
-  const { content, userId } = parsed.data;
+  const { content } = parsed.data;
 
   try {
     const feedback = await prisma.feedback.findUnique({ where: { id } });
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 
     const reply = await prisma.feedbackReply.create({
-      data: { content, feedbackId: id, userId },
+      data: { content, feedbackId: id, userId: auth.user.id },
     });
 
     await prisma.feedback.update({

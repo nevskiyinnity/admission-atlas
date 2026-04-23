@@ -9,12 +9,12 @@ export async function GET(req: NextRequest) {
   if (isAuthError(auth)) return auth;
 
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('userId');
   const type = searchParams.get('type');
 
-  if (!userId) {
-    return NextResponse.json({ error: 'userId required' }, { status: 400 });
-  }
+  // Admins can query any user's notifications; others only see their own
+  const userId = auth.user.role === 'ADMIN'
+    ? (searchParams.get('userId') || auth.user.id)
+    : auth.user.id;
 
   const where: Prisma.NotificationWhereInput = { userId };
   if (type && type !== 'ALL') where.type = type as Prisma.EnumNotificationTypeFilter;

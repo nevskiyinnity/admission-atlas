@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, X, Calendar, ArrowRight } from 'lucide-react';
+import { Plus, X, Calendar, ArrowRight, MessageCircle } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -108,8 +108,9 @@ export default function StudentDetailPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => {
-            const urgentTask = project.milestones
-              .flatMap((m) => m.tasks)
+            const allTasks = project.milestones.flatMap((m) => m.tasks);
+            const completedTasks = allTasks.filter((t) => t.status === 'COMPLETED').length;
+            const urgentTask = allTasks
               .filter((t) => t.status !== 'COMPLETED')
               .sort((a, b) => (a.deadline || '').localeCompare(b.deadline || ''))[0];
 
@@ -117,7 +118,12 @@ export default function StudentDetailPage() {
               <Link key={project.id} href={`/counselor/students/${studentId}/projects/${project.id}` as any}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{project.universityName}</CardTitle>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">{project.universityName}</CardTitle>
+                      <div className="relative shrink-0">
+                        <MessageCircle className="h-5 w-5 text-muted-foreground" />
+                      </div>
+                    </div>
                     <p className="text-sm text-muted-foreground">{project.major}</p>
                   </CardHeader>
                   <CardContent className="space-y-2">
@@ -133,9 +139,16 @@ export default function StudentDetailPage() {
                         <span className="truncate">{urgentTask.name}</span>
                       </div>
                     )}
-                    <Badge variant={project.status === 'ACTIVE' ? 'default' : 'secondary'} className="text-xs">
-                      {project.status}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={project.status === 'ACTIVE' ? 'default' : 'secondary'} className="text-xs">
+                        {project.status}
+                      </Badge>
+                      {allTasks.length > 0 && (
+                        <span className="text-xs bg-muted px-2 py-0.5 rounded-full font-medium">
+                          {completedTasks} / {allTasks.length}
+                        </span>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               </Link>

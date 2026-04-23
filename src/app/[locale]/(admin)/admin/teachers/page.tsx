@@ -46,20 +46,38 @@ export default function TeachersPage() {
   }, [search]);
 
   useEffect(() => { const timer = setTimeout(() => fetchTeachers(), 300); return () => clearTimeout(timer); }, [fetchTeachers]);
-  useEffect(() => { fetch('/api/tags').then(r => r.json()).then(setAllTags); }, []);
+  useEffect(() => { fetch('/api/tags').then(r => r.ok ? r.json() : []).then(setAllTags).catch(() => {}); }, []);
 
   const openCreate = () => { setEditingUser(null); setForm({ name: '', email: '', phone: '', gender: '', password: '', title: '', country: '', city: '', dateOfBirth: '', tagIds: [] }); setShowModal(true); };
   const openEdit = (teacher: Teacher) => { setEditingUser(teacher); setForm({ name: teacher.name, email: teacher.email, phone: teacher.phone || '', gender: teacher.gender || '', password: '', title: teacher.title || '', country: teacher.country || '', city: teacher.city || '', dateOfBirth: '', tagIds: teacher.tags.map(t => t.id) }); setShowModal(true); };
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    setSubmitting(true);
+
     const body: any = { ...form, role: 'COUNSELOR' };
     if (!body.password && editingUser) delete body.password;
     if (!body.gender) delete body.gender;
     if (!body.dateOfBirth) delete body.dateOfBirth;
     const url = editingUser ? `/api/users/${editingUser.id}` : '/api/users';
-    await fetch(url, { method: editingUser ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    setShowModal(false); fetchTeachers();
+
+    try {
+      const res = await fetch(url, { method: editingUser ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      setShowModal(false);
+      fetchTeachers();
+    } catch (err: any) {
+      setSubmitError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const toggleLock = async (id: string) => { await fetch(`/api/users/${id}/lock`, { method: 'POST' }); fetchTeachers(); };
@@ -148,9 +166,10 @@ export default function TeachersPage() {
                   {allTags.map(tag => (<label key={tag.id} className="flex items-center gap-1 text-sm cursor-pointer"><input type="checkbox" checked={form.tagIds.includes(tag.id)} onChange={() => toggleTag(tag.id)} className="rounded" />{tag.name}</label>))}
                 </div>
               </div>
+              {submitError && <p className="text-sm text-destructive">{submitError}</p>}
               <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={() => setShowModal(false)}>{tc('cancel')}</Button>
-                <Button type="submit">{tc('confirm')}</Button>
+                <Button type="submit" disabled={submitting}>{submitting ? tc('loading') : tc('confirm')}</Button>
               </div>
             </form>
           </div>

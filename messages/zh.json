@@ -74,6 +74,7 @@
       "notifications": "业务通知",
       "account": "账户管理",
       "settings": "系统设置",
+      "settingsAccount": "设置与账户",
       "feedback": "反馈与支持",
       "help": "帮助中心"
     },
@@ -115,6 +116,7 @@
       "notifications": "业务通知",
       "account": "账户管理",
       "settings": "系统设置",
+      "settingsAccount": "设置与账户",
       "feedback": "反馈与支持",
       "help": "帮助中心"
     },
@@ -185,7 +187,11 @@
       "totalStudents": "学生总数",
       "totalCounselors": "教师总数",
       "activeProjects": "活跃项目",
-      "pendingTasks": "待处理任务"
+      "pendingTasks": "待处理任务",
+      "totalTasks": "任务总数",
+      "projectStatus": "项目状态",
+      "taskCompletion": "任务完成率",
+      "upcomingDeadlines": "即将到期"
     },
     "students": {
       "title": "学生管理",
@@ -341,7 +347,23 @@
     "tabs": {
       "info": "账户信息",
       "password": "修改密码",
+      "settings": "通知设置",
+      "feedback": "反馈",
       "loginHistory": "登录记录"
+    },
+    "settings": {
+      "webNotifications": "网页通知",
+      "webNotificationsDesc": "接收浏览器弹窗通知",
+      "smsNotifications": "短信通知",
+      "smsNotificationsDesc": "接收短信提醒",
+      "emailNotifications": "邮件通知",
+      "emailNotificationsDesc": "接收邮件提醒"
+    },
+    "feedback": {
+      "issueType": "问题类型",
+      "description": "问题描述",
+      "send": "提交反馈",
+      "history": "反馈历史"
     },
     "info": {
       "profilePicture": "头像",
@@ -356,7 +378,11 @@
       "sendCode": "获取验证码",
       "newPassword": "新密码",
       "confirmPassword": "确认密码",
-      "confirmChange": "确认修改"
+      "confirmChange": "确认修改",
+      "mismatch": "两次密码不一致",
+      "tooShort": "密码至少8个字符",
+      "success": "密码修改成功",
+      "failed": "密码修改失败"
     },
     "loginHistory": {
       "ip": "IP地址",

@@ -74,6 +74,7 @@
       "notifications": "Notifications",
       "account": "Account Management",
       "settings": "Settings",
+      "settingsAccount": "Settings & Account",
       "feedback": "Feedback & Support",
       "help": "Help Center"
     },
@@ -115,6 +116,7 @@
       "notifications": "Notifications",
       "account": "Account Management",
       "settings": "Settings",
+      "settingsAccount": "Settings & Account",
       "feedback": "Feedback & Support",
       "help": "Help Center"
     },
@@ -185,7 +187,11 @@
       "totalStudents": "Total Students",
       "totalCounselors": "Total Counselors",
       "activeProjects": "Active Projects",
-      "pendingTasks": "Pending Tasks"
+      "pendingTasks": "Pending Tasks",
+      "totalTasks": "Total Tasks",
+      "projectStatus": "Project Status",
+      "taskCompletion": "Task Completion Rate",
+      "upcomingDeadlines": "Upcoming Deadlines"
     },
     "students": {
       "title": "Student Management",
@@ -341,7 +347,23 @@
     "tabs": {
       "info": "Account Info",
       "password": "Change Password",
+      "settings": "Notifications",
+      "feedback": "Feedback",
       "loginHistory": "Login History"
+    },
+    "settings": {
+      "webNotifications": "Web Notifications",
+      "webNotificationsDesc": "Receive browser pop-up notifications",
+      "smsNotifications": "SMS Notifications",
+      "smsNotificationsDesc": "Receive text message alerts",
+      "emailNotifications": "Email Notifications",
+      "emailNotificationsDesc": "Receive email reminders"
+    },
+    "feedback": {
+      "issueType": "Issue Type",
+      "description": "Description",
+      "send": "Submit Feedback",
+      "history": "Feedback History"
     },
     "info": {
       "profilePicture": "Profile Picture",
@@ -356,7 +378,11 @@
       "sendCode": "Get Verification Code",
       "newPassword": "New Password",
       "confirmPassword": "Confirm Password",
-      "confirmChange": "Confirm Change"
+      "confirmChange": "Confirm Change",
+      "mismatch": "Passwords do not match",
+      "tooShort": "Password must be at least 8 characters",
+      "success": "Password changed successfully",
+      "failed": "Failed to change password"
     },
     "loginHistory": {
       "ip": "IP Address",
