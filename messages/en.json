@@ -438,6 +438,161 @@
     },
     "langSwitch": {
       "label": "Switch language"
+    },
+    "home": {
+      "meta": {
+        "title": "SAJU 双岸教育 | Strategic University Admissions Counseling",
+        "description": "SAJU brings together admissions strategists and essay specialists with deep knowledge of Europe's university systems, guiding every student from initial exploration through successful enrollment."
+      },
+      "hero": {
+        "badge": "Strategic admissions counsel",
+        "heading": "A tailored strategy for every student, built to reach their best-fit European university.",
+        "subhead": "Clear direction. Rigorous process. Predictable outcomes.",
+        "ctaPrimary": "Talk to an Expert",
+        "ctaSecondary": "University Fit Assessment"
+      },
+      "metrics": [
+        {
+          "value": "5-Phase",
+          "label": "System"
+        },
+        {
+          "value": "1 : 1",
+          "label": "Advisor Ratio"
+        },
+        {
+          "value": "30+",
+          "label": "Countries"
+        },
+        {
+          "value": "100%",
+          "label": "Transparency"
+        }
+      ],
+      "whoWeAre": {
+        "kicker": "Who We Are",
+        "heading": "Top European University Application Consultant",
+        "body": "SAJU brings together admissions strategists and essay specialists with deep knowledge of Europe's university systems, guiding every student from initial exploration through successful enrollment, including post-admission relocation and transition support.",
+        "cta": "Meet Our Counselors"
+      },
+      "services": {
+        "kicker": "What We Do",
+        "heading": "End-to-end application strategy, rather than fragmented advice",
+        "subhead": "The SAJU methodology ensures nothing gets missed. No opportunity for our students is ever overlooked.",
+        "items": [
+          {
+            "num": "01",
+            "title": "Personalized School List",
+            "body": "Prioritizing student fit and calibrated across highly competitive, balanced and safe options. Based on academic strength, differentiation, career direction, and budget."
+          },
+          {
+            "num": "02",
+            "title": "Student Positioning",
+            "body": "Translating the student's profile into signals admissions committees value, building a compelling story through essays, résumé, recommendations, and interviews."
+          },
+          {
+            "num": "03",
+            "title": "Application Execution",
+            "body": "Deadline tracking, task ownership, and application management — all centralized via our proprietary platform for clear visualization and control."
+          },
+          {
+            "num": "04",
+            "title": "Budget & Scholarship Planning",
+            "body": "Costs and financial aid eligibility mapped upfront to avoid unpleasant surprises later."
+          },
+          {
+            "num": "05",
+            "title": "Full Transparency with Families",
+            "body": "Periodic progress updates and feedback meetings with parents, ensuring families are informed and confident at every key moment."
+          },
+          {
+            "num": "06",
+            "title": "Profile Building & Career Direction",
+            "body": "Identify gaps, clarify career paths, and guide students to develop initiatives that genuinely differentiate them in the eyes of admissions officers."
+          }
+        ]
+      },
+      "process": {
+        "kicker": "How It Works",
+        "heading": "From confusion to successful enrollment",
+        "subhead": "Every student's journey is structured across five clear phases. Each phase has defined goals and sets up the next.",
+        "phases": [
+          {
+            "label": "01",
+            "title": "Initial Consultation",
+            "body": "Understand the student's background and goals; carry out a university fit assessment; set direction and realistic expectations."
+          },
+          {
+            "label": "02",
+            "title": "Exploration",
+            "body": "Define academic direction, compare European systems, and build a balanced final school list."
+          },
+          {
+            "label": "03",
+            "title": "Preparation",
+            "body": "Strengthen the student's academic profile, extracurriculars, and overall competitiveness before applications begin."
+          },
+          {
+            "label": "04",
+            "title": "Application",
+            "body": "Execute polished, cohesive applications from essay writing through interview prep."
+          },
+          {
+            "label": "05",
+            "title": "Post-Admission Support",
+            "body": "Full support for visa, housing, and university life transition."
+          }
+        ],
+        "cta": "Learn More"
+      },
+      "engineCallout": {
+        "kicker": "Free Tool",
+        "heading": "University Fit Assessment",
+        "body": "Tell us about academics, extracurricular activities, distinctions, and personal preferences to generate a personalized European university fit assessment.",
+        "cta": "Run the Assessment"
+      },
+      "outcomes": {
+        "kicker": "Our Impact",
+        "heading": "SAJU students consistently achieve better results",
+        "subhead": "Here is how SAJU-supported students consistently compare to other applicants with similar profiles, across four key dimensions:",
+        "items": [
+          {
+            "title": "Balanced Application Strategy",
+            "body": "From relying solely on university prestige to developing a school list with powerful alternatives that best suit the student."
+          },
+          {
+            "title": "Student Positioning",
+            "body": "We know exactly what admissions committees are looking for, and use that to position each student in the most compelling way."
+          },
+          {
+            "title": "A Smoother, Clearer Process",
+            "body": "Structured milestones eliminate confusion and stress, making the entire journey manageable for the whole family."
+          },
+          {
+            "title": "Optimal Admissions Outcomes",
+            "body": "Better positioning and a stronger profile translate into admissions at best-fit universities."
+          }
+        ]
+      },
+      "reviews": {
+        "kicker": "Testimonials",
+        "heading": "Behind every offer letter is a family that trusted us with what matters most.",
+        "cta": "More Details"
+      },
+      "pricing": {
+        "kicker": "Packages",
+        "heading": "Choose the plan that best suits you",
+        "subhead": "Depending on where your student is and what your family needs, we offer three levels of engagement."
+      },
+      "faq": {
+        "kicker": "FAQ",
+        "heading": "Common questions, transparent answers"
+      },
+      "finalCta": {
+        "heading": "Start building the right strategy for your child's future today",
+        "body": "Every year of waiting is a potential missed window. Instead of navigating uncertainty alone, start by understanding which path truly fits your child.",
+        "cta": "Book a Consultation"
+      }
     }
   },
   "files": {
