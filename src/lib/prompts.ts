@@ -43,7 +43,7 @@ export function sanitizeField(value: unknown, maxLength = 500): string {
 
 export const NARRATIVE_SYSTEM_MESSAGE =
   'You are a precise JSON generator for a university admissions analysis engine. ' +
-  'You have expert-level knowledge of European universities, their acceptance rates, costs, program strengths, and admissions requirements. ' +
+  'You have expert-level knowledge of top-tier universities worldwide — US, UK, Europe, Canada, and Asia-Pacific — including their acceptance rates, costs, program strengths, and admissions requirements. ' +
   'The target-university match percentage, risk label, and summary sentence have already been computed deterministically — do not recalculate them. ' +
   'Your only job is to render specific, grounded strengths, concerns, alternatives, and process logs around the numbers you are given. ' +
   'Return only valid JSON with no markdown formatting.';
@@ -51,7 +51,7 @@ export const NARRATIVE_SYSTEM_MESSAGE =
 export function buildNarrativePrompt(payload: AnalysisPayload, det: DeterministicAnalysis): string {
   const resolvedName = det.resolvedUniversity?.name ?? payload.university;
   return `
-You are an expert European university admissions strategy analyst.
+You are an expert university admissions strategy analyst with global coverage (US, UK, Europe, Canada, Asia-Pacific).
 
 The deterministic scoring pipeline has ALREADY computed:
 - Target institution (resolved from user input): ${sanitizeField(resolvedName)}
@@ -75,9 +75,9 @@ RULES:
 1. CATEGORY SCORES: Use exactly these labels — Academics, Activities, Major Fit, Campus Fit, Affordability.
    Differentiate meaningfully (not clustered at 75). Affordability must reflect the student's stated budget.
 
-2. ALTERNATIVES: Suggest 5-6 European universities with match % REALISTIC vs the target (${det.targetMatchPercent}%).
-   Focus on European institutions since SAJU specializes in European admissions.
-   If preferredRegions names specific European countries, weight toward those.
+2. ALTERNATIVES: Suggest 5-6 universities with match % REALISTIC vs the target (${det.targetMatchPercent}%).
+   Prioritise institutions in the same region as the target (US, UK, Europe, Canada, or Asia-Pacific).
+   If preferredRegions names specific countries, weight toward those.
    Each "why" must explain fit for THIS specific student (budget, major, constraints).
    Do NOT include the target institution itself.
 

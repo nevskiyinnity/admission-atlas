@@ -633,22 +633,22 @@
     radial-gradient(ellipse at 30% 30%, rgba(15, 25, 35, 0.04) 0%, transparent 50%);
 }
 
-/* Teal/green variant for Outcomes */
+/* Warm charcoal + bronze variant for Outcomes — retired the teal per spec redline */
 .landing-scope .shell .h-dark-sect--teal .h-dark-inner {
-  background: linear-gradient(145deg, #0F3D3A 0%, #1A5C52 55%, #1B3A4B 100%);
+  background: linear-gradient(145deg, #1A1613 0%, #2B241C 55%, #15110E 100%);
 }
 
 .landing-scope .shell .h-dark-sect--teal .h-dark-inner::before {
   background:
-    radial-gradient(ellipse at 20% 0%, rgba(26,107,90,0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(158,124,56,0.12) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 0%, rgba(158, 124, 56, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(210, 170, 90, 0.10) 0%, transparent 50%);
 }
 
 .landing-scope .shell .h-dark-sect--teal::before {
   background: radial-gradient(
     ellipse at 50% 100%,
-    rgba(26, 107, 90, 0.08) 0%,
-    rgba(15, 61, 58, 0.04) 40%,
+    rgba(158, 124, 56, 0.08) 0%,
+    rgba(42, 32, 22, 0.04) 40%,
     transparent 70%
   );
 }

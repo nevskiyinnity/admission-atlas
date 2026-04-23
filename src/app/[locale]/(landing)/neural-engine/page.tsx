@@ -51,7 +51,7 @@ const RISK_TITLE: Record<'safe' | 'balanced' | 'high-risk', string> = {
   'high-risk': 'High-risk option',
 };
 
-/* ── Mock fill data (European profile) ── */
+/* ── Mock fill data (sample profile) ── */
 
 const MOCK_FILL = {
   name: 'Sofia Martín',
@@ -68,13 +68,13 @@ const MOCK_FILL = {
   awards: 'National Economics Olympiad finalist, IB Bilingual Diploma scholar',
   question1: 'Tutorial-based learning with close faculty contact and rigorous written feedback',
   question2: 'Led a six-month research project on inflation policy, published in the school journal and presented at a regional economics forum',
-  question3: 'Historic European campus with a strong tutorial culture and active society life',
+  question3: 'Historic campus with a strong tutorial culture and active society life',
   question4: 'Fit with the programme matters most; cost is a secondary consideration with scholarship options',
   question5: 'Graduate study in economic policy, then work in public-sector strategy or international organisations',
   question6: 'EUR 20,000–35,000 per year',
   question7: 'Open to merit scholarships and college bursaries; not dependent on full aid',
   question8: 'Academic mentorship, research access, international student advising',
-  question9: 'Debate, economic research circles, policy fellowships, European exchange programmes',
+  question9: 'Debate, economic research circles, policy fellowships, international exchange programmes',
 };
 
 /* ── Helper: score color class ── */
@@ -183,11 +183,11 @@ export default function NeuralEnginePage() {
       setLogs((prev) => {
         const messages = [
           'Ingesting applicant profile and narrative responses...',
-          'Normalizing academic metrics across European grading systems...',
-          'Evaluating target institution selectivity and QS Europe tier...',
+          'Normalizing academic metrics across international grading systems...',
+          'Evaluating target institution selectivity and QS ranking tier...',
           'Scoring academic strength and differentiation...',
           'Comparing preference signals with campus characteristics...',
-          'Building ranked European university shortlist...',
+          'Building ranked university shortlist...',
           'Generating final match report...',
         ];
         const next = messages[prev.length - 1];
@@ -257,7 +257,7 @@ export default function NeuralEnginePage() {
     setTimeout(() => setEmailMode('sent'), 900);
   }, [emailValue]);
 
-  // Deduplicated list of European university names for the datalist.
+  // Deduplicated list of top-tier university names for the datalist.
   // Same source as the scoring tier lookup — one place to update.
   const europeanUniversityOptions = useMemo(() => {
     const seen = new Set<string>();
@@ -279,12 +279,12 @@ export default function NeuralEnginePage() {
         <h1 className="ne-title">Neural Match Engine</h1>
         <p className="ne-subtitle">
           Complete your profile and counselling questionnaire. Our engine scores your fit
-          against your target and surfaces stronger alternatives across Europe&apos;s leading
-          universities.
+          against your target and surfaces stronger alternatives across leading universities
+          worldwide.
         </p>
         <p className="ne-scope-badge">
           <span className="ne-scope-dot" aria-hidden="true" />
-          SAJU specialises in European university admissions. Enter a European target for
+          Enter any top-tier target university — US, UK, Europe, or Asia-Pacific — for
           an accurate assessment.
         </p>
         <button type="button" className="ne-btn-secondary" onClick={handleMockFill}>
@@ -312,7 +312,7 @@ export default function NeuralEnginePage() {
               </select>
             </label>
             <label className="ne-label">
-              Target University (European)
+              Target University
               <input
                 type="text"
                 name="university"
@@ -333,7 +333,7 @@ export default function NeuralEnginePage() {
               <input type="text" name="major" placeholder="e.g., Economics, Engineering, Law" required className="ne-input" />
             </label>
             <label className="ne-label ne-full">
-              Preferred Countries / Regions in Europe (Optional)
+              Preferred Countries / Regions (Optional)
               <input
                 type="text"
                 name="preferredRegions"
@@ -418,7 +418,7 @@ export default function NeuralEnginePage() {
             </label>
             <label className="ne-label ne-full">
               3) What type of campus and location do you prefer?
-              <textarea name="question3" placeholder="e.g., Historic European city · compact campus · strong placements network" className="ne-input ne-textarea" />
+              <textarea name="question3" placeholder="e.g., Historic city · compact campus · strong placements network" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               4) How do you weigh fit, prestige, and outcomes?
@@ -426,7 +426,7 @@ export default function NeuralEnginePage() {
             </label>
             <label className="ne-label ne-full">
               5) What are your intended career outcomes after graduation?
-              <textarea name="question5" placeholder="e.g., Graduate study in Europe, then public-sector strategy or international organisations" className="ne-input ne-textarea" />
+              <textarea name="question5" placeholder="e.g., Graduate study abroad, then public-sector strategy or international organisations" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               6) What is your annual budget range for tuition + living costs? (Required)
@@ -442,7 +442,7 @@ export default function NeuralEnginePage() {
             </label>
             <label className="ne-label ne-full">
               9) What extracurricular or community experiences do you want?
-              <textarea name="question9" placeholder="e.g., Debating societies, research fellowships, European exchange programmes" className="ne-input ne-textarea" />
+              <textarea name="question9" placeholder="e.g., Debating societies, research fellowships, international exchange programmes" className="ne-input ne-textarea" />
             </label>
           </div>
         </section>

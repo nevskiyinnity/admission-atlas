@@ -59,7 +59,7 @@ export default async function CounselorsPage() {
         </div>
       </section>
 
-      {/* ─── EUROPEAN REGIONS ─── */}
+      {/* ─── GLOBAL REACH ─── */}
       <section className="section">
         <header className="section-header">
           <span className="eyebrow">{t('regions.kicker')}</span>

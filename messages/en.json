@@ -118,7 +118,9 @@
       "settings": "Settings",
       "settingsAccount": "Settings & Account",
       "feedback": "Feedback & Support",
-      "help": "Help Center"
+      "help": "Help Center",
+      "dashboard": "Dashboard",
+      "tasks": "Tasks"
     },
     "students": {
       "title": "My Students",
@@ -162,6 +164,29 @@
     },
     "help": {
       "title": "Help Center"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "myStudents": "My Students",
+      "activeProjects": "Active Projects",
+      "pendingTasks": "Pending Tasks",
+      "dueThisWeek": "Due This Week",
+      "upcomingDeadlines": "Upcoming Deadlines",
+      "noUpcoming": "No upcoming deadlines in the next 30 days",
+      "noData": "No data yet"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "filterAll": "All",
+      "filterPending": "Pending",
+      "filterInProgress": "In Progress",
+      "filterCompleted": "Completed",
+      "student": "Student",
+      "project": "Project",
+      "deadline": "Deadline",
+      "status": "Status",
+      "noTasks": "No tasks match this filter",
+      "searchPlaceholder": "Search tasks…"
     }
   },
   "admin": {
@@ -188,10 +213,10 @@
       "totalCounselors": "Total Counselors",
       "activeProjects": "Active Projects",
       "pendingTasks": "Pending Tasks",
-      "totalTasks": "Total Tasks",
-      "projectStatus": "Project Status",
-      "taskCompletion": "Task Completion Rate",
-      "upcomingDeadlines": "Upcoming Deadlines"
+      "upcomingDeadlines": "Upcoming Deadlines",
+      "deadlineAdherence": "Average Deadline Adherence Rate (all counselors and students)",
+      "top3Acceptance": "Average Top-3 Acceptance Rate (top 3 universities from student's list)",
+      "serviceSatisfaction": "Overall Service Satisfaction (based on customer feedback)"
     },
     "students": {
       "title": "Student Management",
@@ -442,11 +467,11 @@
     "home": {
       "meta": {
         "title": "SAJU 双岸教育 | Strategic University Admissions Counseling",
-        "description": "SAJU brings together admissions strategists and essay specialists with deep knowledge of Europe's university systems, guiding every student from initial exploration through successful enrollment."
+        "description": "SAJU brings together admissions strategists and essay specialists with deep knowledge of top universities across the US, UK, Europe, and Asia-Pacific, guiding every student from initial exploration through successful enrollment."
       },
       "hero": {
         "badge": "Strategic admissions counsel",
-        "heading": "A tailored strategy for every student, built to reach their best-fit European university.",
+        "heading": "A tailored strategy for every student, built to reach their best-fit university worldwide.",
         "subhead": "Clear direction. Rigorous process. Predictable outcomes.",
         "ctaPrimary": "Talk to an Expert",
         "ctaSecondary": "University Fit Assessment"
@@ -471,8 +496,8 @@
       ],
       "whoWeAre": {
         "kicker": "Who We Are",
-        "heading": "Top European University Application Consultant",
-        "body": "SAJU brings together admissions strategists and essay specialists with deep knowledge of Europe's university systems, guiding every student from initial exploration through successful enrollment, including post-admission relocation and transition support.",
+        "heading": "Top-Tier University Application Consultant",
+        "body": "SAJU brings together admissions strategists and essay specialists with deep knowledge of top universities across the US, UK, Europe, and Asia-Pacific, guiding every student from initial exploration through successful enrollment, including post-admission relocation and transition support.",
         "cta": "Meet Our Counselors"
       },
       "services": {
@@ -525,7 +550,7 @@
           {
             "label": "02",
             "title": "Exploration",
-            "body": "Define academic direction, compare European systems, and build a balanced final school list."
+            "body": "Define academic direction, compare university systems, and build a balanced final school list."
           },
           {
             "label": "03",
@@ -548,7 +573,7 @@
       "engineCallout": {
         "kicker": "Free Tool",
         "heading": "University Fit Assessment",
-        "body": "Tell us about academics, extracurricular activities, distinctions, and personal preferences to generate a personalized European university fit assessment.",
+        "body": "Tell us about academics, extracurricular activities, distinctions, and personal preferences to generate a personalized university fit assessment.",
         "cta": "Run the Assessment"
       },
       "outcomes": {
@@ -627,7 +652,7 @@
         "items": [
           {
             "q": "Which countries and institutions do you specialize in?",
-            "a": "We focus exclusively on top European universities — UK, Netherlands, Spain, France, Germany, Switzerland, and 30+ more destinations. We do not handle US or Canadian applications."
+            "a": "We focus exclusively on top universities globally — UK, Netherlands, Spain, France, Germany, Switzerland, and 30+ more destinations. We do not handle US or Canadian applications."
           },
           {
             "q": "When is the best time to start preparing?",
@@ -671,8 +696,8 @@
             "body": "Our proprietary platform makes every task, deadline, and milestone visible to students and families at all times, ensuring clearly defined task ownership and accountability."
           },
           {
-            "title": "Deep European Expertise",
-            "body": "Our counselors successfully get students into Oxford, Cambridge, Imperial College, Bocconi and other leading European universities every year, with direct knowledge of what each institution's admissions officers look for."
+            "title": "Deep Global Expertise",
+            "body": "Our counselors successfully get students into Oxford, Cambridge, Imperial College, Bocconi and other leading universities worldwide every year, with direct knowledge of what each institution's admissions officers look for."
           },
           {
             "title": "Fit First, with a Commitment to Transparency",
@@ -696,14 +721,14 @@
     "about": {
       "meta": {
         "title": "About SAJU 双岸教育 | Our Story and Mission",
-        "description": "SAJU was born from firsthand experience with the complexity of European university admissions. Learn about our story, our approach, and the team behind it."
+        "description": "SAJU was born from firsthand experience with the complexity of university admissions. Learn about our story, our approach, and the team behind it."
       },
       "story": {
         "kicker": "Our Story",
         "heading": "Born from firsthand experience",
         "paragraphs": [
           "SAJU was born from firsthand experience. Our founder applied to universities across three different countries over three consecutive years, facing three entirely different systems. Before receiving proper guidance, the process was disorienting and anxiety-ridden.",
-          "What was missing wasn't just more information. It was clarity and a trustworthy partner who truly understood European admissions.",
+          "What was missing wasn't just more information. It was clarity and a trustworthy partner who truly understood top-tier admissions.",
           "SAJU was built to be that partner."
         ]
       },
@@ -746,17 +771,17 @@
       "leadership": {
         "kicker": "Our Leadership",
         "heading": "United by a shared mission",
-        "body": "At SAJU, our team is united by one core mission: to help every student find their best-fit European university path through clear strategy and trustworthy expertise."
+        "body": "At SAJU, our team is united by one core mission: to help every student find their best-fit university worldwide path through clear strategy and trustworthy expertise."
       }
     },
     "collegeAdmissions": {
       "meta": {
-        "title": "SAJU College Admissions | European University Counseling for 8th–12th Grade",
-        "description": "A comprehensive five-phase European university application system with monthly parent meetings, algorithmic fit assessment, and dedicated 1:1 counselor support."
+        "title": "SAJU College Admissions | Global University Counseling for 8th–12th Grade",
+        "description": "A comprehensive five-phase university application system with monthly parent meetings, algorithmic fit assessment, and dedicated 1:1 counselor support."
       },
       "hero": {
         "kicker": "College Admissions",
-        "heading": "Tailored European University Application Guidance for 8th–12th Grade Students",
+        "heading": "Tailored Global University Application Guidance for 8th–12th Grade Students",
         "body": "Every successful application is the result of a series of well-considered decisions, made from the first consultation through to final submission. Our five-phase system ensures nothing falls through the cracks.",
         "cta": "Book an Initial Consultation"
       },
@@ -790,7 +815,7 @@
           "traits": [
             "Counselor matching and comprehensive student profiling",
             "Identification of 2–3 target majors that best suit the student",
-            "In-depth comparison of main European university systems and target countries (e.g. UK, Netherlands)",
+            "In-depth comparison of major university systems globally and target countries (e.g. UK, Netherlands)",
             "Final university list with highly competitive, balanced, and safe options",
             "Determination of all application requirements and deadlines",
             "Scholarship and financial aid eligibility overview"
@@ -831,12 +856,12 @@
           "id": "phase-5",
           "number": "05",
           "title": "Post-Admission Support",
-          "objective": "Core objective: Ensure a smooth transition to university life in Europe.",
+          "objective": "Core objective: Ensure a smooth transition to university life abroad.",
           "body": "Admission is not the end; it is the beginning of a new journey. We stay with your family through the final steps.",
           "traits": [
             "Visa application guidance",
             "Accommodation search and relocation support",
-            "Integration and adaptation support for university life in Europe"
+            "Integration and adaptation support for university life abroad"
           ]
         }
       ],
@@ -846,7 +871,7 @@
       },
       "counselorsPreview": {
         "kicker": "Our Team",
-        "heading": "Meet some of our European admissions experts",
+        "heading": "Meet some of our top-tier admissions experts",
         "cta": "Full Counselor List"
       },
       "testimonials": {
@@ -858,12 +883,12 @@
     "counselors": {
       "meta": {
         "title": "SAJU Counselors | The Architects Behind Your Strategy",
-        "description": "Meet the admissions strategists and essay specialists with deep expertise across Europe's main university systems."
+        "description": "Meet the admissions strategists and essay specialists with deep expertise across major university systems globally."
       },
       "hero": {
         "kicker": "Our Counselors",
         "heading": "The true architects behind your application strategy",
-        "body": "SAJU is built by admissions strategists, essay specialists, and student-success advisors with deep expertise across Europe's main university systems and beyond. Each student works closely with a dedicated consultant who personally guides every step of the process."
+        "body": "SAJU is built by admissions strategists, essay specialists, and student-success advisors with deep expertise across major university systems across the US, UK, Europe, and Asia-Pacific. Each student works closely with a dedicated consultant who personally guides every step of the process."
       },
       "principles": {
         "kicker": "How We Work",
@@ -879,15 +904,15 @@
           },
           {
             "title": "Evidence over Guesswork",
-            "body": "Application strategy grounded in profile analysis, admissions history, and feedback from former and current European university admissions officers."
+            "body": "Application strategy grounded in profile analysis, admissions history, and feedback from former and current university admissions officers."
           },
           {
             "title": "Execution Discipline",
             "body": "Deadlines and material quality are non-negotiable. Task ownership is clearly defined to maximize accountability. We won't let students lose track or miss valuable opportunities."
           },
           {
-            "title": "European Breadth",
-            "body": "We evaluate options across 30+ European countries and guide students toward institutions offering the strongest fit and career outcomes, supported by large data sets."
+            "title": "Global Breadth",
+            "body": "We evaluate options across top destinations across the US, UK, Europe, and Asia-Pacific and guide students toward institutions offering the strongest fit and career outcomes, supported by large data sets."
           },
           {
             "title": "Student Ownership",
@@ -896,34 +921,40 @@
         ]
       },
       "regions": {
-        "kicker": "Expertise",
-        "heading": "The European systems we specialize in",
+        "kicker": "Global Reach",
+        "heading": "Where we support students",
         "items": [
           {
-            "name": "Northern Europe",
+            "name": "US & North America",
             "universities": [
-              "UK: Oxford, Cambridge, Imperial College London, UCL",
-              "Sweden: Lund University, Uppsala University, KTH",
-              "Ireland: Trinity College Dublin, UCD, UCC",
-              "Norway, Finland, Denmark…"
+              "USA: Harvard, MIT, Stanford, Yale, Princeton, Columbia, UChicago, Penn, UCLA, UC Berkeley, Cornell, Duke",
+              "Canada: University of Toronto, McGill University, UBC, University of Waterloo"
             ]
           },
           {
-            "name": "Central Europe",
+            "name": "UK & Ireland",
             "universities": [
-              "Switzerland: ETH Zurich, EPFL, University of Zurich",
-              "Netherlands: TU Delft, University of Amsterdam, Utrecht University",
-              "Germany: TUM, LMU Munich, Heidelberg University",
-              "Belgium, Austria, Czechia…"
+              "UK: Oxford, Cambridge, Imperial College London, UCL, LSE, Edinburgh, St Andrews, King's College London",
+              "Ireland: Trinity College Dublin, UCD"
             ]
           },
           {
-            "name": "Southern Europe",
+            "name": "Europe",
             "universities": [
-              "France: PSL University, Polytechnic Institute of Paris, Paris-Saclay University",
-              "Italy: Polimi, University of Bologna, Sapienza University of Rome",
-              "Spain: UAM, UAB, IE University",
-              "Portugal, Greece, Cyprus…"
+              "Switzerland: ETH Zürich, EPFL",
+              "Netherlands: TU Delft, University of Amsterdam",
+              "Germany: TUM, LMU Munich, Heidelberg",
+              "France: Sciences Po, HEC Paris, Polytechnique",
+              "Italy: Bocconi, Polimi"
+            ]
+          },
+          {
+            "name": "Asia-Pacific",
+            "universities": [
+              "Singapore: National University of Singapore (NUS), Nanyang Technological University",
+              "Hong Kong: HKU, HKUST, CUHK",
+              "Japan: University of Tokyo, Kyoto University",
+              "Australia: University of Melbourne, University of Sydney, ANU"
             ]
           }
         ]

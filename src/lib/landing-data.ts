@@ -72,7 +72,7 @@ export interface LeadershipMember {
 export const WHY_US_TRAITS: Trait[] = [
   { title: 'Customized Counselor Assignment', description: 'Holistic and personalized strategy tailored to each student\'s unique profile, goals, and circumstances.' },
   { title: 'Better Organization Through Our Platform', description: 'Our proprietary platform keeps every document, deadline, and milestone in one place — nothing gets lost.' },
-  { title: 'Insider Knowledge from European Network', description: 'Direct insights from our counselor network across UK, European, and global admissions systems.' },
+  { title: 'Insider Knowledge from Global Network', description: 'Direct insights from our counselor network across US, UK, European, and Asia-Pacific admissions systems.' },
   { title: 'Student Fit & Transparency', description: 'We prioritize finding the right fit over prestige. Every recommendation is backed by data and explained clearly.' },
   { title: 'Peer Review Feedback', description: 'Applications are reviewed by multiple counselors to catch blind spots and strengthen positioning.' },
   { title: 'Bi-weekly Feedback Meetings with Parents', description: 'Regular parent updates ensure alignment on strategy, timeline, and expectations throughout the process.' },
@@ -174,7 +174,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     academics: 'A-Level student with high predicted grades in Economics and History',
     initialProfile: 'All-in on a single target with no margin for error and no consideration of program-level fit.',
     extracurriculars: 'Competitive profile for Oxford but not meaningfully differentiated.',
-    changesMade: 'Compared European programs by teaching style, program strengths, career outcomes, and cost; connected the family with current students and alumni to ground the decision in real experience; built a balanced list that kept Oxford alongside strong alternatives.',
+    changesMade: 'Compared programs across the US, UK, and Europe by teaching style, program strengths, career outcomes, and cost; connected the family with current students and alumni to ground the decision in real experience; built a balanced list that kept Oxford alongside strong alternatives.',
     otherInfo: 'Not admitted to Oxford — and that became a successful cycle, not a failed one.',
     outcome: 'Offers from Sciences Po and the University of Amsterdam — both outstanding programs aligned with his interests and long-term goals.',
   },
