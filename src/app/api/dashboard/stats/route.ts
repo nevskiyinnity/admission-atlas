@@ -17,6 +17,7 @@ export async function GET() {
     completedTasks,
     totalTasks,
     upcomingDeadlines,
+    adherenceRows,
   ] = await Promise.all([
     prisma.user.count({ where: { role: 'STUDENT' } }),
     prisma.user.count({ where: { role: 'COUNSELOR' } }),
@@ -36,7 +37,21 @@ export async function GET() {
       orderBy: { deadline: 'asc' },
       take: 20,
     }),
+    prisma.task.findMany({
+      where: { status: 'COMPLETED', deadline: { not: null } },
+      select: { deadline: true, updatedAt: true },
+    }),
   ]);
+
+  // Completed on-time / total completed with a deadline. updatedAt stands in for completedAt.
+  const onTime = adherenceRows.filter((r) => r.deadline && r.updatedAt <= r.deadline).length;
+  const avgDeadlineAdherenceRate = adherenceRows.length === 0
+    ? null
+    : Math.round((onTime / adherenceRows.length) * 100);
+
+  // Backing data not yet modeled: top-3 university acceptance per student, per-engagement satisfaction ratings.
+  const avgTop3AcceptanceRate: number | null = null;
+  const serviceSatisfaction: { average: number; count: number; distribution: number[] } | null = null;
 
   return NextResponse.json({
     totalStudents,
@@ -49,5 +64,8 @@ export async function GET() {
     completedTasks,
     totalTasks,
     upcomingDeadlines,
+    avgDeadlineAdherenceRate,
+    avgTop3AcceptanceRate,
+    serviceSatisfaction,
   });
 }

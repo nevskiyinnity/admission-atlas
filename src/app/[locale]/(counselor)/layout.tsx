@@ -3,7 +3,9 @@
 import { useTranslations } from 'next-intl';
 import { PortalLayout } from '@/components/layout/portal-layout';
 import {
+  LayoutDashboard,
   Users,
+  CheckSquare,
   Bell,
   Settings,
   HelpCircle,
@@ -18,9 +20,19 @@ export default function CounselorLayout({
 
   const sidebarItems = [
     {
+      label: t('dashboard'),
+      href: '/counselor/dashboard',
+      icon: <LayoutDashboard className="h-4 w-4" />,
+    },
+    {
       label: t('studentManagement'),
       href: '/counselor/students',
       icon: <Users className="h-4 w-4" />,
+    },
+    {
+      label: t('tasks'),
+      href: '/counselor/tasks',
+      icon: <CheckSquare className="h-4 w-4" />,
     },
     {
       label: t('notifications'),
