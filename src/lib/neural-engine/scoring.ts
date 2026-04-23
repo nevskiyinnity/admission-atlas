@@ -198,21 +198,22 @@ const DIFFERENTIATION_PENALTY: Record<EuropeTier, Record<Differentiation, number
  * Compute the final Target School Match percentage.
  *
  * Formula (spec §4, §5):
- *   capped      = academicStrength × academicCap(tier)
- *   differBoost = differentiation bonus (0 for low, +5 for medium, +10 for high)
- *   preBase     = (capped + differBoost) clamped to 100
- *   final       = preBase − differentiationPenalty(tier, differentiation)
+ *   coreFit = academicStrength × academicCap(tier)      // spec §4: academic cap
+ *   final   = coreFit − differentiationPenalty(tier, differentiation)   // spec §5: penalty after core
+ *
+ * The spec defines only penalties, not bonuses. High differentiation helps an
+ * applicant by *avoiding* penalties that Low differentiation would incur — it
+ * doesn't inflate the score on its own. Clamped to [0, 100].
  */
 export function computeFitScore(
   academicStrength: number,
   differentiation: Differentiation,
   tier: EuropeTier,
 ): number {
-  const capped = academicStrength * ACADEMIC_CAP[tier];
-  const differBoost = differentiation === 'high' ? 10 : differentiation === 'medium' ? 5 : 0;
-  const preBase = Math.min(100, capped + differBoost);
+  const coreFit = academicStrength * ACADEMIC_CAP[tier];
   const penalty = DIFFERENTIATION_PENALTY[tier][differentiation];
-  return Math.max(0, Math.round(preBase - penalty));
+  const final = coreFit - penalty;
+  return Math.max(0, Math.min(100, Math.round(final)));
 }
 
 /* ───────────────────────────────────────────────────────────────

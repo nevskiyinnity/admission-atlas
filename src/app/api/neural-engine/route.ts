@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 import { OpenAI } from 'openai';
+import { Redis } from '@upstash/redis';
 import { isNeuralEngineRateLimited } from '@/lib/neural-engine-rate-limit';
 import { analyzeProfileSchema, parseBody } from '@/lib/validations';
 import { buildNarrativePrompt, NARRATIVE_SYSTEM_MESSAGE } from '@/lib/prompts';
@@ -10,6 +11,26 @@ import type { AnalysisPayload } from '@/lib/prompts';
 import type { AnalysisResult, Alternative } from '@/lib/analysis-utils';
 import { buildMockNarrative, mergeNextSteps } from '@/lib/analysis-utils';
 import { logger } from '@/lib/logger';
+
+const NARRATIVE_CACHE_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
+const NARRATIVE_CACHE_PREFIX = 'saju:neural-engine:narrative:';
+
+const redis =
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+    ? new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      })
+    : null;
+
+type Narrative = {
+  strengths: string[];
+  concerns: string[];
+  nextSteps: string[];
+  alternatives: Alternative[];
+  categoryScores: { label: string; score: number }[];
+  logs: string[];
+};
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'dummy' });
@@ -24,15 +45,18 @@ function getClientIp(req: NextRequest): string {
 }
 
 /**
- * Deterministic seed derived from the canonical input. Same payload → same seed,
- * which combined with `temperature: 0` gives OpenAI its strongest determinism
- * guarantee short of caching.
+ * Canonical hash of the sorted payload — used as both the OpenAI `seed` (int)
+ * and the Upstash cache key (hex) so identical inputs map to a single cached
+ * narrative.
  */
-function deterministicSeed(payload: AnalysisPayload): number {
+function canonicalHash(payload: AnalysisPayload): { seed: number; key: string } {
   const keys = Object.keys(payload).sort();
   const canonical = JSON.stringify(payload, keys);
   const hash = createHash('sha256').update(canonical).digest();
-  return hash.readUInt32BE(0) & 0x7fffffff;
+  return {
+    seed: hash.readUInt32BE(0) & 0x7fffffff,
+    key: hash.toString('hex').slice(0, 32),
+  };
 }
 
 export async function POST(req: NextRequest) {
@@ -57,34 +81,52 @@ export async function POST(req: NextRequest) {
     // 1. Deterministic engine: score, tiers, risk, expectation, summary, pinned steps
     const deterministic = analyzeDeterministic(payload);
 
-    // 2. LLM narrative layer — generates only strengths, concerns, alternatives,
-    //    and ancillary next steps. The score + summary + risk are NOT AI outputs.
+    // 2. LLM narrative layer — strengths, concerns, alternatives. The score +
+    //    summary + risk are NOT AI outputs. We cache by a hash of the payload so
+    //    identical inputs return byte-identical narratives (spec §1).
     const hasRealKey =
       process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'YOUR_OPENAI_API_KEY_HERE';
 
-    let narrative: {
-      strengths: string[];
-      concerns: string[];
-      nextSteps: string[];
-      alternatives: Alternative[];
-      categoryScores: { label: string; score: number }[];
-      logs: string[];
-    };
+    const { seed, key: payloadKey } = canonicalHash(payload);
+    const cacheKey = `${NARRATIVE_CACHE_PREFIX}${payloadKey}`;
 
-    if (hasRealKey) {
-      const completion = await getOpenAI().chat.completions.create({
-        model: 'gpt-4o-mini',
-        temperature: 0,
-        seed: deterministicSeed(payload),
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: NARRATIVE_SYSTEM_MESSAGE },
-          { role: 'user', content: buildNarrativePrompt(payload, deterministic) },
-        ],
-      });
-      narrative = JSON.parse(completion.choices[0].message.content!);
-    } else {
-      narrative = buildMockNarrative(payload, deterministic);
+    let narrative: Narrative | null = null;
+
+    if (redis) {
+      try {
+        const cached = (await redis.get(cacheKey)) as Narrative | null;
+        if (cached && cached.strengths && cached.alternatives) {
+          narrative = cached;
+        }
+      } catch (cacheError) {
+        logger.error('Neural engine cache read failed', cacheError, { endpoint: '/api/neural-engine' });
+      }
+    }
+
+    if (!narrative) {
+      if (hasRealKey) {
+        const completion = await getOpenAI().chat.completions.create({
+          model: 'gpt-4o-mini',
+          temperature: 0,
+          seed,
+          response_format: { type: 'json_object' },
+          messages: [
+            { role: 'system', content: NARRATIVE_SYSTEM_MESSAGE },
+            { role: 'user', content: buildNarrativePrompt(payload, deterministic) },
+          ],
+        });
+        narrative = JSON.parse(completion.choices[0].message.content!) as Narrative;
+      } else {
+        narrative = buildMockNarrative(payload, deterministic);
+      }
+
+      if (redis) {
+        try {
+          await redis.set(cacheKey, narrative, { ex: NARRATIVE_CACHE_TTL_SECONDS });
+        } catch (cacheError) {
+          logger.error('Neural engine cache write failed', cacheError, { endpoint: '/api/neural-engine' });
+        }
+      }
     }
 
     // 3. Merge: enforce pinned next steps (de-duped against LLM's list)
