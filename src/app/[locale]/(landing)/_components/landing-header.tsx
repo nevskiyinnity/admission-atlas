@@ -1,28 +1,24 @@
 import Image from 'next/image';
 import { Link } from '@/i18n/routing';
-import { getLocale, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { LanguageSwitcher } from './language-switcher';
 import { MobileMenu } from './mobile-menu';
 
 export async function LandingHeader() {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations('landing')]);
+  const t = await getTranslations('landing');
 
   return (
     <header className="l-header">
       <div className="l-header-inner">
         <Link className="l-brand" href="/" aria-label="双岸教育 SAJU">
-          {locale === 'zh' ? (
-            <Image
-              src="/images/logo-zh.svg"
-              alt=""
-              width={200}
-              height={60}
-              priority
-              className="l-brand-logo"
-            />
-          ) : (
-            <span className="l-brand-placeholder" aria-hidden="true" />
-          )}
+          <Image
+            src="/images/logo.svg"
+            alt=""
+            width={222}
+            height={52}
+            priority
+            className="l-brand-logo"
+          />
         </Link>
         <nav className="l-nav-links">
           <Link href="/about">{t('nav.aboutUs')}</Link>
