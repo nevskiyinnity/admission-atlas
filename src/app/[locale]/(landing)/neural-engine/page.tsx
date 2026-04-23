@@ -84,6 +84,68 @@ function scoreColorClass(score: number): string {
   return 'ne-score-low';
 }
 
+/* ── Helper: build downloadable plain-text report ── */
+
+function buildReportText(r: AnalysisResult): string {
+  const lines: string[] = [];
+  const rule = '─'.repeat(60);
+
+  lines.push('SAJU UNIVERSITY FIT ASSESSMENT');
+  lines.push(rule);
+  lines.push(`Target University: ${r.institution}`);
+  lines.push(`Target School Match: ${r.targetMatchPercent}%`);
+  if (r.risk) lines.push(`Risk Category: ${r.risk.label.toUpperCase()}`);
+  lines.push('');
+  lines.push('SUMMARY');
+  lines.push(rule);
+  lines.push(r.summary);
+  lines.push('');
+  if (r.risk) {
+    lines.push('RISK CATEGORY MESSAGE');
+    lines.push(rule);
+    lines.push(r.risk.message);
+    lines.push('');
+  }
+  if (r.expectation) {
+    lines.push('PROFILE vs. TARGET UNIVERSITY');
+    lines.push(rule);
+    lines.push(r.expectation.message);
+    lines.push('');
+  }
+  lines.push('STRENGTHS');
+  lines.push(rule);
+  r.strengths.forEach((s, i) => lines.push(`${i + 1}. ${s}`));
+  lines.push('');
+  lines.push('WATCHOUTS');
+  lines.push(rule);
+  r.concerns.forEach((c, i) => lines.push(`${i + 1}. ${c}`));
+  lines.push('');
+  lines.push('RECOMMENDED NEXT STEPS');
+  lines.push(rule);
+  r.nextSteps.forEach((n, i) => lines.push(`${i + 1}. ${n}`));
+  lines.push('');
+  lines.push('FIT BREAKDOWN');
+  lines.push(rule);
+  r.categoryScores.forEach((cat) => lines.push(`${cat.label.padEnd(16)} ${cat.score}%`));
+  lines.push('');
+  lines.push('STRONGER FITS YOU MAY BE OVERLOOKING');
+  lines.push(rule);
+  r.alternatives.forEach((alt) => {
+    lines.push(`${alt.name} (${alt.country}) — ${alt.matchPercent}%`);
+    lines.push(`  ${alt.why}`);
+    lines.push('');
+  });
+  if (r.disclaimer) {
+    lines.push(rule);
+    lines.push(r.disclaimer);
+  }
+  return lines.join('\n');
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 /* ── Page Component ── */
 
 export default function NeuralEnginePage() {
@@ -92,10 +154,20 @@ export default function NeuralEnginePage() {
   const [error, setError] = useState<string | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
 
+  // Consent (spec §3)
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+
+  // Secondary CTA: email flow (visual-only — no backend send)
+  const [emailMode, setEmailMode] = useState<'idle' | 'input' | 'sending' | 'sent'>('idle');
+  const [emailValue, setEmailValue] = useState('');
+
   const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setResult(null);
+    setEmailMode('idle');
+    setEmailValue('');
     setLoading(true);
     setLogs(['Initializing analysis...']);
 
@@ -161,6 +233,28 @@ export default function NeuralEnginePage() {
       if (el) el.value = value;
     }
   }, []);
+
+  const handleDownload = useCallback(() => {
+    if (!result) return;
+    const content = buildReportText(result);
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `SAJU-Fit-Assessment-${result.institution.replace(/[^a-z0-9]/gi, '-')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [result]);
+
+  const handleEmailSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isValidEmail(emailValue)) return;
+    setEmailMode('sending');
+    // Visual-only: simulate a send. No backend call — spec deferred.
+    setTimeout(() => setEmailMode('sent'), 900);
+  }, [emailValue]);
 
   return (
     <main className="ne-shell">
@@ -299,9 +393,46 @@ export default function NeuralEnginePage() {
           </div>
         </section>
 
-        <button type="submit" className="ne-btn-primary" disabled={loading}>
+        {/* Consent (spec §3) */}
+        <section className="ne-card ne-consent-card">
+          <label className="ne-consent-row">
+            <input
+              type="checkbox"
+              checked={privacyConsent}
+              onChange={(e) => setPrivacyConsent(e.target.checked)}
+              aria-required="true"
+            />
+            <span>
+              I agree to the company&apos;s{' '}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>{' '}and{' '}
+              <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Use</a>.
+              <span className="ne-consent-required" aria-hidden="true"> *</span>
+            </span>
+          </label>
+          <label className="ne-consent-row">
+            <input
+              type="checkbox"
+              checked={marketingConsent}
+              onChange={(e) => setMarketingConsent(e.target.checked)}
+            />
+            <span>
+              I agree to receive email updates about webinars, relevant information,
+              and occasional promotional content.
+            </span>
+          </label>
+        </section>
+
+        <button
+          type="submit"
+          className="ne-btn-primary"
+          disabled={loading || !privacyConsent}
+          aria-disabled={loading || !privacyConsent}
+        >
           {loading ? 'Analyzing...' : 'Generate Match Report'}
         </button>
+        {!privacyConsent && !loading && (
+          <p className="ne-consent-hint">Please agree to the Privacy Policy and Terms of Use to generate your report.</p>
+        )}
       </form>
 
       {/* ── Processing Modal ── */}
@@ -439,6 +570,80 @@ export default function NeuralEnginePage() {
                   <p className="ne-alt-why">{alt.why}</p>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Post-report CTAs (spec §2) */}
+          <div className="ne-cta-block">
+            <a className="ne-btn-primary ne-cta-primary" href="/contact">
+              Book Personalized Strategy Consultation
+              <span aria-hidden="true">&nbsp;&rarr;</span>
+            </a>
+
+            <div className="ne-cta-secondary">
+              {emailMode === 'idle' && (
+                <div className="ne-cta-secondary-row">
+                  <button
+                    type="button"
+                    className="ne-btn-secondary"
+                    onClick={() => setEmailMode('input')}
+                  >
+                    Email Me the Report
+                  </button>
+                  <span className="ne-cta-separator" aria-hidden="true">or</span>
+                  <button
+                    type="button"
+                    className="ne-btn-ghost"
+                    onClick={handleDownload}
+                  >
+                    Download Report
+                  </button>
+                </div>
+              )}
+
+              {(emailMode === 'input' || emailMode === 'sending') && (
+                <form className="ne-email-form" onSubmit={handleEmailSubmit}>
+                  <label className="ne-email-label">
+                    <span>Send the report to your inbox</span>
+                    <input
+                      type="email"
+                      className="ne-input"
+                      placeholder="you@example.com"
+                      value={emailValue}
+                      onChange={(e) => setEmailValue(e.target.value)}
+                      required
+                      autoComplete="email"
+                      disabled={emailMode === 'sending'}
+                    />
+                  </label>
+                  <div className="ne-email-actions">
+                    <button
+                      type="submit"
+                      className="ne-btn-secondary"
+                      disabled={emailMode === 'sending' || !isValidEmail(emailValue)}
+                    >
+                      {emailMode === 'sending' ? 'Sending…' : 'Send Report'}
+                    </button>
+                    <button
+                      type="button"
+                      className="ne-btn-ghost"
+                      onClick={() => setEmailMode('idle')}
+                      disabled={emailMode === 'sending'}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {emailMode === 'sent' && (
+                <div className="ne-email-success" role="status">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>Your report has been sent successfully. Check your inbox.</span>
+                </div>
+              )}
             </div>
           </div>
 

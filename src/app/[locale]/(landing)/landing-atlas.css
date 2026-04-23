@@ -3627,3 +3627,150 @@
     border-left: 3px solid var(--border, #e6e2d6);
     border-radius: 4px;
 }
+
+/* ───────────────────────────────────────────────────────────────
+   Neural Engine — consent rows (spec §3)
+   ─────────────────────────────────────────────────────────────── */
+
+.ne-consent-card {
+    margin-top: 8px;
+    padding: 20px 22px;
+}
+
+.ne-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--ink-2, #4a4a4a);
+    cursor: pointer;
+}
+
+.ne-consent-row + .ne-consent-row {
+    border-top: 1px solid var(--border, #e6e2d6);
+}
+
+.ne-consent-row input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--accent, #6b8e8e);
+    cursor: pointer;
+}
+
+.ne-consent-row a {
+    color: var(--accent, #6b8e8e);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.ne-consent-row a:hover {
+    text-decoration: none;
+}
+
+.ne-consent-required {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.ne-consent-hint {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #b91c1c;
+    text-align: center;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Neural Engine — post-report CTAs (spec §2)
+   ─────────────────────────────────────────────────────────────── */
+
+.ne-cta-block {
+    margin-top: 32px;
+    padding: 28px 24px;
+    background: linear-gradient(135deg, #f3efe4 0%, #e8e2d2 100%);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.ne-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--ink, #1a1a1a);
+    color: #fff;
+    border-radius: 10px;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.ne-cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.ne-cta-secondary {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    justify-content: center;
+}
+
+.ne-cta-secondary-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ne-cta-separator {
+    font-size: 0.85rem;
+    color: var(--ink-2, #4a4a4a);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ne-email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.ne-email-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--ink-2, #4a4a4a);
+}
+
+.ne-email-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.ne-email-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    color: #16a34a;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
