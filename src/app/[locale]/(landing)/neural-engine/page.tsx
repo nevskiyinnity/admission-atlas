@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { FormEvent } from 'react';
+import { EUROPEAN_RANKINGS } from '@/lib/neural-engine/rankings';
 
 /* ── Types mirroring the API response ── */
 
@@ -50,30 +51,30 @@ const RISK_TITLE: Record<'safe' | 'balanced' | 'high-risk', string> = {
   'high-risk': 'High-risk option',
 };
 
-/* ── Mock fill data ── */
+/* ── Mock fill data (European profile) ── */
 
 const MOCK_FILL = {
-  name: 'Jordan Lee',
-  residency: 'international',
-  university: 'University of Michigan',
-  major: 'Computer Science',
-  preferredRegions: 'USA, UK, Canada',
-  gpa: '3.82',
-  sat: 'SAT 1490',
-  internationalExams: 'AP Calc BC 5, AP Physics C 5',
+  name: 'Sofia Martín',
+  residency: 'eu',
+  university: 'University of Oxford',
+  major: 'Philosophy, Politics and Economics',
+  preferredRegions: 'United Kingdom, Netherlands, France',
+  gpa: '',
+  sat: '',
+  internationalExams: 'IB 42/45 (HL: History 7, Economics 7, English Lit 6)',
   otherExams: '',
-  coursework: 'AP Calculus BC, AP Physics C, AP Computer Science A, Dual Enrollment Linear Algebra',
-  activities: 'Founder and president of coding club; robotics software lead; peer tutoring 200+ hours',
-  awards: 'State robotics finalist, National Merit Commended',
-  question1: 'Project-based classes with close professor access and collaborative labs',
-  question2: 'Built a campus navigation app used by 300 students',
-  question3: 'Mid-size urban campus with strong internship pipeline',
-  question4: 'Cost matters most; open to honors programs with scholarships',
-  question5: 'Product management in health tech, then graduate school',
-  question6: 'USD 25,000-40,000 per year',
-  question7: 'Need merit scholarship of at least 30%, open to work-study',
-  question8: 'Mentorship, career services, international student advising',
-  question9: 'Startup incubators, debate, research labs, running club',
+  coursework: 'IB Higher Level subjects in History, Economics, English Literature; Extended Essay in Economics',
+  activities: 'President of Model United Nations; founder of school economics society (30+ members); national debate team captain',
+  awards: 'National Economics Olympiad finalist, IB Bilingual Diploma scholar',
+  question1: 'Tutorial-based learning with close faculty contact and rigorous written feedback',
+  question2: 'Led a six-month research project on inflation policy, published in the school journal and presented at a regional economics forum',
+  question3: 'Historic European campus with a strong tutorial culture and active society life',
+  question4: 'Fit with the programme matters most; cost is a secondary consideration with scholarship options',
+  question5: 'Graduate study in economic policy, then work in public-sector strategy or international organisations',
+  question6: 'EUR 20,000–35,000 per year',
+  question7: 'Open to merit scholarships and college bursaries; not dependent on full aid',
+  question8: 'Academic mentorship, research access, international student advising',
+  question9: 'Debate, economic research circles, policy fellowships, European exchange programmes',
 };
 
 /* ── Helper: score color class ── */
@@ -182,11 +183,11 @@ export default function NeuralEnginePage() {
       setLogs((prev) => {
         const messages = [
           'Ingesting applicant profile and narrative responses...',
-          'Normalizing academic metrics across grading systems...',
-          'Evaluating target institution selectivity...',
-          'Scoring category fit dimensions...',
+          'Normalizing academic metrics across European grading systems...',
+          'Evaluating target institution selectivity and QS Europe tier...',
+          'Scoring academic strength and differentiation...',
           'Comparing preference signals with campus characteristics...',
-          'Building ranked worldwide university shortlist...',
+          'Building ranked European university shortlist...',
           'Generating final match report...',
         ];
         const next = messages[prev.length - 1];
@@ -256,6 +257,20 @@ export default function NeuralEnginePage() {
     setTimeout(() => setEmailMode('sent'), 900);
   }, [emailValue]);
 
+  // Deduplicated list of European university names for the datalist.
+  // Same source as the scoring tier lookup — one place to update.
+  const europeanUniversityOptions = useMemo(() => {
+    const seen = new Set<string>();
+    const names: string[] = [];
+    for (const u of EUROPEAN_RANKINGS) {
+      if (!seen.has(u.name)) {
+        seen.add(u.name);
+        names.push(u.name);
+      }
+    }
+    return names;
+  }, []);
+
   return (
     <main className="ne-shell">
       {/* ── Hero ── */}
@@ -263,8 +278,14 @@ export default function NeuralEnginePage() {
         <p className="ne-kicker">SAJU Admissions Intelligence</p>
         <h1 className="ne-title">Neural Match Engine</h1>
         <p className="ne-subtitle">
-          Complete your profile and counseling questionnaire. Our AI engine generates your
-          target match score and suggests alternative universities worldwide.
+          Complete your profile and counselling questionnaire. Our engine scores your fit
+          against your target and surfaces stronger alternatives across Europe&apos;s leading
+          universities.
+        </p>
+        <p className="ne-scope-badge">
+          <span className="ne-scope-dot" aria-hidden="true" />
+          SAJU specialises in European university admissions. Enter a European target for
+          an accurate assessment.
         </p>
         <button type="button" className="ne-btn-secondary" onClick={handleMockFill}>
           Fill Sample Answers
@@ -280,27 +301,45 @@ export default function NeuralEnginePage() {
           <div className="ne-grid">
             <label className="ne-label">
               Full Name
-              <input type="text" name="name" placeholder="Jordan Lee" required className="ne-input" />
+              <input type="text" name="name" placeholder="Sofia Martín" required className="ne-input" />
             </label>
             <label className="ne-label">
               Residency Status
-              <select name="residency" className="ne-input">
-                <option value="domestic">Domestic (In-State)</option>
-                <option value="out_of_state">Domestic (Out-of-State)</option>
-                <option value="international">International</option>
+              <select name="residency" className="ne-input" defaultValue="eu">
+                <option value="eu">EU / EEA Student</option>
+                <option value="uk">UK Student</option>
+                <option value="international">International (Non-EU / Non-UK)</option>
               </select>
             </label>
             <label className="ne-label">
-              Target University
-              <input type="text" name="university" placeholder="University of Michigan" required className="ne-input" />
+              Target University (European)
+              <input
+                type="text"
+                name="university"
+                placeholder="e.g., University of Oxford, TU Delft, Sciences Po"
+                required
+                className="ne-input"
+                list="eu-university-suggestions"
+                autoComplete="off"
+              />
+              <datalist id="eu-university-suggestions">
+                {europeanUniversityOptions.map((name) => (
+                  <option key={name} value={name} />
+                ))}
+              </datalist>
             </label>
             <label className="ne-label">
               Intended Major
-              <input type="text" name="major" placeholder="Computer Science" required className="ne-input" />
+              <input type="text" name="major" placeholder="e.g., Economics, Engineering, Law" required className="ne-input" />
             </label>
             <label className="ne-label ne-full">
-              Preferred Countries / Regions (Optional)
-              <input type="text" name="preferredRegions" placeholder="e.g., USA, UK, Canada, Singapore" className="ne-input" />
+              Preferred Countries / Regions in Europe (Optional)
+              <input
+                type="text"
+                name="preferredRegions"
+                placeholder="e.g., United Kingdom, Netherlands, Germany, France, Spain"
+                className="ne-input"
+              />
             </label>
           </div>
         </section>
@@ -308,27 +347,42 @@ export default function NeuralEnginePage() {
         {/* Academic Readiness */}
         <section className="ne-card">
           <h2 className="ne-card-title">Academic Readiness</h2>
-          <p className="ne-card-subtitle">Supports GPA, SAT/ACT, A Levels, IB, and other exam systems.</p>
+          <p className="ne-card-subtitle">
+            Enter whichever school-leaving qualifications apply to you — IB, A-Levels, Abitur,
+            Spanish Bachillerato, French Baccalauréat, Leaving Cert, and others are all supported.
+          </p>
           <div className="ne-grid">
             <label className="ne-label">
-              GPA (Optional, 4.0 scale)
+              GPA (Optional — if your school uses a 4.0 scale)
               <input type="number" name="gpa" step="0.01" min="0" max="4.0" placeholder="3.82" className="ne-input" />
             </label>
             <label className="ne-label">
-              SAT / ACT / Other Standardized Tests
+              SAT / ACT (Optional — only if you&apos;ve taken them)
               <input type="text" name="sat" placeholder="e.g., SAT 1490, ACT 33" className="ne-input" />
             </label>
             <label className="ne-label ne-full">
-              A Levels / IB / AP / National Qualifications
-              <textarea name="internationalExams" placeholder="e.g., A*AA in A Levels, IB 40/45 (HL Math 7), AP Calc BC 5" className="ne-input ne-textarea" />
+              IB / A-Levels / Other Primary Qualifications
+              <textarea
+                name="internationalExams"
+                placeholder="e.g., IB 42/45 (HL History 7, Economics 7) · A*AA in A-Levels · predicted Abitur 1.3"
+                className="ne-input ne-textarea"
+              />
             </label>
             <label className="ne-label ne-full">
-              Other Exam Systems (Optional)
-              <textarea name="otherExams" placeholder="e.g., Gaokao, JEE, Abitur, Leaving Cert" className="ne-input ne-textarea" />
+              Other National Qualifications (Optional)
+              <textarea
+                name="otherExams"
+                placeholder="e.g., Spanish Bachillerato, French Baccalauréat, Leaving Cert, Italian Maturità"
+                className="ne-input ne-textarea"
+              />
             </label>
             <label className="ne-label ne-full">
               Advanced Coursework
-              <textarea name="coursework" placeholder="AP Calculus BC, AP Physics C, Dual Enrollment Linear Algebra" className="ne-input ne-textarea" />
+              <textarea
+                name="coursework"
+                placeholder="e.g., IB HL subjects, A-Level choices, Abitur focus subjects, Extended Essay topic"
+                className="ne-input ne-textarea"
+              />
             </label>
           </div>
         </section>
@@ -349,46 +403,46 @@ export default function NeuralEnginePage() {
           </div>
         </section>
 
-        {/* Counseling Questions */}
+        {/* Counselling Questions */}
         <section className="ne-card">
-          <h2 className="ne-card-title">Neural Engine Counseling Questions</h2>
+          <h2 className="ne-card-title">Neural Engine Counselling Questions</h2>
           <p className="ne-card-subtitle">Answer all prompts for better recommendation quality.</p>
           <div className="ne-grid">
             <label className="ne-label ne-full">
               1) What learning environment helps you perform at your best?
-              <textarea name="question1" placeholder="e.g., Project-based classes, close professor access" className="ne-input ne-textarea" />
+              <textarea name="question1" placeholder="e.g., Tutorial-based learning, seminars, research-led teaching" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               2) What project or achievement best represents your strengths?
-              <textarea name="question2" placeholder="e.g., Built a campus navigation app used by 300 students" className="ne-input ne-textarea" />
+              <textarea name="question2" placeholder="e.g., Independent research in economics, launched a student publication, led a national debate team" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               3) What type of campus and location do you prefer?
-              <textarea name="question3" placeholder="e.g., Mid-size urban campus with strong internship pipeline" className="ne-input ne-textarea" />
+              <textarea name="question3" placeholder="e.g., Historic European city · compact campus · strong placements network" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
-              4) How do you weigh affordability, prestige, and outcomes?
-              <textarea name="question4" placeholder="e.g., Cost matters most; open to honors programs with scholarships" className="ne-input ne-textarea" />
+              4) How do you weigh fit, prestige, and outcomes?
+              <textarea name="question4" placeholder="e.g., Programme fit is primary; open to selective and mid-tier options" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               5) What are your intended career outcomes after graduation?
-              <textarea name="question5" placeholder="e.g., Product management in health tech, then graduate school" className="ne-input ne-textarea" />
+              <textarea name="question5" placeholder="e.g., Graduate study in Europe, then public-sector strategy or international organisations" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               6) What is your annual budget range for tuition + living costs? (Required)
-              <input type="text" name="question6" placeholder="e.g., USD 25,000-40,000 per year" required className="ne-input" />
+              <input type="text" name="question6" placeholder="e.g., EUR 20,000–35,000 or GBP 18,000–30,000 per year" required className="ne-input" />
             </label>
             <label className="ne-label ne-full">
               7) Do you need scholarships, grants, or financial aid?
-              <textarea name="question7" placeholder="e.g., Need merit scholarship of at least 30%" className="ne-input ne-textarea" />
+              <textarea name="question7" placeholder="e.g., Interested in college bursaries or merit scholarships; not dependent on full aid" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               8) What type of support matters most to you at university?
-              <textarea name="question8" placeholder="e.g., Mentorship, career services, international student advising" className="ne-input ne-textarea" />
+              <textarea name="question8" placeholder="e.g., Tutor mentorship, research access, international student advising" className="ne-input ne-textarea" />
             </label>
             <label className="ne-label ne-full">
               9) What extracurricular or community experiences do you want?
-              <textarea name="question9" placeholder="e.g., Startup incubators, debate, research labs" className="ne-input ne-textarea" />
+              <textarea name="question9" placeholder="e.g., Debating societies, research fellowships, European exchange programmes" className="ne-input ne-textarea" />
             </label>
           </div>
         </section>

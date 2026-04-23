@@ -3774,3 +3774,38 @@
     font-size: 0.95rem;
     font-weight: 500;
 }
+
+/* ───────────────────────────────────────────────────────────────
+   Neural Engine — Europe-only scope badge
+   ─────────────────────────────────────────────────────────────── */
+
+.ne-scope-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px auto 20px;
+    padding: 10px 16px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--accent-dark, #44676a);
+    background: rgba(107, 142, 142, 0.08);
+    border: 1px solid rgba(107, 142, 142, 0.25);
+    border-radius: 999px;
+    max-width: 620px;
+    text-align: left;
+}
+
+.ne-scope-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent, #6b8e8e);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(107, 142, 142, 0.15);
+    animation: ne-scope-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes ne-scope-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(107, 142, 142, 0.15); }
+    50%      { box-shadow: 0 0 0 5px rgba(107, 142, 142, 0.08); }
+}
