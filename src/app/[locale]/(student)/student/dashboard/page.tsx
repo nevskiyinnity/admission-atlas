@@ -1,43 +1,37 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { prisma } from '@/lib/prisma';
 import { Link } from '@/i18n/routing';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, ArrowRight, MessageCircle } from 'lucide-react';
-import { useDbUser } from '@/hooks/use-db-user';
 
-interface Project {
-  id: string;
-  universityName: string;
-  major: string;
-  deadline: string | null;
-  status: string;
-  milestones: { tasks: { id: string; status: string; deadline: string | null; name: string }[] }[];
-}
+export default async function StudentDashboardPage() {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) redirect('/login');
 
-export default function StudentDashboardPage() {
-  const t = useTranslations('student.dashboard');
-  const tc = useTranslations('common');
-  const dbUser = useDbUser();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [t, tc, user] = await Promise.all([
+    getTranslations('student.dashboard'),
+    getTranslations('common'),
+    prisma.user.findUnique({ where: { clerkId }, select: { id: true } }),
+  ]);
 
-  useEffect(() => {
-    if (!dbUser?.id) return;
-    fetch(`/api/projects?studentId=${dbUser.id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
-        return res.json();
-      })
-      .then((data) => { setProjects(data.projects ?? []); setLoading(false); })
-      .catch((err) => { setError(err.message); setLoading(false); });
-  }, [dbUser?.id]);
+  if (!user) {
+    return <p className="text-destructive">User not found in database</p>;
+  }
 
-  if (loading) return <p className="text-muted-foreground">{tc('loading')}</p>;
-  if (error) return <p className="text-destructive">{error}</p>;
+  const projects = await prisma.project.findMany({
+    where: { studentId: user.id },
+    include: {
+      milestones: {
+        include: {
+          tasks: { select: { id: true, status: true, deadline: true, name: true } },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
 
   return (
     <div>
@@ -49,10 +43,11 @@ export default function StudentDashboardPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => {
             const allTasks = project.milestones.flatMap((m) => m.tasks);
-            const completedTasks = allTasks.filter((t) => t.status === 'COMPLETED').length;
+            const completedTasks = allTasks.filter((task) => task.status === 'COMPLETED').length;
+            const FAR_FUTURE = 8640000000000000;
             const urgentTask = allTasks
-              .filter((t) => t.status !== 'COMPLETED')
-              .sort((a, b) => (a.deadline || '9').localeCompare(b.deadline || '9'))[0];
+              .filter((task) => task.status !== 'COMPLETED')
+              .sort((a, b) => (a.deadline?.getTime() ?? FAR_FUTURE) - (b.deadline?.getTime() ?? FAR_FUTURE))[0];
 
             return (
               <Link key={project.id} href={`/student/projects/${project.id}` as any}>
@@ -70,7 +65,7 @@ export default function StudentDashboardPage() {
                     {project.deadline && (
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Calendar className="h-3 w-3" />
-                        <span>{new Date(project.deadline).toLocaleDateString()}</span>
+                        <span>{project.deadline.toLocaleDateString()}</span>
                       </div>
                     )}
                     {urgentTask && (
