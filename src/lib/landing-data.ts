@@ -130,11 +130,70 @@ export const PRICING_TIERS: PricingTier[] = [
 ];
 
 export const CASE_STUDIES: CaseStudy[] = [
-  // Placeholder data — to be replaced with real case studies
-  { name: 'Student A', photo: '/images/cases/placeholder.jpg', challenges: ['Unclear academic direction', 'Weak extracurricular profile'], result: 'Accepted to target university', uniLogo: '/images/unis/placeholder.png', academics: 'GPA 3.8, SAT 1480', initialProfile: 'Unfocused application strategy', extracurriculars: 'Limited leadership roles', changesMade: 'Developed research project, refined essay narrative', otherInfo: '', outcome: 'Accepted with merit scholarship' },
-  { name: 'Student B', photo: '/images/cases/placeholder.jpg', challenges: ['Budget constraints', 'Late start'], result: 'Multiple acceptances', uniLogo: '/images/unis/placeholder.png', academics: 'GPA 3.6, IB 38', initialProfile: 'Strong academics but weak positioning', extracurriculars: 'Multiple activities, no depth', changesMade: 'Focused narrative, strategic school list', otherInfo: '', outcome: 'Accepted to 4 of 6 targets with aid' },
-  { name: 'Student C', photo: '/images/cases/placeholder.jpg', challenges: ['International applicant', 'Visa concerns'], result: 'Accepted to dream school', uniLogo: '/images/unis/placeholder.png', academics: 'GPA 3.9, A-Levels AAA', initialProfile: 'Strong but unfocused on UK vs US', extracurriculars: 'Research and community service', changesMade: 'Cross-region strategy, interview prep', otherInfo: '', outcome: 'Accepted to Oxbridge and US top-20' },
-  { name: 'Student D', photo: '/images/cases/placeholder.jpg', challenges: ['Scattered profile', 'Confusion from varying advice'], result: 'Clear strategy, strong outcome', uniLogo: '/images/unis/placeholder.png', academics: 'GPA 3.7, SAT 1520', initialProfile: 'Too many advisors, conflicting direction', extracurriculars: 'Strong but poorly presented', changesMade: 'Unified narrative, single point of strategy', otherInfo: '', outcome: 'Accepted to top-choice with full aid' },
+  {
+    name: 'Dominic S.',
+    photo: '/images/cases/placeholder.svg',
+    uniLogo: '/images/unis/placeholder.png',
+    challenges: [
+      'Perfect grades, no clear academic direction',
+      'Every future decision — university, essays, activities — resting on unstable ground',
+    ],
+    result: 'TU Delft & University of Amsterdam — Industrial Engineering',
+    academics: 'IB 40/45 predicted · top of class in Math and Physics · international school in Shanghai',
+    initialProfile: 'Strong academics with no answer to the simplest question — "what do you actually want to study?". Direction was missing, not ability.',
+    extracurriculars: 'Engaged across technical subjects, but with no strategic thread tying them to a major.',
+    changesMade: 'Mapped genuine interests (Industrial Engineering vs. Business Management); evaluated each path across market demand, academic fit, and flexibility; connected Dominic with working professionals in both fields so the choice was grounded in real-world understanding.',
+    otherInfo: '',
+    outcome: 'Committed to Industrial Engineering with genuine clarity; secured offers from TU Delft and the University of Amsterdam.',
+  },
+  {
+    name: 'Paul K.',
+    photo: '/images/cases/placeholder.svg',
+    uniLogo: '/images/unis/placeholder.png',
+    challenges: [
+      'Strong but interchangeable — nothing that made him stand out',
+      'A scattered list of activities with no unifying theme',
+    ],
+    result: 'London School of Economics — with scholarship opportunities',
+    academics: 'IB 43/45 predicted · consistently strong across subjects',
+    initialProfile: '"Excellent, but so is everyone else applying to competitive universities." A high-performing student with no distinguishing intellectual identity.',
+    extracurriculars: 'A wide range of activities accumulated without direction or strategy.',
+    changesMade: 'Identified behavioral economics as a central intellectual interest and rebuilt the profile around it; reframed existing experiences to support that narrative; launched a focused project — a social media account explaining real-world economic behavior to a younger audience.',
+    otherInfo: '',
+    outcome: 'Received an offer from the London School of Economics with strong scholarship opportunities.',
+  },
+  {
+    name: 'Bink M.',
+    photo: '/images/cases/placeholder.svg',
+    uniLogo: '/images/unis/placeholder.png',
+    challenges: [
+      'Family fixated on Oxford as the only acceptable outcome',
+      'No balanced list, no backup; budget required financial aid that was never guaranteed',
+    ],
+    result: 'Sciences Po & University of Amsterdam — fit, not just prestige',
+    academics: 'A-Level student with high predicted grades in Economics and History',
+    initialProfile: 'All-in on a single target with no margin for error and no consideration of program-level fit.',
+    extracurriculars: 'Competitive profile for Oxford but not meaningfully differentiated.',
+    changesMade: 'Compared European programs by teaching style, program strengths, career outcomes, and cost; connected the family with current students and alumni to ground the decision in real experience; built a balanced list that kept Oxford alongside strong alternatives.',
+    otherInfo: 'Not admitted to Oxford — and that became a successful cycle, not a failed one.',
+    outcome: 'Offers from Sciences Po and the University of Amsterdam — both outstanding programs aligned with his interests and long-term goals.',
+  },
+  {
+    name: 'Kexin P.',
+    photo: '/images/cases/placeholder.svg',
+    uniLogo: '/images/unis/placeholder.png',
+    challenges: [
+      'Passive student — delayed decisions, missed opportunities',
+      'Overwhelmed parents managing the process themselves, with prior distrust of counseling agencies',
+    ],
+    result: 'ESADE — Bachelor in Business and Artificial Intelligence',
+    academics: 'Spanish Baccalaureate · consistently ranked at the very top of her program',
+    initialProfile: 'Strong academics and an international upbringing; already helping run the family business — well-positioned for competitive business programs, but not doing the consistent work to translate potential into results.',
+    extracurriculars: 'Co-managed the family business alongside her studies.',
+    changesMade: 'Mapped every university, requirement, and deadline transparently on our platform so Kexin could see what was done, in progress, and coming next; replaced ad-hoc parental oversight with periodic progress updates focused on decisions, not day-to-day management.',
+    otherInfo: 'Originally from Zhejiang; raised in Spain.',
+    outcome: 'Admitted to ESADE University for the Bachelor in Business and Artificial Intelligence.',
+  },
 ];
 
 export const BEFORE_AFTER: BeforeAfter[] = [
