@@ -582,16 +582,482 @@
       "pricing": {
         "kicker": "Packages",
         "heading": "Choose the plan that best suits you",
-        "subhead": "Depending on where your student is and what your family needs, we offer three levels of engagement."
+        "subhead": "Depending on where your student is and what your family needs, we offer three levels of engagement.",
+        "tiers": [
+          {
+            "tier": "Full Bundle",
+            "name": "Complete 5-Phase Engagement",
+            "badge": "Recommended",
+            "features": [
+              "All five phases, end-to-end guidance",
+              "Full application strategy across the entire journey",
+              "Best for families seeking maximum outcomes"
+            ],
+            "popular": true,
+            "ctaText": "Book Consultation",
+            "ctaHref": "/contact"
+          },
+          {
+            "tier": "Phase-by-Phase",
+            "name": "Flexible, As-You-Go",
+            "features": [
+              "Each phase purchased separately",
+              "Greater flexibility, pay only for what you need",
+              "Total cost slightly higher than Full Bundle"
+            ],
+            "ctaText": "Request Details",
+            "ctaHref": "/contact"
+          },
+          {
+            "tier": "Initial Consultation",
+            "name": "One-Time Advisory Session",
+            "features": [
+              "Analyze current position and next steps",
+              "Personalized recommendations",
+              "Ideal before committing to full engagement"
+            ],
+            "ctaText": "Book Consultation",
+            "ctaHref": "/contact"
+          }
+        ]
       },
       "faq": {
         "kicker": "FAQ",
-        "heading": "Common questions, transparent answers"
+        "heading": "Common questions, transparent answers",
+        "items": [
+          {
+            "q": "Which countries and institutions do you specialize in?",
+            "a": "We focus exclusively on top European universities — UK, Netherlands, Spain, France, Germany, Switzerland, and 30+ more destinations. We do not handle US or Canadian applications."
+          },
+          {
+            "q": "When is the best time to start preparing?",
+            "a": "The earlier, the better. Starting in Grade 10 or 11 gives us time to strengthen the academic profile, build extracurricular depth, and execute applications calmly. That said, our system is designed to support late-stage (Grade 12) applicants effectively as well."
+          },
+          {
+            "q": "Do your recommendations take cost into account?",
+            "a": "Yes. Budget is a core input to our school list — not an afterthought. We factor in tuition, living costs, and scholarship probability from day one."
+          },
+          {
+            "q": "How are you different from other college consultants?",
+            "a": "Most companies rely on templates and gut instinct. We combine AI diagnostics, a 1:1 advisor ratio, a transparent progress tracking platform, and periodic parent feedback meetings — always prioritizing transparency, honesty, and student fit. We don't promise what we can't deliver."
+          },
+          {
+            "q": "Do you provide post-admission support after acceptance?",
+            "a": "Yes. We offer visa guidance, housing support, and other transition assistance services to help students settle in smoothly."
+          },
+          {
+            "q": "How do you ensure service quality?",
+            "a": "We cap each counselor's caseload to ensure deep involvement. All progress is visible through our platform — no information gaps for families."
+          }
+        ]
       },
       "finalCta": {
         "heading": "Start building the right strategy for your child's future today",
         "body": "Every year of waiting is a potential missed window. Instead of navigating uncertainty alone, start by understanding which path truly fits your child.",
         "cta": "Book a Consultation"
+      }
+    },
+    "shared": {
+      "whyUs": {
+        "kicker": "Differentiators",
+        "heading": "Why Choose SAJU Admissions Counseling?",
+        "items": [
+          {
+            "title": "Personalized Consultant Matching",
+            "body": "Every student is matched to the most suitable counselor based on academics, interests, and personality. Your counselor owns the full strategy from school selection to narrative — bespoke, not templated."
+          },
+          {
+            "title": "Proprietary Platform with Full Transparency",
+            "body": "Our proprietary platform makes every task, deadline, and milestone visible to students and families at all times, ensuring clearly defined task ownership and accountability."
+          },
+          {
+            "title": "Deep European Expertise",
+            "body": "Our counselors successfully get students into Oxford, Cambridge, Imperial College, Bocconi and other leading European universities every year, with direct knowledge of what each institution's admissions officers look for."
+          },
+          {
+            "title": "Fit First, with a Commitment to Transparency",
+            "body": "We don't chase prestige for its own sake. We give honest advice based on the student's real profile and family situation — directly stating probabilities and risks."
+          },
+          {
+            "title": "Monthly Parent Review Meetings",
+            "body": "Monthly 1:1 meetings between counselors and parents to review progress, calibrate expectations, and answer questions. You are always informed and involved."
+          },
+          {
+            "title": "Passion Project Development Support",
+            "body": "A meaningful passion project is often what distinguishes a strong application from an outstanding one. We help students identify and develop authentic initiatives that add real weight to their profile."
+          },
+          {
+            "title": "Post-Admission Relocation & Integration Support",
+            "body": "From visa applications to housing and settling in, we stay with families through the full relocation process so students arrive prepared and confident."
+          }
+        ]
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "About SAJU 双岸教育 | Our Story and Mission",
+        "description": "SAJU was born from firsthand experience with the complexity of European university admissions. Learn about our story, our approach, and the team behind it."
+      },
+      "story": {
+        "kicker": "Our Story",
+        "heading": "Born from firsthand experience",
+        "paragraphs": [
+          "SAJU was born from firsthand experience. Our founder applied to universities across three different countries over three consecutive years, facing three entirely different systems. Before receiving proper guidance, the process was disorienting and anxiety-ridden.",
+          "What was missing wasn't just more information. It was clarity and a trustworthy partner who truly understood European admissions.",
+          "SAJU was built to be that partner."
+        ]
+      },
+      "parentConcerns": {
+        "kicker": "The Parent Perspective",
+        "heading": "We know what this process feels like for high-achieving families",
+        "intro": "As a highly responsible parent, you may be facing these challenges:",
+        "items": [
+          {
+            "title": "Information overload, with no clear comparison",
+            "body": "The UK, the Netherlands, Germany — each country has entirely different systems, deadlines, and requirements, making it nearly impossible to compare effectively."
+          },
+          {
+            "title": "Unclear direction, no clear starting point",
+            "body": "Choosing a major shapes your child's future career path, yet they may still be exploring their interests — while you worry about making irreversible decisions."
+          },
+          {
+            "title": "Complex processes, with little room for error",
+            "body": "Different universities and platforms come with different requirements; even a small oversight can impact the entire outcome."
+          },
+          {
+            "title": "The gap between ambition and reality",
+            "body": "You want your child to attend a top-tier university, but worry about the risks and pressure of setting expectations too high."
+          },
+          {
+            "title": "Lack of trust in agencies",
+            "body": "The market is full of exaggerated promises, making it difficult to know who can truly be trusted."
+          },
+          {
+            "title": "Concerns about cost transparency",
+            "body": "What is the real total cost of studying abroad? Is the investment truly worthwhile?"
+          },
+          {
+            "title": "Post-admission uncertainties",
+            "body": "Visas, accommodation, cultural adaptation — admission is only the beginning; the real challenges come after."
+          }
+        ],
+        "closing": "The SAJU system is designed to address these exact concerns, using a well-structured and fully transparent framework so you feel in control at every key moment."
+      },
+      "leadership": {
+        "kicker": "Our Leadership",
+        "heading": "United by a shared mission",
+        "body": "At SAJU, our team is united by one core mission: to help every student find their best-fit European university path through clear strategy and trustworthy expertise."
+      }
+    },
+    "collegeAdmissions": {
+      "meta": {
+        "title": "SAJU College Admissions | European University Counseling for 8th–12th Grade",
+        "description": "A comprehensive five-phase European university application system with monthly parent meetings, algorithmic fit assessment, and dedicated 1:1 counselor support."
+      },
+      "hero": {
+        "kicker": "College Admissions",
+        "heading": "Tailored European University Application Guidance for 8th–12th Grade Students",
+        "body": "Every successful application is the result of a series of well-considered decisions, made from the first consultation through to final submission. Our five-phase system ensures nothing falls through the cracks.",
+        "cta": "Book an Initial Consultation"
+      },
+      "phaseOverview": {
+        "kicker": "Our Process",
+        "heading": "A comprehensive five-stage application system",
+        "body": "Every student's journey follows the same structured framework, with monthly parent meetings and algorithmic fit assessment support. Choose the full bundle or select individual phases based on your needs."
+      },
+      "phases": [
+        {
+          "id": "phase-1",
+          "number": "01",
+          "title": "Initial Consultation & Fit Assessment",
+          "objective": "Core objective: Analyze student context and define direction and expectations.",
+          "body": "Phase 1 is divided into two complementary parts — a personalized data-driven fit report, followed by a 1:1 session that unpacks it.",
+          "traits": [
+            "Personalized University Fit Assessment — answers on academics, extracurriculars, distinctions, preferences, and target school",
+            "Generated report with target fit percentage, fit analysis, alternative suggestions, and recommended next steps",
+            "Initial Consultation with a SAJU expert — deeper analysis and justification of results",
+            "Introduction to the concept of a balanced application strategy",
+            "Additional university alternatives and realistic expectation setting",
+            "Tailored action steps and full Q&A for the family"
+          ]
+        },
+        {
+          "id": "phase-2",
+          "number": "02",
+          "title": "Exploration",
+          "objective": "Core objective: Define a clear academic direction and university strategy.",
+          "body": "Match with a dedicated counselor, build a full student profile, and develop a university list that balances reach, match, and safety.",
+          "traits": [
+            "Counselor matching and comprehensive student profiling",
+            "Identification of 2–3 target majors that best suit the student",
+            "In-depth comparison of main European university systems and target countries (e.g. UK, Netherlands)",
+            "Final university list with highly competitive, balanced, and safe options",
+            "Determination of all application requirements and deadlines",
+            "Scholarship and financial aid eligibility overview"
+          ]
+        },
+        {
+          "id": "phase-3",
+          "number": "03",
+          "title": "Preparation",
+          "objective": "Core objective: Build a competitive student profile before formal applications begin.",
+          "body": "Strengthen academics, extracurriculars, and the overall profile so the application writing itself starts from a position of strength.",
+          "traits": [
+            "Academic planning — grade management and subject selection strategy",
+            "Standardized test planning (IELTS, SAT, etc.)",
+            "Résumé development and gap analysis",
+            "Summer programs and personal project planning",
+            "Recommendation strategy",
+            "Application timeline planning — early, regular, and rolling admissions"
+          ]
+        },
+        {
+          "id": "phase-4",
+          "number": "04",
+          "title": "Application",
+          "objective": "Core objective: Deliver a high-quality, cohesive application package.",
+          "body": "Translate the strategy and profile into polished, consistent materials — from personal narrative through interview prep.",
+          "traits": [
+            "Personal narrative positioning and storytelling strategy",
+            "Essay development with multiple rounds of refinement",
+            "Finalization of the résumé",
+            "Recommender support — including Brag Sheet preparation",
+            "Assembly and final review of all application materials",
+            "Interview preparation",
+            "Comparative analysis of admission outcomes across universities"
+          ]
+        },
+        {
+          "id": "phase-5",
+          "number": "05",
+          "title": "Post-Admission Support",
+          "objective": "Core objective: Ensure a smooth transition to university life in Europe.",
+          "body": "Admission is not the end; it is the beginning of a new journey. We stay with your family through the final steps.",
+          "traits": [
+            "Visa application guidance",
+            "Accommodation search and relocation support",
+            "Integration and adaptation support for university life in Europe"
+          ]
+        }
+      ],
+      "packages": {
+        "kicker": "Packages",
+        "heading": "Choose the plan that best suits you"
+      },
+      "counselorsPreview": {
+        "kicker": "Our Team",
+        "heading": "Meet some of our European admissions experts",
+        "cta": "Full Counselor List"
+      },
+      "testimonials": {
+        "kicker": "Testimonials",
+        "heading": "What SAJU students and families say",
+        "cta": "More Details"
+      }
+    },
+    "counselors": {
+      "meta": {
+        "title": "SAJU Counselors | The Architects Behind Your Strategy",
+        "description": "Meet the admissions strategists and essay specialists with deep expertise across Europe's main university systems."
+      },
+      "hero": {
+        "kicker": "Our Counselors",
+        "heading": "The true architects behind your application strategy",
+        "body": "SAJU is built by admissions strategists, essay specialists, and student-success advisors with deep expertise across Europe's main university systems and beyond. Each student works closely with a dedicated consultant who personally guides every step of the process."
+      },
+      "principles": {
+        "kicker": "How We Work",
+        "heading": "Operating principles every counselor follows",
+        "items": [
+          {
+            "title": "Student Fit First",
+            "body": "Every university selection is made based on student fit, not solely prestige, to ensure the student gets the most out of their education and successfully reaches their career goals."
+          },
+          {
+            "title": "Radical Transparency",
+            "body": "We state probabilities and risks directly. We believe real expertise shows in honesty, not sales language."
+          },
+          {
+            "title": "Evidence over Guesswork",
+            "body": "Application strategy grounded in profile analysis, admissions history, and feedback from former and current European university admissions officers."
+          },
+          {
+            "title": "Execution Discipline",
+            "body": "Deadlines and material quality are non-negotiable. Task ownership is clearly defined to maximize accountability. We won't let students lose track or miss valuable opportunities."
+          },
+          {
+            "title": "European Breadth",
+            "body": "We evaluate options across 30+ European countries and guide students toward institutions offering the strongest fit and career outcomes, supported by large data sets."
+          },
+          {
+            "title": "Student Ownership",
+            "body": "We help students present their authentic selves. Applications are always a true extension of the student, not the counselor's creation."
+          }
+        ]
+      },
+      "regions": {
+        "kicker": "Expertise",
+        "heading": "The European systems we specialize in",
+        "items": [
+          {
+            "name": "Northern Europe",
+            "universities": [
+              "UK: Oxford, Cambridge, Imperial College London, UCL",
+              "Sweden: Lund University, Uppsala University, KTH",
+              "Ireland: Trinity College Dublin, UCD, UCC",
+              "Norway, Finland, Denmark…"
+            ]
+          },
+          {
+            "name": "Central Europe",
+            "universities": [
+              "Switzerland: ETH Zurich, EPFL, University of Zurich",
+              "Netherlands: TU Delft, University of Amsterdam, Utrecht University",
+              "Germany: TUM, LMU Munich, Heidelberg University",
+              "Belgium, Austria, Czechia…"
+            ]
+          },
+          {
+            "name": "Southern Europe",
+            "universities": [
+              "France: PSL University, Polytechnic Institute of Paris, Paris-Saclay University",
+              "Italy: Polimi, University of Bologna, Sapienza University of Rome",
+              "Spain: UAM, UAB, IE University",
+              "Portugal, Greece, Cyprus…"
+            ]
+          }
+        ]
+      },
+      "finalCta": {
+        "heading": "Meet your dedicated consultant face-to-face",
+        "body": "Share the student's profile, current target school, budget, and other preferences. We'll give you clear and actionable next steps.",
+        "cta": "Book an Initial Consultation"
+      }
+    },
+    "contact": {
+      "meta": {
+        "title": "Contact SAJU | Schedule a Strategy Consultation",
+        "description": "Book a strategy consultation with SAJU. Tell us about the student, target programs, and budget — we'll recommend the right support and clear next steps."
+      },
+      "hero": {
+        "kicker": "Get Started",
+        "heading": "Schedule a strategy consultation with us",
+        "body": "Tell us about the student, target programs, budget, and other preferences. We'll recommend the right support level and outline clear immediate next steps.",
+        "cta": "Submit Inquiry"
+      },
+      "form": {
+        "kicker": "Inquiry Form",
+        "heading": "Share your admissions context",
+        "body": "We use this to prepare a focused first consultation."
+      },
+      "faq": {
+        "heading": "Before you book, you may want to know",
+        "items": [
+          {
+            "q": "Is it too early to book if my child is still in Year 10 or Year 11?",
+            "a": "Not at all. Earlier means more we can do. Grade 10 is the golden window for academic path planning and developing meaningful extracurriculars. Even a first consultation helps families build a clear long-term framework."
+          },
+          {
+            "q": "Do we need to finalize a list of target universities before booking?",
+            "a": "Not at all. Building the right school list is one of the core outputs of the initial consultation. Come with your questions and early thoughts — we start from there."
+          },
+          {
+            "q": "Can you help families plan applications with scholarships as a key consideration?",
+            "a": "Yes. Scholarship and financial aid eligibility planning is a core part of our service, integrated into the school list and strategy from day one."
+          },
+          {
+            "q": "What does the initial consultation include?",
+            "a": "It has two parts. (A) A personalized university fit assessment — the student answers questions on academics, extracurriculars, distinctions, preferences, and target school. The output is a report with a target university fit percentage, fit analysis, suggested alternatives, and recommended next steps. (B) An initial consultation with a SAJU expert who builds on the report — interpreting results, introducing a balanced application strategy, suggesting additional alternatives, setting realistic expectations, outlining tailored action steps, and answering family questions."
+          },
+          {
+            "q": "Do you accept applications from students in Year 12?",
+            "a": "Yes. Though we recommend starting earlier, our system is specifically designed to support efficient late-stage applications. Your counselor will build a priority-driven action plan based on current timing."
+          },
+          {
+            "q": "How do you charge? Is it a one-time fee or stage-based pricing?",
+            "a": "Both options are available. We offer a full five-phase bundle and a phase-by-phase option. Full pricing is presented during the initial consultation, so families make fully informed decisions."
+          }
+        ]
+      },
+      "channels": {
+        "kicker": "Reach Us",
+        "heading": "Contact Channels",
+        "labels": {
+          "email": "Email",
+          "phone": "Phone",
+          "wechat": "WeChat",
+          "xiaohongshu": "XiaoHongShu",
+          "office": "Office Address",
+          "hours": "Office Hours"
+        },
+        "values": {
+          "email": "admissions@saju.edu",
+          "phone": "+1 (XXX) XXX-XXXX",
+          "wechat": "XXXXXXXXX",
+          "xiaohongshu": "XXXXXXXXX",
+          "office": "XXXXXXXXX",
+          "hours": "Monday – Friday, 9:00 AM – 7:00 PM (local team time zones)"
+        }
+      }
+    },
+    "results": {
+      "meta": {
+        "title": "SAJU Results | Student Outcomes and Case Stories",
+        "description": "See how admissions results look with a SAJU-supported application — case studies, before/after transformations, and measurable outcomes."
+      },
+      "hero": {
+        "kicker": "Outcomes",
+        "heading": "How admissions results look with a SAJU-supported application",
+        "body": "Our approach focuses on measurable improvements: better fit and balanced school lists, optimal student positioning, tighter execution without confusion, and better budget-fit outcomes.",
+        "ctaPrimary": "Book a Consultation",
+        "ctaSecondary": "Run the Assessment"
+      },
+      "cases": {
+        "kicker": "Case Stories",
+        "heading": "Student case stories"
+      },
+      "beforeAfter": {
+        "kicker": "Before & After",
+        "heading": "The difference professional SAJU guidance makes",
+        "items": [
+          {
+            "label": "Academic Direction",
+            "before": "Course selection lacks focus, making it difficult to build a coherent application narrative. Admissions officers see no clear academic direction.",
+            "after": "A focused academic trajectory, supported by targeted extracurriculars and personal projects, presenting a clear and authentic academic path."
+          },
+          {
+            "label": "Profile Narrative",
+            "before": "A list of achievements without a cohesive story, resulting in an application that lacks personality and impact.",
+            "after": "Background, experiences, and goals are seamlessly integrated into a compelling narrative that leaves a lasting impression."
+          },
+          {
+            "label": "Application Execution",
+            "before": "Conflicting information from multiple sources leads to confusion, disorganized execution, mounting pressure, and missed opportunities.",
+            "after": "A clear, transparent strategy with defined milestones and quality control, ensuring every small detail is taken care of."
+          }
+        ]
+      },
+      "steps": {
+        "kicker": "Your Turn",
+        "heading": "Start your application journey in three steps",
+        "items": [
+          {
+            "num": "1",
+            "title": "Run the University Fit Assessment",
+            "body": "Answer questions on academics, extracurriculars, achievements, current target school, and other preferences. Our algorithm generates a personalized university fit report."
+          },
+          {
+            "num": "2",
+            "title": "Book your Initial Consultation",
+            "body": "A 1:1 deep-dive with one of our experts. Understand your assessment results, profile gaps, and where your child stands relative to their targets."
+          },
+          {
+            "num": "3",
+            "title": "Begin your Application Journey",
+            "body": "Your counselor guides you through the entire process, following the SAJU framework to successfully achieve every milestone before deadlines."
+          }
+        ],
+        "cta": "Get Started"
       }
     }
   },

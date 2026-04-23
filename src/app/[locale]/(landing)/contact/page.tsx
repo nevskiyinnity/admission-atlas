@@ -1,36 +1,40 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { FAQSection } from '../_components/faq-section';
-import { CONTACT_FAQ } from '@/lib/landing-data';
 import { ContactForm } from './_components/contact-form';
 
-export const metadata: Metadata = {
-  title: 'Contact SAJU | Book a Strategy Consultation',
-  description:
-    'Book a strategy consultation with SAJU. Share your admissions context for personalized guidance.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('landing.contact.meta');
+  return { title: t('title'), description: t('description') };
+}
 
-export default function ContactPage() {
+type FAQ = { q: string; a: string };
+
+export default async function ContactPage() {
+  const t = await getTranslations('landing.contact');
+
+  const faqRaw = t.raw('faq.items') as FAQ[];
+  const faqItems = faqRaw.map(({ q, a }) => ({ question: q, answer: a }));
+  const channelKeys = ['email', 'phone', 'wechat', 'xiaohongshu', 'office', 'hours'] as const;
+
   return (
     <main className="page">
       {/* ─── HERO ─── */}
       <section className="contact-hero">
-        <p className="eyebrow">Get Started</p>
-        <h1>Book a Strategy Consultation with SAJU</h1>
-        <p className="contact-hero-lead">
-          Tell us about the student, target programs, and budget. We will
-          recommend the right support level and outline immediate next actions.
-        </p>
+        <p className="eyebrow">{t('hero.kicker')}</p>
+        <h1>{t('hero.heading')}</h1>
+        <p className="contact-hero-lead">{t('hero.body')}</p>
         <a className="l-btn-primary" href="#inquiry">
-          Submit Inquiry
+          {t('hero.cta')}
         </a>
       </section>
 
       {/* ─── INQUIRY FORM ─── */}
       <section className="section" id="inquiry">
         <div className="section-head">
-          <p className="eyebrow">Inquiry Form</p>
-          <h2>Share Your Admissions Context</h2>
-          <p>We use this to prepare a focused first consultation.</p>
+          <p className="eyebrow">{t('form.kicker')}</p>
+          <h2>{t('form.heading')}</h2>
+          <p>{t('form.body')}</p>
         </div>
         <div className="contact-form-container">
           <ContactForm />
@@ -38,39 +42,21 @@ export default function ContactPage() {
       </section>
 
       {/* ─── FAQ ─── */}
-      <FAQSection heading="Before You Book" items={CONTACT_FAQ} />
+      <FAQSection heading={t('faq.heading')} items={faqItems} />
 
       {/* ─── CONTACT CHANNELS ─── */}
       <section className="section">
         <div className="section-head">
-          <p className="eyebrow">Reach Us</p>
-          <h2>Contact Channels</h2>
+          <p className="eyebrow">{t('channels.kicker')}</p>
+          <h2>{t('channels.heading')}</h2>
         </div>
         <div className="contact-channels">
-          <div className="contact-channel-card">
-            <h3>Email</h3>
-            <p>admissions@saju.edu</p>
-          </div>
-          <div className="contact-channel-card">
-            <h3>Phone</h3>
-            <p>+1 (XXX) XXX-XXXX</p>
-          </div>
-          <div className="contact-channel-card">
-            <h3>WeChat</h3>
-            <p>XXXXXXXXX</p>
-          </div>
-          <div className="contact-channel-card">
-            <h3>XiaoHongShu</h3>
-            <p>XXXXXXXXX</p>
-          </div>
-          <div className="contact-channel-card">
-            <h3>Office Address</h3>
-            <p>XXXXXXXXX</p>
-          </div>
-          <div className="contact-channel-card">
-            <h3>Office Hours</h3>
-            <p>Monday – Friday, 9:00 AM – 7:00 PM (local team time zones)</p>
-          </div>
+          {channelKeys.map((key) => (
+            <div key={key} className="contact-channel-card">
+              <h3>{t(`channels.labels.${key}`)}</h3>
+              <p>{t(`channels.values.${key}`)}</p>
+            </div>
+          ))}
         </div>
       </section>
     </main>

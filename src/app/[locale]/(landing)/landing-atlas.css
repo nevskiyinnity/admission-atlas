@@ -3426,3 +3426,141 @@
         font-size: 0.78rem;
     }
 }
+
+/* ───────────────────────────────────────────────────────────────
+   About page — Parent concerns grid
+   ─────────────────────────────────────────────────────────────── */
+
+.landing-scope .about-concerns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin: 32px 0;
+}
+
+.landing-scope .about-concern-card {
+    background: var(--card, #fff);
+    border: 1px solid var(--border, #e6e2d6);
+    border-radius: 14px;
+    padding: 22px 24px;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.landing-scope .about-concern-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.landing-scope .about-concern-card h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.1rem;
+    margin: 0 0 8px;
+    color: var(--ink, #1a1a1a);
+}
+
+.landing-scope .about-concern-card p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--ink-2, #4a4a4a);
+    margin: 0;
+}
+
+.landing-scope .about-concerns-closing {
+    max-width: 780px;
+    margin: 32px auto 0;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--ink, #1a1a1a);
+    font-style: italic;
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Counselors page — Regions grid
+   ─────────────────────────────────────────────────────────────── */
+
+.landing-scope .counselors-regions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+}
+
+.landing-scope .counselors-region-card {
+    background: var(--card, #fff);
+    border: 1px solid var(--border, #e6e2d6);
+    border-radius: 14px;
+    padding: 24px 26px;
+}
+
+.landing-scope .counselors-region-card h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.25rem;
+    margin: 0 0 14px;
+    color: var(--ink, #1a1a1a);
+    border-bottom: 1px solid var(--border, #e6e2d6);
+    padding-bottom: 10px;
+}
+
+.landing-scope .counselors-region-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.landing-scope .counselors-region-card li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--ink-2, #4a4a4a);
+    padding-left: 12px;
+    position: relative;
+}
+
+.landing-scope .counselors-region-card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent, #6b8e8e);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   College Admissions — Phase number fallback (no image)
+   ─────────────────────────────────────────────────────────────── */
+
+.landing-scope .ca-phase-num-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 5.5rem;
+    color: var(--accent, #6b8e8e);
+    background: linear-gradient(135deg, #f3efe4 0%, #e8e2d2 100%);
+    border-radius: 14px;
+    letter-spacing: -0.02em;
+}
+
+.landing-scope .ca-phase-objective {
+    color: var(--accent, #6b8e8e);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+/* Results Before/After — label heading */
+.landing-scope .results-ba-label-heading {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.1rem;
+    color: var(--ink, #1a1a1a);
+    margin: 0 0 6px;
+    font-weight: 400;
+}

@@ -1,14 +1,26 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { WhyUsAccordion } from '../_components/why-us-accordion';
-import { WHY_US_TRAITS, LEADERSHIP } from '@/lib/landing-data';
+import { LEADERSHIP } from '@/lib/landing-data';
+import type { Trait } from '@/lib/landing-data';
 
-export const metadata: Metadata = {
-  title: 'About SAJU 双岸教育 | Our Story and Leadership',
-  description:
-    "Learn about SAJU's mission, our approach to admissions counseling, and meet the leadership team.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('landing.about.meta');
+  return { title: t('title'), description: t('description') };
+}
 
-export default function AboutPage() {
+type Concern = { title: string; body: string };
+type WhyUsItem = { title: string; body: string };
+
+export default async function AboutPage() {
+  const t = await getTranslations('landing.about');
+  const tShared = await getTranslations('landing.shared');
+
+  const storyParagraphs = t.raw('story.paragraphs') as string[];
+  const concerns = t.raw('parentConcerns.items') as Concern[];
+  const whyUsRaw = tShared.raw('whyUs.items') as WhyUsItem[];
+  const traits: Trait[] = whyUsRaw.map((i) => ({ title: i.title, description: i.body }));
+
   return (
     <main className="page">
       {/* ─── HERO (image-only) ─── */}
@@ -17,55 +29,50 @@ export default function AboutPage() {
       {/* ─── ORIGIN STORY ─── */}
       <section className="section about-story">
         <div className="about-story-text">
-          <span className="eyebrow">Our Story</span>
-          <h2>What Makes the Difference?</h2>
-          <p>
-            SAJU was born from firsthand experience with the admissions process —
-            not just once, but many times over. As someone who has been in the
-            applicant position across different systems, countries, and
-            expectations, I learned that the difference between a strong outcome
-            and a missed opportunity often comes down to structure, timing, and
-            honest guidance.
-          </p>
-          <p>
-            Too many students receive advice that is either too generic to act on
-            or too focused on prestige to be practical. We started SAJU to
-            change that — to build a counseling practice grounded in strategy,
-            transparency, and real execution. Every recommendation we make is
-            backed by evidence, tailored to the individual, and tested against
-            the constraints that actually matter: budget, fit, and long-term
-            trajectory.
-          </p>
-          <p>
-            What began as a small group of advisors helping friends and family
-            has grown into a structured practice serving students across
-            continents. But the core principle remains the same: treat every
-            student&apos;s future as seriously as we treated our own.
-          </p>
+          <span className="eyebrow">{t('story.kicker')}</span>
+          <h2>{t('story.heading')}</h2>
+          {storyParagraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
         </div>
         <div className="about-story-image">
           <div className="about-story-placeholder" aria-label="Origin story image" />
         </div>
       </section>
 
-      {/* ─── WHY US (compact) ─── */}
+      {/* ─── PARENT CONCERNS ─── */}
       <section className="section">
         <header className="section-header">
-          <span className="eyebrow">Differentiators</span>
-          <h2>Why Choose SAJU Admissions Counseling?</h2>
+          <span className="eyebrow">{t('parentConcerns.kicker')}</span>
+          <h2>{t('parentConcerns.heading')}</h2>
+          <p className="section-subtitle">{t('parentConcerns.intro')}</p>
         </header>
-        <WhyUsAccordion traits={WHY_US_TRAITS} variant="compact" />
+        <div className="about-concerns-grid">
+          {concerns.map((c, i) => (
+            <article key={i} className="about-concern-card">
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </article>
+          ))}
+        </div>
+        <p className="about-concerns-closing">{t('parentConcerns.closing')}</p>
+      </section>
+
+      {/* ─── WHY US ─── */}
+      <section className="section">
+        <header className="section-header">
+          <span className="eyebrow">{tShared('whyUs.kicker')}</span>
+          <h2>{tShared('whyUs.heading')}</h2>
+        </header>
+        <WhyUsAccordion traits={traits} variant="compact" />
       </section>
 
       {/* ─── LEADERSHIP ─── */}
       <section className="section about-leadership">
         <header className="section-header">
-          <span className="eyebrow">Our Leadership</span>
-          <h2>Meet the Team Behind SAJU</h2>
-          <p className="section-subtitle">
-            At SAJU, our leadership team is united by the mission of helping
-            every student find their best-fit path.
-          </p>
+          <span className="eyebrow">{t('leadership.kicker')}</span>
+          <h2>{t('leadership.heading')}</h2>
+          <p className="section-subtitle">{t('leadership.body')}</p>
         </header>
         <div className="about-leadership-grid">
           {LEADERSHIP.map((member) => (

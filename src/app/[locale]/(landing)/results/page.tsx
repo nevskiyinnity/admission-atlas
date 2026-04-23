@@ -1,32 +1,36 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { CaseStudyCard } from '../_components/case-study-card';
-import { CASE_STUDIES, BEFORE_AFTER } from '@/lib/landing-data';
+import { CASE_STUDIES } from '@/lib/landing-data';
 
-export const metadata: Metadata = {
-  title: 'SAJU Results | Student Outcomes and Case Stories',
-  description:
-    'See how students improve their admissions position with SAJU — case studies, before/after transformations, and measurable outcomes.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('landing.results.meta');
+  return { title: t('title'), description: t('description') };
+}
 
-export default function ResultsPage() {
+type BeforeAfterItem = { label: string; before: string; after: string };
+type Step = { num: string; title: string; body: string };
+
+export default async function ResultsPage() {
+  const t = await getTranslations('landing.results');
+
+  const baItems = t.raw('beforeAfter.items') as BeforeAfterItem[];
+  const steps = t.raw('steps.items') as Step[];
+
   return (
     <main className="page">
-      {/* ─── HERO (full-width) ─── */}
+      {/* ─── HERO ─── */}
       <section className="results-hero">
-        <span className="eyebrow">Outcomes</span>
-        <h1>How Students Improve Their Admissions Position with SAJU</h1>
-        <p className="lead">
-          Our approach focuses on measurable improvements: stronger school list
-          quality, clearer major positioning, tighter execution, and better
-          budget-fit outcomes.
-        </p>
+        <span className="eyebrow">{t('hero.kicker')}</span>
+        <h1>{t('hero.heading')}</h1>
+        <p className="lead">{t('hero.body')}</p>
         <div className="btn-row">
           <Link className="btn-primary" href="/contact">
-            Discuss Your Profile
+            {t('hero.ctaPrimary')}
           </Link>
           <Link className="btn-ghost" href="/neural-engine">
-            Run Neural Engine
+            {t('hero.ctaSecondary')}
           </Link>
         </div>
       </section>
@@ -34,8 +38,8 @@ export default function ResultsPage() {
       {/* ─── CASE STUDIES ─── */}
       <section className="section">
         <div className="section-head">
-          <span className="eyebrow">Case Stories</span>
-          <h2>Illustrative Student Journeys</h2>
+          <span className="eyebrow">{t('cases.kicker')}</span>
+          <h2>{t('cases.heading')}</h2>
         </div>
         <div className="results-case-grid">
           {CASE_STUDIES.map((study) => (
@@ -47,12 +51,13 @@ export default function ResultsPage() {
       {/* ─── BEFORE / AFTER ─── */}
       <section className="section">
         <div className="section-head">
-          <span className="eyebrow">Before &amp; After</span>
-          <h2>Transformation Pattern</h2>
+          <span className="eyebrow">{t('beforeAfter.kicker')}</span>
+          <h2>{t('beforeAfter.heading')}</h2>
         </div>
         <div className="results-ba-grid">
-          {BEFORE_AFTER.map((item, i) => (
+          {baItems.map((item, i) => (
             <article key={i} className="results-ba-card">
+              {item.label && <h4 className="results-ba-label-heading">{item.label}</h4>}
               <div className="results-ba-side results-ba-before">
                 <span className="results-ba-label">Before</span>
                 <p>{item.before}</p>
@@ -70,49 +75,28 @@ export default function ResultsPage() {
             </article>
           ))}
         </div>
-
-        <div className="results-ba-thread">
-          <h3>What they all had in common (and how we fixed it):</h3>
-          <ol>
-            <li>Unclear academic direction</li>
-            <li>Weak profile</li>
-            <li>Confusion from scattered info</li>
-          </ol>
-        </div>
       </section>
 
-      {/* ─── GET YOUR OWN BASELINE ─── */}
+      {/* ─── YOUR STEPS ─── */}
       <section className="section">
         <div className="section-head">
-          <span className="eyebrow">Your Turn</span>
-          <h2>Get Your Own Baseline First</h2>
+          <span className="eyebrow">{t('steps.kicker')}</span>
+          <h2>{t('steps.heading')}</h2>
         </div>
         <div className="results-steps">
-          <article className="results-step">
-            <span className="results-step-num">1</span>
-            <div>
-              <h3>Run Neural Engine</h3>
-              <p>Input your profile, constraints, and budget.</p>
-            </div>
-          </article>
-          <article className="results-step">
-            <span className="results-step-num">2</span>
-            <div>
-              <h3>Schedule Initial Consultation</h3>
-              <p>Review result gaps and identify where your profile underperforms relative to targets.</p>
-            </div>
-          </article>
-          <article className="results-step">
-            <span className="results-step-num">3</span>
-            <div>
-              <h3>Begin Your Application Journey</h3>
-              <p>Build a structured action plan with counselor guidance to close key gaps before deadlines.</p>
-            </div>
-          </article>
+          {steps.map((step) => (
+            <article key={step.num} className="results-step">
+              <span className="results-step-num">{step.num}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            </article>
+          ))}
         </div>
         <div className="results-steps-cta">
           <Link className="btn-primary" href="/neural-engine">
-            Get Started
+            {t('steps.cta')}
           </Link>
         </div>
       </section>

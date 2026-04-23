@@ -1,35 +1,32 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { CounselorCard } from '../_components/counselor-card';
-import { COUNSELORS, OPERATING_PRINCIPLES, GLOBAL_REGIONS } from '@/lib/landing-data';
+import { COUNSELORS } from '@/lib/landing-data';
 
-export const metadata: Metadata = {
-  title: 'SAJU Counselors | Meet Our Admissions Team',
-  description:
-    'Meet the admissions strategists and counselors behind SAJU — their expertise, operating principles, and global reach.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('landing.counselors.meta');
+  return { title: t('title'), description: t('description') };
+}
 
-const REGION_FLAGS: Record<string, string> = {
-  US: '\u{1F1FA}\u{1F1F8}',
-  GB: '\u{1F1EC}\u{1F1E7}',
-  SG: '\u{1F1F8}\u{1F1EC}',
-};
+type Principle = { title: string; body: string };
+type Region = { name: string; universities: string[] };
 
-export default function CounselorsPage() {
+export default async function CounselorsPage() {
+  const t = await getTranslations('landing.counselors');
+
+  const principles = t.raw('principles.items') as Principle[];
+  const regions = t.raw('regions.items') as Region[];
+
   return (
     <main className="page">
       {/* ─── HEADER ─── */}
       <section className="section counselors-hero-section">
         <header className="section-header">
-          <span className="eyebrow">Our Counselors</span>
-          <h1>The People Behind Your Admissions&nbsp;Strategy</h1>
+          <span className="eyebrow">{t('hero.kicker')}</span>
+          <h1>{t('hero.heading')}</h1>
         </header>
-        <p className="counselors-intro">
-          SAJU is built by admissions strategists, essay specialists, and
-          student-success advisors who combine practical counseling with
-          structured decision-making. Every engagement is led by a dedicated
-          counselor who owns your strategy end to end.
-        </p>
+        <p className="counselors-intro">{t('hero.body')}</p>
       </section>
 
       {/* ─── COUNSELOR CARDS ─── */}
@@ -44,38 +41,39 @@ export default function CounselorsPage() {
       {/* ─── OPERATING PRINCIPLES ─── */}
       <section className="section">
         <header className="section-header">
-          <span className="eyebrow">How We Work</span>
-          <h2>Operating principles that shape every engagement</h2>
+          <span className="eyebrow">{t('principles.kicker')}</span>
+          <h2>{t('principles.heading')}</h2>
         </header>
         <div className="principles-list principles-grid-2col">
-          {OPERATING_PRINCIPLES.map((p, i) => (
+          {principles.map((p, i) => (
             <div key={p.title} className="principle">
               <div className="principle-num">
                 {String(i + 1).padStart(2, '0')}
               </div>
               <div className="principle-body">
                 <h3>{p.title}</h3>
-                <p>{p.description}</p>
+                <p>{p.body}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ─── GLOBAL REACH ─── */}
+      {/* ─── EUROPEAN REGIONS ─── */}
       <section className="section">
         <header className="section-header">
-          <span className="eyebrow">Global Reach</span>
-          <h2>Where we support students</h2>
+          <span className="eyebrow">{t('regions.kicker')}</span>
+          <h2>{t('regions.heading')}</h2>
         </header>
-        <div className="location-row">
-          {GLOBAL_REGIONS.map((r) => (
-            <article key={r.code} className="location-card">
-              <span className="location-flag">
-                {REGION_FLAGS[r.code] ?? '🌍'}
-              </span>
+        <div className="counselors-regions-grid">
+          {regions.map((r) => (
+            <article key={r.name} className="counselors-region-card">
               <h3>{r.name}</h3>
-              <p>{r.description}</p>
+              <ul>
+                {r.universities.map((u, i) => (
+                  <li key={i}>{u}</li>
+                ))}
+              </ul>
             </article>
           ))}
         </div>
@@ -83,13 +81,10 @@ export default function CounselorsPage() {
 
       {/* ─── CTA ─── */}
       <section className="final-cta">
-        <h2>Meet the team through a strategy session</h2>
-        <p>
-          Share your profile, target schools, and constraints. We&#39;ll
-          recommend an actionable next-step plan — no commitment required.
-        </p>
+        <h2>{t('finalCta.heading')}</h2>
+        <p>{t('finalCta.body')}</p>
         <Link className="btn-primary btn-lg" href="/contact">
-          Book Your Consultation <span aria-hidden="true">&rarr;</span>
+          {t('finalCta.cta')} <span aria-hidden="true">&rarr;</span>
         </Link>
       </section>
     </main>

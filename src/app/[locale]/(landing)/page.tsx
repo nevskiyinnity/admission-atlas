@@ -10,7 +10,8 @@ import { TiltCard } from './_components/tilt-card';
 import { ReviewsCarousel } from './_components/reviews-carousel';
 import { PricingCards } from './_components/pricing-cards';
 import { FAQSection } from './_components/faq-section';
-import { REVIEWS, PRICING_TIERS, HOME_FAQ } from '@/lib/landing-data';
+import { REVIEWS } from '@/lib/landing-data';
+import type { PricingTier } from '@/lib/landing-data';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('landing.home.meta');
@@ -29,6 +30,9 @@ export default async function LandingHomePage() {
   const services = t.raw('services.items') as ServiceItem[];
   const phases = t.raw('process.phases') as Phase[];
   const outcomes = t.raw('outcomes.items') as Outcome[];
+  const pricingTiers = t.raw('pricing.tiers') as PricingTier[];
+  const faqRaw = t.raw('faq.items') as { q: string; a: string }[];
+  const faqItems = faqRaw.map(({ q, a }) => ({ question: q, answer: a }));
 
   return (
     <>
@@ -209,7 +213,7 @@ export default async function LandingHomePage() {
                 </svg>
               </div>
               <p className="h-sect-sub">{t('pricing.subhead')}</p>
-              <PricingCards tiers={PRICING_TIERS} />
+              <PricingCards tiers={pricingTiers} />
             </section>
           </AnimatedSection>
 
@@ -219,7 +223,7 @@ export default async function LandingHomePage() {
               <div className="h-sect-head">
                 <span className="h-kicker">{t('faq.kicker')}</span>
               </div>
-              <FAQSection heading={t('faq.heading')} items={HOME_FAQ} />
+              <FAQSection heading={t('faq.heading')} items={faqItems} />
             </section>
           </AnimatedSection>
 
