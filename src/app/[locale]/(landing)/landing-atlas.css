@@ -69,6 +69,23 @@
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    min-width: 160px;
+    min-height: 40px;
+}
+
+.landing-scope .l-brand-logo {
+    height: 40px;
+    width: auto;
+    display: block;
+}
+
+/* EN locale: same footprint as the ZH logo so the header grid doesn't shift */
+.landing-scope .l-brand-placeholder {
+    display: inline-block;
+    width: 160px;
+    height: 40px;
 }
 
 .landing-scope .l-nav-links {
